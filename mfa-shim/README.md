@@ -2,6 +2,9 @@
 
 Software reference design for the **inline service-port multi-factor authentication shim** introduced in paper §3.4 as Pattern C.
 
+**Interactive demo with live TOTP gate in your browser — no install:**
+**[https://analyst133.github.io/legacy-medical-device-security-frameworks/mfa-shim/](https://analyst133.github.io/legacy-medical-device-security-frameworks/mfa-shim/)** — architecture diagram, session-flow walkthrough, and a working RFC 6238 TOTP gate you can authenticate against.
+
 > **Status:** Functional prototype. The Python implementation under `prototype/` demonstrates the security mechanisms (TOTP gate, session recording, tamper detection) at a level sufficient to validate the design and to support pilot deployments at the institutional research level. Production hardware procurement and FDA regulatory analysis are out of scope for this artifact and are flagged in `FDA-CONSIDERATIONS.md`.
 
 ## Why Pattern C exists

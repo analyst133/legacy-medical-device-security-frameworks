@@ -2,6 +2,9 @@
 
 Threat-modelling templates for legacy medical devices, implementing the STRIDE-HC framework defined in paper Section 4. The templates support the dual threat model — network attacker and physical/insider attacker — across both legacy device archetypes.
 
+**Try the interactive builder in your browser — no install:**
+**[https://analyst133.github.io/legacy-medical-device-security-frameworks/stride-hc-templates/](https://analyst133.github.io/legacy-medical-device-security-frameworks/stride-hc-templates/)**
+
 ## What is STRIDE-HC?
 
 STRIDE-HC adapts Microsoft's STRIDE threat-modelling methodology for clinical legacy environments through four modifications:

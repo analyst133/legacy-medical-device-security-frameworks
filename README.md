@@ -25,8 +25,15 @@ A substantial fraction of clinical medical devices run end-of-life operating sys
 
 ## Quick start
 
-**Try the MDRS calculator instantly — no install, runs in your browser:**
-**[https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/](https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/)**
+**Every artifact has an interactive page in your browser — no install required:**
+
+| Artifact | Live page |
+|---|---|
+| MDRS Calculator | https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/ |
+| STRIDE-HC Builder | https://analyst133.github.io/legacy-medical-device-security-frameworks/stride-hc-templates/ |
+| CJR Builder | https://analyst133.github.io/legacy-medical-device-security-frameworks/cjr-templates/ |
+| Test Harness Results Explorer | https://analyst133.github.io/legacy-medical-device-security-frameworks/test-harness/ |
+| MFA Shim Demo (live TOTP gate) | https://analyst133.github.io/legacy-medical-device-security-frameworks/mfa-shim/ |
 
 - **First time here?** Read [`SETUP.md`](./SETUP.md) — step-by-step install for Linux, macOS, and Windows.
 - **Want to understand how the artifacts fit together?** Read [`WALKTHROUGH.md`](./WALKTHROUGH.md) — cross-artifact tour using a worked infusion-pump example.
