@@ -43,12 +43,24 @@ cd ../mfa-shim/prototype && pip install -r requirements.txt && python -m pytest
 
 ## Citing this work
 
-This repository is published with a Zenodo DOI (forthcoming on first release). For now, please cite the companion paper.
+This repository is archived on Zenodo. Use the **concept DOI** to cite the artifact suite — it always resolves to the latest version:
+
+- Concept DOI: [10.5281/zenodo.20113684](https://doi.org/10.5281/zenodo.20113684)
+- v1.0.0 release: [10.5281/zenodo.20113685](https://doi.org/10.5281/zenodo.20113685)
 
 ```bibtex
+@software{mohiuddin2026legacy_artifacts,
+  title   = {Legacy Medical Device Security Frameworks: Companion Artifacts},
+  author  = {Mohiuddin, Khaja T.},
+  year    = {2026},
+  doi     = {10.5281/zenodo.20113684},
+  url     = {https://doi.org/10.5281/zenodo.20113684},
+  version = {v1.0.0}
+}
+
 @article{mohiuddin2026legacy,
   title  = {A Practical Cybersecurity Framework for Legacy Medical Devices},
-  author = {Mohiuddin, Khaja T. and Bernia, Brad},
+  author = {Mohiuddin, Khaja T.},
   year   = {2026},
   note   = {Submitted}
 }
