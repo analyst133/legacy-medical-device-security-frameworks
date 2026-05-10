@@ -207,7 +207,7 @@ function render() {
 
   // Header
   const head = document.getElementById('matrix-head');
-  head.innerHTML = '<th class="scenario-th">Scenario</th>' + profiles.map(p => `<th>${p}</th>`).join('');
+  head.innerHTML = '<th class="scenario-th">Scenario</th>' + profiles.map(p => `<th>${escapeHtml(p)}</th>`).join('');
 
   // Body
   const body = document.getElementById('matrix-body');
@@ -216,7 +216,7 @@ function render() {
     const tr = document.createElement('tr');
     const stride = rows.find(r => r.scenario === sc)?.stride_hc || '?';
     const niceName = SCENARIO_NAMES[sc] || sc;
-    tr.innerHTML = `<th class="scenario-th"><span class="stride-letter">${stride}</span>${niceName}</th>`;
+    tr.innerHTML = `<th class="scenario-th"><span class="stride-letter">${escapeHtml(stride)}</span>${escapeHtml(niceName)}</th>`;
     for (const p of profiles) {
       const row = rows.find(r => r.scenario === sc && r.control_profile === p);
       if (!row) {
@@ -259,12 +259,13 @@ function showDetail(row) {
   const panel = document.getElementById('detail-panel');
   panel.classList.remove('empty');
   const cls = `cell-${row.outcome.replace(/[^A-Z_]/g,'')}`;
+  const niceName = SCENARIO_NAMES[row.scenario] || row.scenario;
   panel.innerHTML = `
     <div class="det-header">
-      <h3 style="margin:0;">${SCENARIO_NAMES[row.scenario] || row.scenario} <span style="opacity:.5;">(${row.stride_hc})</span> × ${row.control_profile}</h3>
-      <span class="det-tag ${cls}">${row.outcome}</span>
+      <h3 style="margin:0;">${escapeHtml(niceName)} <span style="opacity:.5;">(${escapeHtml(row.stride_hc)})</span> × ${escapeHtml(row.control_profile)}</h3>
+      <span class="det-tag ${cls}">${escapeHtml(row.outcome)}</span>
     </div>
-    <p><strong>Timestamp:</strong> ${row.timestamp}</p>
+    <p><strong>Timestamp:</strong> ${escapeHtml(row.timestamp)}</p>
     <p><strong>Detail:</strong></p>
     <pre>${escapeHtml(row.detail)}</pre>
   `;

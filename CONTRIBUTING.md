@@ -80,7 +80,7 @@ Example: `mdrs-calculator: add edge-case test for CCD=8 with CIS=10`.
 
 ## Reporting security issues
 
-If you believe you have found a security issue in any artifact (particularly the MFA shim prototype or test harness), please **do not** open a public issue. Instead, report privately by following the procedure documented in [`SECURITY.md`](./SECURITY.md) (forthcoming).
+If you believe you have found a security issue in any artifact (particularly the MFA shim prototype or test harness), please **do not** open a public issue. Instead, report privately by following the procedure documented in [`SECURITY.md`](./SECURITY.md).
 
 ## Code of Conduct
 
