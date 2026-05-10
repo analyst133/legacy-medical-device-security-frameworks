@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>STRIDE-HC Threat Model Builder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { box-sizing: border-box; }
+:root {
+  --bg: #ffffff; --bg-alt: #f7f8fa; --bg-section: #fafbfc;
+  --text: #1a1a1a; --text-muted: #666; --border: #e1e4e8;
+  --primary: #1f3864; --primary-light: #2f5496;
+  --chip-bg: #eef2f7; --chip-active: #1f3864; --chip-active-text: #fff;
+  --network: #2f5496; --physical: #c0504d;
+  --warning-bg: #fff4e6; --warning-border: #c65911;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.6; color: var(--text); background: var(--bg); margin: 0; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+header { background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%); color: white; padding: 32px 0 24px; margin-bottom: 32px; }
+header h1 { margin: 0 0 4px; font-size: 32px; font-weight: 700; }
+header .subtitle { margin: 0 0 16px; font-size: 15px; opacity: 0.9; }
+header nav { display: flex; gap: 24px; flex-wrap: wrap; }
+header nav a { color: white; text-decoration: none; font-size: 14px; border-bottom: 2px solid transparent; padding-bottom: 2px; transition: border-color 0.15s; }
+header nav a:hover { border-bottom-color: white; }
+main { padding-bottom: 64px; }
+section { margin-bottom: 40px; }
+h2 { font-size: 22px; margin: 0 0 12px; color: var(--primary); }
+h3 { font-size: 17px; margin: 20px 0 10px; color: var(--primary-light); }
+h4 { font-size: 14px; margin: 14px 0 6px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+p { margin: 0 0 12px; }
+.card { background: var(--bg-section); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; }
+.card.collapsed .card-body { display: none; }
+.card-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
+.card-header h2 { margin: 0; flex: 1; }
+.toggle-icon { color: var(--primary-light); font-size: 14px; transition: transform 0.15s; }
+.card.collapsed .toggle-icon { transform: rotate(-90deg); }
+.archetype-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.archetype-card { border: 2px solid var(--border); border-radius: 8px; padding: 20px; cursor: pointer; transition: all 0.15s; background: white; }
+.archetype-card:hover { border-color: var(--primary-light); }
+.archetype-card.active { border-color: var(--primary); background: var(--bg-alt); box-shadow: 0 2px 8px rgba(31, 56, 100, 0.15); }
+.archetype-card h3 { margin: 0 0 8px; color: var(--primary); font-size: 16px; }
+.archetype-card .examples { color: var(--text-muted); font-size: 14px; }
+.profile-grid { display: grid; grid-template-columns: 200px 1fr; gap: 10px 16px; align-items: center; }
+.profile-grid label { font-weight: 600; font-size: 14px; }
+.profile-grid input, .profile-grid textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; font-family: inherit; }
+.profile-grid textarea { resize: vertical; min-height: 60px; }
+.stride-category { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.stride-category-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.stride-category-header h3 { margin: 0; font-size: 18px; color: var(--primary); }
+.caw-label { font-size: 13px; color: var(--text-muted); background: var(--bg-alt); padding: 4px 10px; border-radius: 12px; }
+.caw-label strong { color: var(--text); }
+.attacker-block { margin-bottom: 16px; }
+.attacker-block.network h4 { color: var(--network); }
+.attacker-block.physical h4 { color: var(--physical); }
+.chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chip { display: inline-block; background: var(--chip-bg); padding: 5px 12px; border-radius: 16px; font-size: 13px; cursor: pointer; user-select: none; border: 1px solid transparent; transition: all 0.12s; }
+.chip:hover { background: #dde4ec; }
+.chip.selected { background: var(--chip-active); color: var(--chip-active-text); }
+.chip.selected.network { background: var(--network); }
+.chip.selected.physical { background: var(--physical); }
+.custom-input { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; font-family: inherit; margin-top: 6px; }
+.coverage-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); }
+.coverage-row label { font-weight: 600; font-size: 14px; }
+.coverage-row select { padding: 6px 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; font-family: inherit; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; padding: 20px; background: var(--bg-alt); border-radius: 8px; border: 1px solid var(--border); }
+.btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-light); }
+.btn-secondary { background: white; color: var(--primary); border: 1px solid var(--primary); }
+.btn-secondary:hover { background: var(--bg-alt); }
+.empty-state { color: var(--text-muted); font-style: italic; padding: 16px; text-align: center; }
+.notice { background: var(--warning-bg); border-left: 4px solid var(--warning-border); padding: 12px 16px; border-radius: 4px; margin: 16px 0; font-size: 14px; }
+.notice strong { color: var(--warning-border); }
+.tab-row { display: flex; gap: 0; margin-bottom: 16px; border-bottom: 2px solid var(--border); }
+.tab { padding: 10px 20px; cursor: pointer; user-select: none; border-bottom: 2px solid transparent; margin-bottom: -2px; font-size: 14px; font-weight: 600; color: var(--text-muted); }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>STRIDE-HC Threat Model Builder</h1>
+    <p class="subtitle">Interactive builder for STRIDE-HC threat models — covers the dual network/physical attacker surface for legacy medical devices</p>
+    <nav>
+      <a href="../">Repo</a>
+      <a href="../mdrs-calculator/">MDRS Calculator</a>
+      <a href="../cjr-templates/">CJR Builder</a>
+      <a href="../test-harness/">Test Harness</a>
+      <a href="../mfa-shim/">MFA Shim</a>
+      <a href="https://github.com/analyst133/legacy-medical-device-security-frameworks">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+<section>
+  <h2>1. Pick the device archetype</h2>
+  <p>The archetype determines which scenario library and which compensating controls apply. <a href="./WALKTHROUGH.md">Not sure which?</a></p>
+  <div class="archetype-picker">
+    <div class="archetype-card" id="ark-1" onclick="setArchetype('A1')">
+      <h3>Archetype 1 — General-purpose OS legacy</h3>
+      <div class="examples">Windows XP/7/Server 2008, older Linux. PACS workstations, imaging modality consoles, lab analysers, pharmacy automation.</div>
+    </div>
+    <div class="archetype-card" id="ark-2" onclick="setArchetype('A2')">
+      <h3>Archetype 2 — Embedded RTOS legacy</h3>
+      <div class="examples">VxWorks, QNX, ThreadX, proprietary firmware. Infusion pumps, ventilators, patient monitors, anaesthesia, dialysis.</div>
+    </div>
+  </div>
+</section>
+
+<section id="device-profile-section" style="display:none">
+  <h2>2. Device profile</h2>
+  <div class="card">
+    <div class="profile-grid" id="profile-grid"></div>
+  </div>
+</section>
+
+<section id="stride-section" style="display:none">
+  <h2>3. STRIDE-HC scenarios</h2>
+  <p>For each category, pick the scenarios that apply to your device. <strong>Click chips to toggle</strong> — selected chips are coloured. Use the custom-scenarios input to add device-specific ones the library doesn't cover.</p>
+  <div id="stride-categories"></div>
+</section>
+
+<section id="generate-section" style="display:none">
+  <h2>4. Generate threat model</h2>
+  <div class="notice">
+    <strong>Tip:</strong> the downloaded files mirror <code>stride-hc-template.md</code> and <code>stride-hc-schema.yaml</code> exactly — drop them into the <code>stride-hc-templates/</code> directory of your project and they become a regular STRIDE-HC threat model.
+  </div>
+  <div class="actions">
+    <button class="btn btn-primary" onclick="downloadMarkdown()">Download as Markdown (.md)</button>
+    <button class="btn btn-primary" onclick="downloadYaml()">Download as YAML (.yaml)</button>
+    <button class="btn btn-secondary" onclick="previewMarkdown()">Preview Markdown</button>
+    <button class="btn btn-secondary" onclick="resetForm()">Reset</button>
+  </div>
+  <div id="preview" style="display:none; margin-top:16px;">
+    <h3>Preview</h3>
+    <pre id="preview-text" style="background: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto; max-height: 500px; font-size: 13px; line-height: 1.5;"></pre>
+  </div>
+</section>
+
+</main>
+
+<script>
+'use strict';
+
+const PROFILE_FIELDS = [
+  ['device_name', 'Device name and model', 'text', 'e.g., ExampleMed Volumetric Infusion Pump v3.2'],
+  ['manufacturer', 'Manufacturer', 'text', 'e.g., ExampleMed Inc.'],
+  ['fda_class', 'Device class (FDA / EU MDR)', 'text', 'e.g., Class II'],
+  ['umdns', 'UMDNS / GMDN code', 'text', 'e.g., 16495 / 35143'],
+  ['mds2', 'MDS² reference', 'text', 'e.g., ExampleMed-IP3.2-MDS2-2024'],
+  ['os', 'Operating system / firmware', 'text', 'e.g., VxWorks 6.9 (EOL)'],
+  ['networking', 'Networking', 'text', 'e.g., 100Mbit Ethernet, HL7 v2 over TCP/2575, no TLS'],
+  ['authentication', 'Authentication', 'text', 'e.g., Hardcoded service-mode credential'],
+  ['patching', 'Patching status', 'text', 'e.g., Manufacturer EOL; FDA clearance limits modification'],
+  ['audit_logging', 'Audit logging', 'text', 'e.g., None on device; only at upstream nursing station'],
+  ['physical_ifaces', 'Physical interfaces', 'text', 'e.g., RS-232 service port, USB-A, Bluetooth'],
+  ['deployment', 'Deployment count', 'text', 'e.g., 240 units across ICU and oncology'],
+  ['clinical_use', 'Clinical use', 'text', 'e.g., Continuous medication infusion']
+];
+
+const CAW = { S: 1.2, T: 1.1, R: 0.9, I: 1.2, D: 1.5, E: 1.1 };
+const CAT_NAMES = {
+  S: 'Spoofing', T: 'Tampering', R: 'Repudiation',
+  I: 'Information Disclosure', D: 'Denial of Service', E: 'Elevation of Privilege'
+};
+
+const SCENARIOS = {
+  A1: {
+    S: {
+      net: ['ARP cache poisoning on shared VLAN to redirect device traffic', 'Compromised peer system forging legitimate-looking HL7/DICOM/vendor traffic', 'Rogue DHCP serving devices with attacker-controlled gateway', 'Spoofed NTP time source causing certificate/log timestamp manipulation', 'Domain controller compromise enabling ticket forgery (Golden Ticket)', 'mDNS/LLMNR spoofing for credential capture'],
+      phy: ['Local logon with shared credentials (technologist, "lab user", "vendor service")', 'Unattended workstation hijack during user break or shift change', 'USB HID-class device (BadUSB / Rubber Ducky) emulating keyboard for credential injection', 'Bluetooth/Wi-Fi pairing impersonation to keyboard/mouse', 'Service-mode access using vendor-disclosed credential pair'],
+      det: ['Endpoint authentication log forwarding', 'EDR behavioural detection on lateral logon patterns', 'LAPS audit on local admin events'],
+      ctl: ['Microsoft LAPS or equivalent', 'PAM/PAW for administrative functions', '802.1X port-based access control', 'EDR with USB device control']
+    },
+    T: {
+      net: ['Exploitation of known unpatched OS CVE (e.g., EternalBlue/MS17-010 on Win7)', 'Configuration tampering via weakly-protected SMB share or remote registry', 'Tampering with DICOM imagery in transit (CT-GAN-class attacks)', 'Compromised software update channel pushing unsigned binaries', 'DLL hijacking via writable system directory or PATH manipulation'],
+      phy: ['Malware introduction via USB drive during legitimate image import workflow', 'Malware introduction via CD/DVD or external optical drive', 'Configuration tamper via local administrator login', 'DLL replacement via local file write (vendor application directories often world-writable)', 'Removable storage replacement (MicroSD card in handheld devices)'],
+      det: ['File integrity monitoring on system and application directories', 'EDR detection of unsigned binary execution', 'DICOM/HL7 protocol-aware proxy with hash verification'],
+      ctl: ['Application allowlisting', 'EDR with behavioural detection', 'Network IPS with virtual patching', 'USB device control via EDR', 'DICOM/HL7 protocol-aware proxy']
+    },
+    R: {
+      net: ['Anonymous protocol-level transfers without strong source authentication (DICOM AE-Title without TLS, HL7 v2 without ACK chains)', 'Use of compromised credentials with no second-factor record', 'Log deletion or rotation manipulation post-compromise'],
+      phy: ['Use of shared workstation credentials with no per-user attribution', 'PHI capture via mobile-phone photography of display', 'DVD/USB export by unidentified user with shared session', 'Vendor service activity outside scheduled work-order window'],
+      det: ['Forwarded session logs to immutable SIEM', 'Session recording for shared accounts', 'Door access correlation'],
+      ctl: ['PAM with session recording', 'LAPS for local admin attribution', 'Vendor-escort policy with badge correlation']
+    },
+    I: {
+      net: ['Cleartext DICOM, HL7, or vendor-proprietary protocol carrying PHI on shared segment', 'Memory scraping via Windows OS vulnerability for reading active session data', 'Unprotected SMB share or file system permission allowing PHI export', 'Exploitation of vendor application export features without audit'],
+      phy: ['Mobile-phone photography of PHI on display', 'Bulk PHI export to USB or optical media during legitimate session', 'Shoulder-surfing in shared reading rooms or open clinical areas', 'Print-to-network exfiltration via networked printers'],
+      det: ['Network DLP on PHI patterns', 'USB write event auditing', 'Print-job audit'],
+      ctl: ['DICOM/HL7 protocol-aware proxy', 'VLAN isolation', 'EDR USB device control with DLP', 'Privacy screens']
+    },
+    D: {
+      net: ['Ransomware encrypting local data store (PACS cache, application data, OS files)', 'Targeted SMB or RDP exploit causing OS crash (BSOD)', 'Network flooding overwhelming legitimate traffic', 'Resource exhaustion via crafted application input', 'Malware-induced infinite loop or memory exhaustion'],
+      phy: ['Power or network cable disconnection at workstation', 'Display destruction or input-device theft', 'Local malware introduction via USB causing system instability', 'Boot order tampering causing failure-to-boot'],
+      det: ['Endpoint availability monitoring', 'Ransomware behavioural detection in EDR', 'Power monitoring on critical workstations'],
+      ctl: ['Application allowlisting (blocks ransomware payloads)', 'EDR with anti-ransomware', 'Network IPS', 'Battery backup; redundant displays']
+    },
+    E: {
+      net: ['Windows local privilege escalation CVE exploitation post-foothold', 'Token impersonation following service account compromise', 'Lateral movement to peer systems via Pass-the-Hash or NTLM relay', 'Kerberoasting against service principals'],
+      phy: ['Local administrator credential abuse (especially where LAPS is not deployed)', 'Boot from USB or external media to bypass disk encryption', 'Direct memory access (DMA) attacks via Thunderbolt/PCIe', 'Exploitation of physical reset switches or jumpers', '"Sticky keys" or accessibility-tool replacement at the login screen'],
+      det: ['EDR privilege escalation detection', 'Authentication log analytics', 'Boot media auditing'],
+      ctl: ['Application allowlisting', 'LAPS for local admin', 'PAM upstream (Pattern A)', 'BIOS/UEFI password + boot order lock', 'Disk encryption']
+    }
+  },
+  A2: {
+    S: {
+      net: ['ARP cache poisoning to redirect device-to-host traffic', 'Forged HL7 v2 messages from spoofed nursing station or clinical information system', 'Forged proprietary protocol traffic (vendor binary protocols often have weak/no integrity)', 'Rogue device on shared VLAN impersonating peer device', 'DHCP spoofing causing device to use attacker-controlled gateway'],
+      phy: ['Substituted device with cloned identifier during scheduled service window', 'Vendor-impersonation social engineering at device location', 'Cloned RFID/NFC/proximity token used for paired-display authentication', 'Bluetooth pairing impersonation against paired peripherals', 'Identical-model device swap concealing tampering'],
+      det: ['Passive device fingerprinting (network sensor with longitudinal store)', 'Badge-correlation analytics', 'Network UEBA peer-set anomaly', 'Tamper-evident asset-tag inspection'],
+      ctl: ['802.1X port-based access control with MAC allowlisting', 'Strict network microsegmentation', 'Tamper-evident asset tags with serialised identifier', 'Vendor-escort policy', 'HL7/DICOM protocol-aware proxy with authentication']
+    },
+    T: {
+      net: ['Unauthorised firmware push from compromised vendor update channel', 'Configuration tampering via unauthenticated management interface (HTTP, Telnet, SNMP v1/v2)', 'Protocol parser exploitation (URGENT/11, Ripple20, AMNESIA:33, NUMBER:JACK, NAME:WRECK)', 'TFTP/FTP boot configuration manipulation', 'Malformed HL7 or DICOM message causing memory corruption'],
+      phy: ['Firmware injection via USB-A, RS-232, or proprietary service connector', 'Configuration tamper via local console or service-mode PIN', 'Removable media replacement (CompactFlash, MicroSD, EEPROM) during maintenance', 'Direct EEPROM/JTAG access via physical disassembly', 'Service-mode firmware downgrade to vulnerable version'],
+      det: ['File integrity monitoring (network-adjacent — device itself cannot run agents)', 'Configuration version comparison via management API', 'Tamper-evident seal inspection (periodic cadence)', 'IPS deep-packet inspection for protocol-parser exploits'],
+      ctl: ['Inline IPS with healthcare protocol parsing (URGENT/11 virtual patches)', 'Pattern C — inline MFA shim at service port', 'Tamper-evident sealing with serialised seals', 'Physical port blockers (epoxy / locking inserts)', 'USB port logical or physical disablement']
+    },
+    R: {
+      net: ['Configuration changes via shared service account with no per-user attribution', 'Untraceable data access via cleartext protocol with no per-session log', 'Use of vendor service tooling that does not generate device-side audit records'],
+      phy: ['Service-mode access by unidentified technician (badge worn, work order falsified)', 'Bedside parameter changes by user logged in to nursing station with shared credential', 'PHI capture by mobile-phone photography of device display', 'Vendor service activity outside scheduled work-order window'],
+      det: ['Upstream session recording (provided by MFA shim or PAM)', 'Door access correlation', 'Camera correlation in high-risk areas', 'Network UEBA on session boundaries'],
+      ctl: ['Inline MFA shim with TOTP-bound session recording (Pattern C)', 'Pattern A — upstream PAM gateway', 'Vendor-escort policy with logged escort identity', 'Badge-correlation requirement for service work orders']
+    },
+    I: {
+      net: ['Cleartext HL7 v2 carrying patient identifier, medication, dose, timing', 'Cleartext DICOM with patient PHI', 'Vendor-proprietary protocol carrying PHI without encryption', 'Unprotected data export via management interface or service tool', 'Memory readout via debug interface'],
+      phy: ['Mobile-phone photography of PHI on device display', 'Bulk PHI export to USB at service port using service tool', 'Eavesdropping on Bluetooth or BLE pairing or active sessions', 'NFC sniffing in proximity to NFC-equipped devices', 'Acoustic eavesdropping (rare; documented for some pumps)'],
+      det: ['Network sensor for unexpected cleartext PHI flows', 'Camera correlation in service-window timeframes', 'Bluetooth scanning baseline'],
+      ctl: ['IPSec encapsulation of cleartext streams', 'VLAN microsegmentation', 'Service-window privacy screens', 'Inline MFA shim with session recording (deters insider capture)', 'Bluetooth disablement where not clinically required']
+    },
+    D: {
+      net: ['Network flooding disrupting real-time HL7/DICOM communication', 'Targeted protocol-parser crash (URGENT/11-class IPnet stack vulnerabilities)', 'Resource exhaustion via malformed message stream', 'ARP storm or broadcast amplification on shared segment', 'TCP RST injection terminating active session'],
+      phy: ['Power or network cable disconnection at device location', 'Physical destruction or theft', 'Service-mode reset rendering device unavailable mid-therapy', 'Battery removal causing reboot in transportable devices', 'Tampering with peripheral cabling causing device to fault into safe-mode'],
+      det: ['Network traffic baselining + flood detection', 'Device availability monitoring (pings, health-check API)', 'Power monitoring on critical-care branches', 'Backup device staging audit'],
+      ctl: ['Rate-limiting at upstream switch', 'Redundant network paths', 'Battery backup with monitored capacity', 'Physical cable lock + tamper-evident covering', 'Backup device staging']
+    },
+    E: {
+      net: ['Default credential exploitation via management interface (Telnet, HTTP, SNMP)', 'Vendor backdoor account exploitation', 'Protocol parser exploitation enabling code execution', 'SNMP v1/v2 community string brute-force', 'Telnet credential brute-force where account lockout is absent'],
+      phy: ['Service-mode credential abuse via physical service port (RS-232, USB)', 'Vendor service-tool privilege abuse', 'Unauthorised access to administrative menus via undocumented key sequence', 'Direct hardware access (JTAG, UART headers exposed on PCB)', 'Boot media replacement (MicroSD, EEPROM) with attacker-prepared image'],
+      det: ['Authentication attempt logging (upstream of device)', 'Privileged session recording (MFA shim)', 'Firmware version surveillance', 'Network UEBA on management-interface flows'],
+      ctl: ['Pattern A — upstream PAM with MFA', 'Pattern C — inline MFA shim with per-user enforcement', 'Network ACL restricting management interface to PAM gateway only', 'Service-port physical lock + escort policy']
+    }
+  }
+};
+
+const COVERAGE = ['Strong', 'Partial', 'Weak', 'Unassessed'];
+
+let state = {
+  archetype: null,
+  profile: {},
+  categories: {} // { S: { net: Set, phy: Set, det: Set, ctl: Set, custom_net: '', custom_phy: '', custom_det: '', custom_ctl: '', coverage: '' }, ... }
+};
+
+function setArchetype(a) {
+  state.archetype = a;
+  document.getElementById('ark-1').classList.toggle('active', a === 'A1');
+  document.getElementById('ark-2').classList.toggle('active', a === 'A2');
+
+  // Init categories
+  state.categories = {};
+  for (const cat of ['S','T','R','I','D','E']) {
+    state.categories[cat] = { net: new Set(), phy: new Set(), det: new Set(), ctl: new Set(), custom_net: '', custom_phy: '', custom_det: '', custom_ctl: '', coverage: '' };
+  }
+
+  renderProfile();
+  renderStrideCategories();
+  document.getElementById('device-profile-section').style.display = '';
+  document.getElementById('stride-section').style.display = '';
+  document.getElementById('generate-section').style.display = '';
+}
+
+function renderProfile() {
+  const grid = document.getElementById('profile-grid');
+  grid.innerHTML = '';
+  for (const [key, label, type, placeholder] of PROFILE_FIELDS) {
+    const lab = document.createElement('label');
+    lab.textContent = label;
+    lab.setAttribute('for', `prof-${key}`);
+    const inp = document.createElement('input');
+    inp.type = type;
+    inp.id = `prof-${key}`;
+    inp.placeholder = placeholder;
+    inp.value = state.profile[key] || '';
+    inp.addEventListener('input', () => { state.profile[key] = inp.value; });
+    grid.appendChild(lab);
+    grid.appendChild(inp);
+  }
+}
+
+function renderStrideCategories() {
+  const container = document.getElementById('stride-categories');
+  container.innerHTML = '';
+  const cats = ['S', 'T', 'R', 'I', 'D', 'E'];
+  for (const cat of cats) {
+    const data = SCENARIOS[state.archetype][cat];
+    const catState = state.categories[cat];
+    const div = document.createElement('div');
+    div.className = 'stride-category';
+    div.innerHTML = `
+      <div class="stride-category-header">
+        <h3>${cat} — ${CAT_NAMES[cat]}</h3>
+        <span class="caw-label">CAW = <strong>${CAW[cat]}</strong></span>
+      </div>
+      <div class="attacker-block network">
+        <h4>Network attacker scenarios</h4>
+        <div class="chip-list" data-cat="${cat}" data-kind="net"></div>
+        <input class="custom-input" data-cat="${cat}" data-kind="custom_net" placeholder="+ Add custom network-attacker scenario" value="${escapeHtml(catState.custom_net)}">
+      </div>
+      <div class="attacker-block physical">
+        <h4>Physical / insider attacker scenarios</h4>
+        <div class="chip-list" data-cat="${cat}" data-kind="phy"></div>
+        <input class="custom-input" data-cat="${cat}" data-kind="custom_phy" placeholder="+ Add custom physical/insider scenario" value="${escapeHtml(catState.custom_phy)}">
+      </div>
+      <div class="attacker-block">
+        <h4>Detection methods (Framework V)</h4>
+        <div class="chip-list" data-cat="${cat}" data-kind="det"></div>
+        <input class="custom-input" data-cat="${cat}" data-kind="custom_det" placeholder="+ Add custom detection method" value="${escapeHtml(catState.custom_det)}">
+      </div>
+      <div class="attacker-block">
+        <h4>Compensating controls (Framework I)</h4>
+        <div class="chip-list" data-cat="${cat}" data-kind="ctl"></div>
+        <input class="custom-input" data-cat="${cat}" data-kind="custom_ctl" placeholder="+ Add custom compensating control" value="${escapeHtml(catState.custom_ctl)}">
+      </div>
+      <div class="coverage-row">
+        <label for="cov-${cat}">CCD coverage assessment:</label>
+        <select id="cov-${cat}" data-cat="${cat}"><option value="">— pick one —</option>${COVERAGE.map(c => `<option value="${c}" ${catState.coverage===c?'selected':''}>${c}</option>`).join('')}</select>
+      </div>
+    `;
+    container.appendChild(div);
+
+    // Render chips
+    const chipKinds = [['net', data.net, 'network'], ['phy', data.phy, 'physical'], ['det', data.det, ''], ['ctl', data.ctl, '']];
+    for (const [kind, items, klass] of chipKinds) {
+      const list = div.querySelector(`.chip-list[data-kind="${kind}"]`);
+      for (const item of items) {
+        const chip = document.createElement('span');
+        chip.className = 'chip ' + klass;
+        chip.textContent = item;
+        if (catState[kind].has(item)) chip.classList.add('selected');
+        chip.addEventListener('click', () => {
+          if (catState[kind].has(item)) { catState[kind].delete(item); chip.classList.remove('selected'); }
+          else { catState[kind].add(item); chip.classList.add('selected'); }
+        });
+        list.appendChild(chip);
+      }
+    }
+    // Wire custom inputs
+    div.querySelectorAll('.custom-input').forEach(inp => {
+      inp.addEventListener('input', () => { catState[inp.dataset.kind] = inp.value; });
+    });
+    // Wire coverage
+    div.querySelector(`#cov-${cat}`).addEventListener('change', e => { catState.coverage = e.target.value; });
+  }
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function bullets(items, customLine) {
+  const out = items.map(i => `- ${i}`);
+  if (customLine && customLine.trim()) out.push(`- ${customLine.trim()}`);
+  return out.length ? out.join('\n') : '_(none selected)_';
+}
+
+function buildMarkdown() {
+  const p = state.profile;
+  const arkLabel = state.archetype === 'A1' ? 'Archetype 1 (general-purpose-OS legacy)' : 'Archetype 2 (embedded RTOS legacy)';
+  let md = `# STRIDE-HC Threat Model: ${p.device_name || '[Device name]'}\n\n`;
+  md += `> Generated by the STRIDE-HC builder. Replace remaining bracketed text with device-specific content before submission.\n\n`;
+  md += `## 1. Device profile\n\n| Field | Value |\n|---|---|\n`;
+  md += `| Device name and model | ${p.device_name || '[TBD]'} |\n`;
+  md += `| Manufacturer | ${p.manufacturer || '[TBD]'} |\n`;
+  md += `| Device class (FDA / EU MDR) | ${p.fda_class || '[TBD]'} |\n`;
+  md += `| UMDNS / GMDN code | ${p.umdns || '[TBD]'} |\n`;
+  md += `| MDS² reference | ${p.mds2 || '[TBD]'} |\n`;
+  md += `| **Archetype** | **${arkLabel}** |\n`;
+  md += `| Operating system / firmware | ${p.os || '[TBD]'} |\n`;
+  md += `| Networking | ${p.networking || '[TBD]'} |\n`;
+  md += `| Authentication | ${p.authentication || '[TBD]'} |\n`;
+  md += `| Patching | ${p.patching || '[TBD]'} |\n`;
+  md += `| Audit logging | ${p.audit_logging || '[TBD]'} |\n`;
+  md += `| Physical interfaces | ${p.physical_ifaces || '[TBD]'} |\n`;
+  md += `| Deployment count | ${p.deployment || '[TBD]'} |\n`;
+  md += `| Clinical use | ${p.clinical_use || '[TBD]'} |\n\n`;
+  md += `## 2. STRIDE-HC threat scenarios\n\n`;
+  for (const cat of ['S','T','R','I','D','E']) {
+    const c = state.categories[cat];
+    md += `### ${cat} — ${CAT_NAMES[cat]} (CAW = ${CAW[cat]})\n\n`;
+    md += `**Network-attacker scenarios:**\n${bullets([...c.net], c.custom_net)}\n\n`;
+    md += `**Physical / insider-attacker scenarios:**\n${bullets([...c.phy], c.custom_phy)}\n\n`;
+    md += `**Detection methods (Framework V):**\n${bullets([...c.det], c.custom_det)}\n\n`;
+    md += `**Compensating controls (Framework I):**\n${bullets([...c.ctl], c.custom_ctl)}\n\n`;
+    md += `**CCD coverage assessment:** ${c.coverage || '_(not assessed)_'}\n\n---\n\n`;
+  }
+  md += `## 3. Clinical Availability Weights (CAW)\n\n`;
+  md += `Defaults applied per paper §4.3:\n\n`;
+  md += `| Category | CAW |\n|---|---|\n`;
+  for (const cat of ['S','T','R','I','D','E']) md += `| ${cat} — ${CAT_NAMES[cat]} | ${CAW[cat]} |\n`;
+  md += `\n## 4. Linked records\n\n_(reference your MDRS score, related CJRs, test-harness outputs, etc.)_\n`;
+  return md;
+}
+
+function buildYaml() {
+  const p = state.profile;
+  const arkLabel = state.archetype === 'A1' ? 'Archetype 1 (general-purpose-OS legacy)' : 'Archetype 2 (embedded RTOS legacy)';
+  let y = `# STRIDE-HC threat model — generated by the builder\n`;
+  y += `device:\n`;
+  y += `  name: ${yq(p.device_name)}\n`;
+  y += `  manufacturer: ${yq(p.manufacturer)}\n`;
+  y += `  fda_class: ${yq(p.fda_class)}\n`;
+  y += `  umdns_gmdn: ${yq(p.umdns)}\n`;
+  y += `  mds2_reference: ${yq(p.mds2)}\n`;
+  y += `  archetype: ${yq(arkLabel)}\n`;
+  y += `  os_firmware: ${yq(p.os)}\n`;
+  y += `  networking: ${yq(p.networking)}\n`;
+  y += `  authentication: ${yq(p.authentication)}\n`;
+  y += `  patching: ${yq(p.patching)}\n`;
+  y += `  audit_logging: ${yq(p.audit_logging)}\n`;
+  y += `  physical_interfaces: ${yq(p.physical_ifaces)}\n`;
+  y += `  deployment: ${yq(p.deployment)}\n`;
+  y += `  clinical_use: ${yq(p.clinical_use)}\n`;
+  y += `categories:\n`;
+  for (const cat of ['S','T','R','I','D','E']) {
+    const c = state.categories[cat];
+    y += `  ${cat}:\n`;
+    y += `    name: "${CAT_NAMES[cat]}"\n`;
+    y += `    caw: ${CAW[cat]}\n`;
+    y += `    network_scenarios:\n`;
+    [...c.net, c.custom_net].filter(x => x && x.trim()).forEach(s => { y += `      - ${yq(s)}\n`; });
+    y += `    physical_insider_scenarios:\n`;
+    [...c.phy, c.custom_phy].filter(x => x && x.trim()).forEach(s => { y += `      - ${yq(s)}\n`; });
+    y += `    detection_methods:\n`;
+    [...c.det, c.custom_det].filter(x => x && x.trim()).forEach(s => { y += `      - ${yq(s)}\n`; });
+    y += `    compensating_controls:\n`;
+    [...c.ctl, c.custom_ctl].filter(x => x && x.trim()).forEach(s => { y += `      - ${yq(s)}\n`; });
+    y += `    coverage_assessment: ${yq(c.coverage || 'Unassessed')}\n`;
+  }
+  return y;
+}
+
+function yq(s) {
+  if (!s) return '""';
+  const str = String(s);
+  if (/[:#"'\n\\]/.test(str)) return JSON.stringify(str);
+  return `"${str}"`;
+}
+
+function downloadFile(name, content, type='text/plain') {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 100);
+}
+
+function slug(s) {
+  return (s || 'device').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'device';
+}
+
+function downloadMarkdown() {
+  if (!state.archetype) return alert('Pick an archetype first.');
+  downloadFile(`stride-hc-${slug(state.profile.device_name)}.md`, buildMarkdown(), 'text/markdown');
+}
+function downloadYaml() {
+  if (!state.archetype) return alert('Pick an archetype first.');
+  downloadFile(`stride-hc-${slug(state.profile.device_name)}.yaml`, buildYaml(), 'application/yaml');
+}
+function previewMarkdown() {
+  if (!state.archetype) return alert('Pick an archetype first.');
+  document.getElementById('preview').style.display = '';
+  document.getElementById('preview-text').textContent = buildMarkdown();
+  document.getElementById('preview').scrollIntoView({ behavior: 'smooth' });
+}
+function resetForm() {
+  if (!confirm('Reset all fields?')) return;
+  state = { archetype: null, profile: {}, categories: {} };
+  document.getElementById('ark-1').classList.remove('active');
+  document.getElementById('ark-2').classList.remove('active');
+  document.getElementById('device-profile-section').style.display = 'none';
+  document.getElementById('stride-section').style.display = 'none';
+  document.getElementById('generate-section').style.display = 'none';
+  document.getElementById('preview').style.display = 'none';
+}
+</script>
+</body>
+</html>
