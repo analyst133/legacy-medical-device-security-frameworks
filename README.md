@@ -1,7 +1,7 @@
 # Legacy Medical Device Security Frameworks
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![DOI](https://img.shields.io/badge/DOI-pending-lightgrey.svg)](https://zenodo.org/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20113684.svg)](https://doi.org/10.5281/zenodo.20113684)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB.svg)](https://www.python.org/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED.svg)](https://docs.docker.com/compose/)
 
