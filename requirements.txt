@@ -1,0 +1,13 @@
+# Aggregator — pulls in every Python dependency in the repo.
+#
+# The MFA shim prototype is currently the only Python artifact. If more
+# Python code is added in future, add another -r line below.
+#
+# Usage from the repo root:
+#   python -m venv .venv
+#   source .venv/bin/activate          # Linux / macOS
+#   source .venv/Scripts/activate      # Git Bash on Windows
+#   .venv\Scripts\Activate.ps1         # PowerShell on Windows
+#   pip install -r requirements.txt
+
+-r mfa-shim/prototype/requirements.txt
