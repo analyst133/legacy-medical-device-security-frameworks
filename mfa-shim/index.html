@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pattern C MFA Shim — Reference Design</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { box-sizing: border-box; }
+:root {
+  --bg: #ffffff; --bg-alt: #f7f8fa; --bg-section: #fafbfc;
+  --text: #1a1a1a; --text-muted: #666; --border: #e1e4e8;
+  --primary: #1f3864; --primary-light: #2f5496;
+  --tech: #2f5496; --shim: #1f3864; --device: #4a7c4a;
+  --success: #2e7d32; --warning: #ed7d31; --danger: #c00000;
+  --warning-bg: #fff4e6;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.6; color: var(--text); background: var(--bg); margin: 0; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+header { background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%); color: white; padding: 32px 0 24px; margin-bottom: 32px; }
+header h1 { margin: 0 0 4px; font-size: 32px; font-weight: 700; }
+header .subtitle { margin: 0 0 16px; font-size: 15px; opacity: 0.9; }
+header nav { display: flex; gap: 24px; flex-wrap: wrap; }
+header nav a { color: white; text-decoration: none; font-size: 14px; border-bottom: 2px solid transparent; padding-bottom: 2px; transition: border-color 0.15s; }
+header nav a:hover { border-bottom-color: white; }
+main { padding-bottom: 64px; }
+section { margin-bottom: 40px; }
+h2 { font-size: 22px; margin: 0 0 12px; color: var(--primary); }
+h3 { font-size: 17px; margin: 18px 0 10px; color: var(--primary-light); }
+p { margin: 0 0 12px; }
+.card { background: var(--bg-section); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; }
+.notice { background: var(--warning-bg); border-left: 4px solid var(--warning); padding: 12px 16px; border-radius: 4px; margin: 16px 0; font-size: 14px; }
+.notice strong { color: var(--warning); }
+.arch-diagram { display: flex; align-items: stretch; gap: 0; margin: 24px 0; flex-wrap: wrap; }
+.arch-box { flex: 1; min-width: 240px; padding: 16px 18px; border-radius: 8px; text-align: center; font-size: 14px; position: relative; }
+.arch-box h4 { margin: 0 0 8px; font-size: 15px; }
+.arch-tech { background: var(--tech); color: white; }
+.arch-shim { background: var(--shim); color: white; border: 2px solid var(--primary-light); }
+.arch-device { background: var(--device); color: white; }
+.arrow { display: flex; align-items: center; justify-content: center; padding: 0 8px; font-size: 24px; color: var(--text-muted); font-weight: 700; }
+.shim-internals { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; font-size: 12px; }
+.shim-internals .module { background: rgba(255,255,255,0.15); padding: 6px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); }
+.flow-section { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 24px 0; }
+.flow-step { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 14px; padding: 12px; border-radius: 6px; transition: all 0.2s; }
+.flow-step.active { background: var(--bg-alt); box-shadow: 0 2px 8px rgba(31, 56, 100, 0.1); }
+.flow-step .num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: white; font-weight: 700; flex-shrink: 0; }
+.flow-step.active .num { background: var(--success); }
+.flow-step .body { flex: 1; }
+.flow-step .body h4 { margin: 0 0 4px; font-size: 15px; }
+.flow-step .body p { margin: 0; font-size: 14px; color: var(--text-muted); }
+.flow-controls { display: flex; gap: 12px; justify-content: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-light); }
+.btn-secondary { background: white; color: var(--primary); border: 1px solid var(--primary); }
+.btn-secondary:hover { background: var(--bg-alt); }
+.totp-demo { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 16px 0; }
+.totp-demo .totp-display { font-family: 'Courier New', monospace; font-size: 36px; font-weight: 700; color: var(--primary); text-align: center; letter-spacing: 4px; margin: 12px 0; }
+.totp-demo .totp-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); }
+.totp-bar { height: 4px; background: var(--bg-alt); border-radius: 2px; overflow: hidden; margin: 8px 0; }
+.totp-bar-fill { height: 100%; background: var(--primary); transition: width 1s linear; }
+.totp-form { display: flex; gap: 10px; margin: 12px 0; align-items: flex-end; }
+.totp-form .field { flex: 1; }
+.totp-form label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.totp-form input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; font-family: 'Courier New', monospace; }
+.totp-result { padding: 12px; border-radius: 4px; margin-top: 12px; font-size: 14px; font-weight: 600; }
+.totp-result.ok { background: #e8f5e9; color: var(--success); border: 1px solid var(--success); }
+.totp-result.bad { background: #ffebee; color: var(--danger); border: 1px solid var(--danger); }
+.threats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin: 16px 0; }
+.threat-card { background: white; border-left: 4px solid var(--danger); border-radius: 6px; padding: 14px 16px; }
+.threat-card h4 { margin: 0 0 6px; color: var(--danger); font-size: 14px; }
+.threat-card.mitigated { border-left-color: var(--success); }
+.threat-card.mitigated h4 { color: var(--success); }
+.threat-card p { margin: 0; font-size: 13px; color: var(--text-muted); }
+.stride-tags { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+.stride-tag { background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+.doc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 16px 0; }
+.doc-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 16px; transition: all 0.15s; }
+.doc-card:hover { border-color: var(--primary-light); box-shadow: 0 2px 8px rgba(31, 56, 100, 0.1); }
+.doc-card h4 { margin: 0 0 6px; }
+.doc-card h4 a { color: var(--primary); text-decoration: none; }
+.doc-card p { margin: 0; font-size: 13px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>Pattern C MFA Shim</h1>
+    <p class="subtitle">Inline service-port multi-factor authentication for legacy medical devices that cannot run MFA natively</p>
+    <nav>
+      <a href="../">Repo</a>
+      <a href="../mdrs-calculator/">MDRS Calculator</a>
+      <a href="../stride-hc-templates/">STRIDE-HC Builder</a>
+      <a href="../cjr-templates/">CJR Builder</a>
+      <a href="../test-harness/">Test Harness</a>
+      <a href="https://github.com/analyst133/legacy-medical-device-security-frameworks">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+<div class="notice">
+  <strong>This is a reference design</strong>, not a regulated product. Read <a href="./FDA-CONSIDERATIONS.md">FDA-CONSIDERATIONS.md</a> before any clinical deployment — inline insertion into a medical device's service port may, depending on jurisdiction, constitute a modification requiring regulatory engagement.
+</div>
+
+<section>
+  <h2>The problem</h2>
+  <p>Legacy medical devices commonly expose a physical <strong>service port</strong> — RS-232, USB, or a proprietary connector — that vendor field engineers use for diagnostics, configuration, and firmware updates. The port is typically protected by:</p>
+  <div class="threats-grid">
+    <div class="threat-card">
+      <h4>Hardcoded service-mode password</h4>
+      <p>Documented in service manuals that frequently leak online; identical across deployment sites.</p>
+      <div class="stride-tags"><span class="stride-tag">E</span></div>
+    </div>
+    <div class="threat-card">
+      <h4>No per-user authentication</h4>
+      <p>Once anyone has the password, all actions are attributed to "service mode" — no individual accountability.</p>
+      <div class="stride-tags"><span class="stride-tag">R</span></div>
+    </div>
+    <div class="threat-card">
+      <h4>No audit logging on the device</h4>
+      <p>Configuration changes, firmware updates, and parameter modifications leave no trace.</p>
+      <div class="stride-tags"><span class="stride-tag">R</span><span class="stride-tag">T</span></div>
+    </div>
+    <div class="threat-card">
+      <h4>Cannot be retrofitted with MFA</h4>
+      <p>Vendor firmware is locked by FDA clearance; modifying it requires re-submission, a multi-year process.</p>
+      <div class="stride-tags"><span class="stride-tag">E</span></div>
+    </div>
+  </div>
+  <p><strong>Patterns A (upstream PAM) and B (network gating)</strong> protect the network management interface but do nothing for the physical service port. Pattern C closes that gap.</p>
+</section>
+
+<section>
+  <h2>How Pattern C works</h2>
+  <p>A small inline hardware element sits between the technician's laptop and the device's service port. Every byte of every session passes through it.</p>
+  <div class="arch-diagram">
+    <div class="arch-box arch-tech">
+      <h4>Technician laptop</h4>
+      <div>Vendor service tooling</div>
+    </div>
+    <div class="arrow">⇄</div>
+    <div class="arch-box arch-shim">
+      <h4>Pattern C MFA Shim</h4>
+      <div class="shim-internals">
+        <div class="module">TOTP gate</div>
+        <div class="module">Session recorder</div>
+        <div class="module">Tamper detector</div>
+      </div>
+    </div>
+    <div class="arrow">⇄</div>
+    <div class="arch-box arch-device">
+      <h4>Medical device</h4>
+      <div>RS-232 / USB service port</div>
+    </div>
+  </div>
+  <p>The shim also reaches a <strong>central SIEM</strong> over a side channel for session forwarding, heartbeats, and tamper alerts. <a href="./ARCHITECTURE.md">Full architecture →</a></p>
+</section>
+
+<section>
+  <h2>Session flow — click "Run" to step through</h2>
+  <div class="flow-section">
+    <div class="flow-step" id="step-1">
+      <span class="num">1</span>
+      <div class="body">
+        <h4>Technician plugs in laptop</h4>
+        <p>Service tooling opens the serial connection. The shim intercepts; <strong>no traffic passes through</strong> until step 4 succeeds.</p>
+      </div>
+    </div>
+    <div class="flow-step" id="step-2">
+      <span class="num">2</span>
+      <div class="body">
+        <h4>Shim presents authentication prompt</h4>
+        <p>"Authenticate as: <code>&lt;technician_id&gt; &lt;totp_code&gt;</code>". Tamper detector confirms the case is sealed; if not, session is refused before prompt.</p>
+      </div>
+    </div>
+    <div class="flow-step" id="step-3">
+      <span class="num">3</span>
+      <div class="body">
+        <h4>Technician submits TOTP code</h4>
+        <p>Generated by their authenticator app from the shared secret issued at enrollment. Try the live demo below.</p>
+      </div>
+    </div>
+    <div class="flow-step" id="step-4">
+      <span class="num">4</span>
+      <div class="body">
+        <h4>TOTP gate validates</h4>
+        <p>Checks the code against ±1 time-window tolerance, marks the period used (replay protection), tracks failed attempts (lockout). If valid: emit <code>session_start</code> event; passthrough enabled.</p>
+      </div>
+    </div>
+    <div class="flow-step" id="step-5">
+      <span class="num">5</span>
+      <div class="body">
+        <h4>Bidirectional session</h4>
+        <p>Every byte recorded with direction (IN/OUT), timestamp, and technician ID. Recorded to local non-volatile storage and forwarded to SIEM when reachable.</p>
+      </div>
+    </div>
+    <div class="flow-step" id="step-6">
+      <span class="num">6</span>
+      <div class="body">
+        <h4>Session ends</h4>
+        <p>Technician disconnects, or shim force-closes on tamper event or emergency stop. Footer event emitted with terminal reason and byte counts.</p>
+      </div>
+    </div>
+    <div class="flow-controls">
+      <button class="btn btn-primary" id="play-btn" onclick="playFlow()">▶ Run flow</button>
+      <button class="btn btn-secondary" onclick="resetFlow()">Reset</button>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Live TOTP demo</h2>
+  <div class="totp-demo">
+    <p>Generates a real TOTP code (RFC 6238, SHA-1, 6 digits, 30-second period) from a demo secret. Enter the current code into the field below to test the gate logic. This is the same algorithm <code>prototype/totp_gate.py</code> implements.</p>
+    <div class="totp-meta">
+      <span>Demo secret: <code id="secret">JBSWY3DPEHPK3PXP</code></span>
+      <span id="period-remaining">— s remaining</span>
+    </div>
+    <div class="totp-display" id="current-code">------</div>
+    <div class="totp-bar"><div class="totp-bar-fill" id="period-bar"></div></div>
+    <div class="totp-form">
+      <div class="field">
+        <label for="tech-id">Technician ID</label>
+        <input id="tech-id" value="alice@example.org">
+      </div>
+      <div class="field">
+        <label for="code-input">TOTP code</label>
+        <input id="code-input" maxlength="6" placeholder="6 digits">
+      </div>
+      <button class="btn btn-primary" onclick="tryAuth()">Authenticate</button>
+    </div>
+    <div id="auth-result"></div>
+  </div>
+</section>
+
+<section>
+  <h2>STRIDE-HC threats addressed</h2>
+  <div class="threats-grid">
+    <div class="threat-card mitigated">
+      <h4>T — Tampering</h4>
+      <p>Firmware injection via service port now requires TOTP authentication. Every byte recorded for forensic analysis.</p>
+      <div class="stride-tags"><span class="stride-tag">T</span></div>
+    </div>
+    <div class="threat-card mitigated">
+      <h4>R — Repudiation</h4>
+      <p>Per-user attribution restored via TOTP binding. Session recording provides post-hoc proof of who did what.</p>
+      <div class="stride-tags"><span class="stride-tag">R</span></div>
+    </div>
+    <div class="threat-card mitigated">
+      <h4>E — Elevation of Privilege</h4>
+      <p>Documented service-port password is operationally useless without a valid TOTP. Lockout prevents brute force.</p>
+      <div class="stride-tags"><span class="stride-tag">E</span></div>
+    </div>
+    <div class="threat-card mitigated">
+      <h4>I — Information Disclosure (partial)</h4>
+      <p>Insider PHI capture via service-port export is deterred by session recording. Vendor still sees PHI in the clear when authorized; not a confidentiality control.</p>
+      <div class="stride-tags"><span class="stride-tag">I</span></div>
+    </div>
+  </div>
+  <p>See <a href="../stride-hc-templates/examples/infusion-pump.md">stride-hc-templates/examples/infusion-pump.md</a> for the worked threat model that prescribes this control.</p>
+</section>
+
+<section>
+  <h2>Documentation</h2>
+  <div class="doc-grid">
+    <div class="doc-card">
+      <h4><a href="./README.md">README.md</a></h4>
+      <p>Overview, why Pattern C exists, where this fits in the wider repo.</p>
+    </div>
+    <div class="doc-card">
+      <h4><a href="./DESIGN.md">DESIGN.md</a></h4>
+      <p>Design rationale and security properties.</p>
+    </div>
+    <div class="doc-card">
+      <h4><a href="./ARCHITECTURE.md">ARCHITECTURE.md</a></h4>
+      <p>System architecture, components, data flow.</p>
+    </div>
+    <div class="doc-card">
+      <h4><a href="./FDA-CONSIDERATIONS.md">FDA-CONSIDERATIONS.md</a> ⚠️</h4>
+      <p>Regulatory analysis. Read before any clinical deployment.</p>
+    </div>
+    <div class="doc-card">
+      <h4><a href="./prototype/README.md">prototype/README.md</a></h4>
+      <p>How to run the Python reference implementation. 37 tests, all passing.</p>
+    </div>
+    <div class="doc-card">
+      <h4><a href="./hardware/README.md">hardware/README.md</a></h4>
+      <p>Notes on porting to Raspberry Pi / ESP32 / custom hardware.</p>
+    </div>
+    <div class="doc-card">
+      <h4><a href="../cjr-templates/examples/cjr-leaked-service-pin.md">CJR example</a></h4>
+      <p>Worked Control Justification Record for deploying Pattern C against a leaked service PIN.</p>
+    </div>
+    <div class="doc-card">
+      <h4><a href="https://github.com/analyst133/legacy-medical-device-security-frameworks/tree/main/mfa-shim/prototype">Source on GitHub</a></h4>
+      <p>Browse the Python code, tests, and configuration template.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+'use strict';
+
+// ----- RFC 6238 TOTP (HMAC-SHA1) -----
+// Uses Web Crypto API. Same algorithm as pyotp.TOTP.
+
+function base32Decode(s) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  s = s.replace(/=+$/, '').toUpperCase();
+  let bits = '';
+  for (const c of s) {
+    const idx = alphabet.indexOf(c);
+    if (idx < 0) continue;
+    bits += idx.toString(2).padStart(5, '0');
+  }
+  const bytes = new Uint8Array(Math.floor(bits.length / 8));
+  for (let i = 0; i < bytes.length; i++) {
+    bytes[i] = parseInt(bits.substr(i * 8, 8), 2);
+  }
+  return bytes;
+}
+
+async function hotp(secret, counter) {
+  const counterBytes = new Uint8Array(8);
+  // Big-endian counter
+  let c = counter;
+  for (let i = 7; i >= 0; i--) { counterBytes[i] = c & 0xff; c = Math.floor(c / 256); }
+  const key = await crypto.subtle.importKey('raw', secret, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
+  const sig = new Uint8Array(await crypto.subtle.sign('HMAC', key, counterBytes));
+  const offset = sig[sig.length - 1] & 0x0f;
+  const code = ((sig[offset] & 0x7f) << 24) | (sig[offset+1] << 16) | (sig[offset+2] << 8) | sig[offset+3];
+  return String(code % 1000000).padStart(6, '0');
+}
+
+async function totp(secretBase32, time = Date.now() / 1000) {
+  const counter = Math.floor(time / 30);
+  const secret = base32Decode(secretBase32);
+  return await hotp(secret, counter);
+}
+
+const DEMO_SECRET = 'JBSWY3DPEHPK3PXP';
+const usedPeriods = new Set();
+const failureCounts = {};
+
+async function updateTotpDisplay() {
+  const now = Date.now() / 1000;
+  const period = Math.floor(now / 30);
+  const elapsed = now - period * 30;
+  const remaining = 30 - elapsed;
+  const code = await totp(DEMO_SECRET);
+  document.getElementById('current-code').textContent = code;
+  document.getElementById('period-remaining').textContent = `${Math.ceil(remaining)} s remaining`;
+  document.getElementById('period-bar').style.width = `${(remaining/30)*100}%`;
+}
+
+async function tryAuth() {
+  const techId = document.getElementById('tech-id').value.trim();
+  const code = document.getElementById('code-input').value.trim();
+  const out = document.getElementById('auth-result');
+  const now = Date.now() / 1000;
+  const period = Math.floor(now / 30);
+
+  if (!techId || !code) { out.innerHTML = `<div class="totp-result bad">Provide technician ID and 6-digit code.</div>`; return; }
+  if (!/^\d{6}$/.test(code)) { out.innerHTML = `<div class="totp-result bad">Code must be 6 digits.</div>`; return; }
+
+  // Lockout check (3 fails)
+  if (failureCounts[techId] >= 3) {
+    out.innerHTML = `<div class="totp-result bad">LOCKED OUT — ${techId} has 3 failed attempts. (Admin reset required.)</div>`;
+    return;
+  }
+
+  // Replay check
+  const replayKey = `${techId}:${period}`;
+  if (usedPeriods.has(replayKey)) {
+    out.innerHTML = `<div class="totp-result bad">REPLAY DETECTED — this code was already used this 30-second window. Wait for next period.</div>`;
+    return;
+  }
+
+  // Compute valid codes for window tolerance ±1
+  const validCodes = await Promise.all([
+    totp(DEMO_SECRET, (period - 1) * 30),
+    totp(DEMO_SECRET, period * 30),
+    totp(DEMO_SECRET, (period + 1) * 30)
+  ]);
+
+  if (validCodes.includes(code)) {
+    usedPeriods.add(replayKey);
+    failureCounts[techId] = 0;
+    out.innerHTML = `<div class="totp-result ok">✓ AUTHENTICATED — session_start emitted for ${techId} at period ${period}. Passthrough enabled.</div>`;
+  } else {
+    failureCounts[techId] = (failureCounts[techId] || 0) + 1;
+    const remaining = 3 - failureCounts[techId];
+    out.innerHTML = `<div class="totp-result bad">✗ Code rejected. ${remaining > 0 ? `${remaining} attempts remaining before lockout.` : 'LOCKED OUT.'}</div>`;
+  }
+}
+
+setInterval(updateTotpDisplay, 1000);
+updateTotpDisplay();
+
+// ----- Flow demo -----
+let flowTimer = null;
+function playFlow() {
+  resetFlow();
+  const steps = [1, 2, 3, 4, 5, 6];
+  let i = 0;
+  document.getElementById('play-btn').disabled = true;
+  flowTimer = setInterval(() => {
+    if (i > 0) document.getElementById(`step-${steps[i-1]}`).classList.remove('active');
+    if (i >= steps.length) {
+      clearInterval(flowTimer);
+      document.getElementById('play-btn').disabled = false;
+      return;
+    }
+    document.getElementById(`step-${steps[i]}`).classList.add('active');
+    i++;
+  }, 1200);
+}
+function resetFlow() {
+  if (flowTimer) clearInterval(flowTimer);
+  for (let i = 1; i <= 6; i++) document.getElementById(`step-${i}`).classList.remove('active');
+  document.getElementById('play-btn').disabled = false;
+}
+</script>
+</body>
+</html>
