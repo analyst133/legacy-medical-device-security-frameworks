@@ -36,6 +36,8 @@ stride-hc-templates/
 
 ## How to use the templates
 
+**First time using these templates? Start with [`WALKTHROUGH.md`](./WALKTHROUGH.md)** — a 30-minute tutorial that takes you from blank page to completed threat model with a worked example. The summary below is a reference for users who have done one already.
+
 ### For threat-model authors
 
 1. Identify the device's **archetype** (general-purpose-OS or embedded RTOS) per paper Section 4.2.
@@ -45,7 +47,31 @@ stride-hc-templates/
 5. Identify detection methods drawn from the Framework V monitoring categories (paper Section 7).
 6. Map each scenario to compensating controls from paper Section 3 / the CJR templates.
 7. Confirm the Clinical Availability Weights (defaults: DoS=1.5, S/I=1.2, T/E=1.1, R=0.9).
-8. Use the result as the threat-model attachment to FDA premarket cybersecurity submissions, ISO 14971 risk management files, AAMI TIR57 security risk records, or HDO compensating-controls programmes.
+8. Deliver the completed model to its downstream consumers — see **Where the output goes** below.
+
+### Where the output goes
+
+A completed STRIDE-HC threat model is an **input to four downstream artifacts**, not a standalone deliverable:
+
+| Downstream | What STRIDE-HC provides | Handoff |
+|---|---|---|
+| **FDA §524B premarket submission** (vendors) | The threat-model deliverable required by 2023 cybersecurity guidance | Attach as Appendix to your premarket submission |
+| **ISO 14971 risk management file** (vendors + HDOs) | Hazard identification (cl.5) and risk estimation (cl.6) records | Attach as the security-hazard section of your risk management file |
+| **AAMI TIR57 security risk records** | The security risk identification activities TIR57 requires | Reference by ID in your TIR57 records |
+| **CJR documents** ([`../cjr-templates/`](../cjr-templates/)) | The threat each compensating control is justified against | Each STRIDE-HC scenario you cannot fully mitigate produces a CJR; cross-reference the STRIDE-HC scenario ID inside the CJR |
+| **MDRS calculator** ([`../mdrs-calculator/`](../mdrs-calculator/)) | Empirical input to the CCD (Compensating-Control Deficit) score | Re-run MDRS after deploying controls; the CCD score should improve |
+
+**Review cadence:**
+- After any **firmware update** by the vendor
+- After any **network architecture change** affecting the device
+- After any **incident** involving the device or a peer device
+- Otherwise **annually** for production-deployed legacy devices
+
+**Typical sign-offs:**
+- Clinical / biomedical engineering — clinical accuracy
+- InfoSec / CISO office — threat-model technical correctness
+- Quality / regulatory affairs — standards alignment (FDA, ISO 14971, AAMI)
+- For HDOs with life-sustaining devices: also CMO or service-line chief for DoS scenarios
 
 ### For tooling integration
 

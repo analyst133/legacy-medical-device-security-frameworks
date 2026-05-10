@@ -25,11 +25,18 @@ A substantial fraction of clinical medical devices run end-of-life operating sys
 
 ## Quick start
 
+**Try the MDRS calculator instantly — no install, runs in your browser:**
+**[https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/](https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/)**
+
+For a step-by-step tour of how all five artifacts fit together as one workflow, see [`WALKTHROUGH.md`](./WALKTHROUGH.md).
+
+For the full suite locally:
+
 ```bash
 git clone https://github.com/analyst133/legacy-medical-device-security-frameworks.git
 cd legacy-medical-device-security-frameworks
 
-# Try the MDRS calculator (no install required)
+# MDRS calculator (no install required)
 open mdrs-calculator/index.html      # macOS
 xdg-open mdrs-calculator/index.html  # Linux
 start mdrs-calculator/index.html     # Windows
