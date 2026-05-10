@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Test Harness — Results Explorer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { box-sizing: border-box; }
+:root {
+  --bg: #ffffff; --bg-alt: #f7f8fa; --bg-section: #fafbfc;
+  --text: #1a1a1a; --text-muted: #666; --border: #e1e4e8;
+  --primary: #1f3864; --primary-light: #2f5496;
+  --success: #2e7d32; --success-bg: #e8f5e9;
+  --warning: #ed7d31; --warning-bg: #fff4e6;
+  --danger: #c00000; --danger-bg: #ffebee;
+  --neutral: #757575; --neutral-bg: #f5f5f5;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.6; color: var(--text); background: var(--bg); margin: 0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+header { background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%); color: white; padding: 32px 0 24px; margin-bottom: 32px; }
+header h1 { margin: 0 0 4px; font-size: 32px; font-weight: 700; }
+header .subtitle { margin: 0 0 16px; font-size: 15px; opacity: 0.9; }
+header nav { display: flex; gap: 24px; flex-wrap: wrap; }
+header nav a { color: white; text-decoration: none; font-size: 14px; border-bottom: 2px solid transparent; padding-bottom: 2px; transition: border-color 0.15s; }
+header nav a:hover { border-bottom-color: white; }
+main { padding-bottom: 64px; }
+section { margin-bottom: 32px; }
+h2 { font-size: 22px; margin: 0 0 12px; color: var(--primary); }
+h3 { font-size: 17px; margin: 18px 0 10px; color: var(--primary-light); }
+p { margin: 0 0 12px; }
+.card { background: var(--bg-section); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; }
+.controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 12px 0; }
+.btn { padding: 8px 16px; border: 1px solid var(--primary); border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; background: white; color: var(--primary); transition: background 0.15s; font-family: inherit; }
+.btn:hover { background: var(--bg-alt); }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-light); }
+.matrix-wrap { overflow-x: auto; margin: 20px 0; }
+.matrix { border-collapse: separate; border-spacing: 4px; width: 100%; }
+.matrix th, .matrix td { padding: 14px 16px; text-align: center; border-radius: 6px; vertical-align: middle; font-size: 13px; }
+.matrix th { background: var(--bg-alt); color: var(--text); font-weight: 700; }
+.matrix th.scenario-th { text-align: left; min-width: 220px; }
+.matrix th.scenario-th .stride-letter { display: inline-block; background: var(--primary); color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; font-weight: 700; line-height: 22px; margin-right: 8px; }
+.matrix td { cursor: pointer; transition: transform 0.1s; font-weight: 600; min-width: 110px; }
+.matrix td:hover { transform: scale(1.05); box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+.cell-SUCCESS, .cell-REACHABLE { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger); }
+.cell-MITIGATED { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning); }
+.cell-BLOCKED, .cell-BLOCKED_NET, .cell-BLOCKED_AUTH, .cell-BLOCKED_HTTP { background: var(--success-bg); color: var(--success); border: 1px solid var(--success); }
+.cell-ERROR { background: var(--neutral-bg); color: var(--neutral); border: 1px dashed var(--neutral); }
+.cell-empty { background: white; color: var(--text-muted); border: 1px dashed var(--border); font-style: italic; }
+.detail-panel { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-top: 16px; min-height: 80px; }
+.detail-panel.empty { color: var(--text-muted); font-style: italic; text-align: center; }
+.detail-panel .det-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.detail-panel .det-tag { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+.detail-panel pre { background: var(--bg-alt); padding: 12px; border-radius: 4px; font-size: 13px; overflow-x: auto; margin: 8px 0 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; font-size: 13px; }
+.legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.legend-swatch { display: inline-block; width: 16px; height: 16px; border-radius: 4px; }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+.summary-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+.summary-card .num { font-size: 32px; font-weight: 700; color: var(--primary); }
+.summary-card .label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+.file-input { display: inline-block; }
+.file-input input[type=file] { display: none; }
+.notice { background: var(--warning-bg); border-left: 4px solid var(--warning); padding: 12px 16px; border-radius: 4px; margin: 16px 0; font-size: 14px; }
+.notice a { color: var(--primary); }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>Test Harness — Results Explorer</h1>
+    <p class="subtitle">Visualize compensating-control effectiveness across STRIDE-HC scenarios from a harness CSV</p>
+    <nav>
+      <a href="../">Repo</a>
+      <a href="../mdrs-calculator/">MDRS Calculator</a>
+      <a href="../stride-hc-templates/">STRIDE-HC Builder</a>
+      <a href="../cjr-templates/">CJR Builder</a>
+      <a href="../mfa-shim/">MFA Shim</a>
+      <a href="https://github.com/analyst133/legacy-medical-device-security-frameworks">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+<section>
+  <div class="card">
+    <p><strong>This page renders any harness results CSV as a (scenario × control profile) matrix.</strong> By default it loads <code>results/sample-results.csv</code> from this repo, which shows the representative run referenced in paper §9.3. You can also upload your own CSV produced by <code>make matrix</code>.</p>
+    <div class="controls">
+      <button class="btn btn-primary" onclick="loadSample()">Reload sample-results.csv</button>
+      <label class="btn file-input">Upload your CSV<input type="file" accept=".csv" onchange="loadFromFile(event)"></label>
+      <a class="btn" href="./METHODOLOGY.md">Read METHODOLOGY.md</a>
+      <a class="btn" href="./results/sample-results.csv" download>Download sample CSV</a>
+    </div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-swatch" style="background: var(--danger-bg); border: 1px solid var(--danger);"></span>SUCCESS / REACHABLE — attack worked</span>
+      <span class="legend-item"><span class="legend-swatch" style="background: var(--warning-bg); border: 1px solid var(--warning);"></span>MITIGATED — partial mitigation</span>
+      <span class="legend-item"><span class="legend-swatch" style="background: var(--success-bg); border: 1px solid var(--success);"></span>BLOCKED — control fully effective</span>
+      <span class="legend-item"><span class="legend-swatch" style="background: var(--neutral-bg); border: 1px dashed var(--neutral);"></span>ERROR — scenario failed</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Summary</h2>
+  <div class="summary-grid" id="summary"></div>
+</section>
+
+<section>
+  <h2>Outcome matrix</h2>
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrix-table">
+      <thead><tr id="matrix-head"></tr></thead>
+      <tbody id="matrix-body"></tbody>
+    </table>
+  </div>
+  <div class="detail-panel empty" id="detail-panel">
+    Click any cell to see the timestamp, exact outcome label, and detail text.
+  </div>
+</section>
+
+<section>
+  <h2>Interpretation</h2>
+  <div class="card">
+    <p><strong>Read top-to-bottom:</strong> each row is a STRIDE-HC attack scenario; the cell colour in each column shows whether that attack succeeded against that control profile.</p>
+    <p><strong>Read left-to-right:</strong> each column is a compensating-control configuration. The further right you go, the more of the row should turn green.</p>
+    <p><strong>The expected pattern</strong> (see <a href="./METHODOLOGY.md">METHODOLOGY.md</a>) is that segmentation alone blocks Spoofing (S), Information Disclosure (I), and DoS (D) — because all three depend on Layer-2/3 attacker positioning — but does not block Tampering (T) or EoP (E) which target the management interface. IPS and PAM each block T and E for different reasons. The "all" column should be green everywhere.</p>
+    <p><strong>If the results diverge from the expected pattern:</strong> it may indicate a control gap, a scenario implementation issue, or an emulator behaviour mismatch with real-world devices. Worth investigating.</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+'use strict';
+
+const SCENARIO_NAMES = {
+  '01-spoofing-arp-poisoning': 'ARP poisoning',
+  '02-tampering-firmware-injection': 'Firmware injection',
+  '03-info-disclosure-cleartext-hl7': 'Cleartext HL7 sniff',
+  '04-dos-protocol-flood': 'Protocol-flood DoS',
+  '05-eop-default-credential': 'Default-credential EoP'
+};
+
+let rows = [];
+
+function parseCsv(text) {
+  // Simple CSV parser handling quoted fields with commas
+  const out = [];
+  const lines = text.split(/\r?\n/);
+  if (!lines.length) return out;
+  const header = parseLine(lines[0]);
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const fields = parseLine(lines[i]);
+    const row = {};
+    header.forEach((h, j) => row[h] = fields[j] || '');
+    out.push(row);
+  }
+  return out;
+}
+
+function parseLine(line) {
+  const out = [];
+  let cur = '', inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (inQuotes) {
+      if (c === '"' && line[i+1] === '"') { cur += '"'; i++; }
+      else if (c === '"') { inQuotes = false; }
+      else cur += c;
+    } else {
+      if (c === ',') { out.push(cur); cur = ''; }
+      else if (c === '"') { inQuotes = true; }
+      else cur += c;
+    }
+  }
+  out.push(cur);
+  return out.map(s => s.trim());
+}
+
+async function loadSample() {
+  try {
+    const resp = await fetch('./results/sample-results.csv');
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const text = await resp.text();
+    rows = parseCsv(text);
+    render();
+  } catch (e) {
+    alert('Could not load sample-results.csv: ' + e.message + '\n\nIf you are viewing this offline, use the Upload button to load a CSV manually.');
+  }
+}
+
+function loadFromFile(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { rows = parseCsv(e.target.result); render(); };
+  reader.readAsText(file);
+}
+
+function render() {
+  if (!rows.length) return;
+  // Unique scenarios in row order; unique control profiles
+  const scenarios = [...new Set(rows.map(r => r.scenario))];
+  const profiles = [...new Set(rows.map(r => r.control_profile))];
+
+  // Header
+  const head = document.getElementById('matrix-head');
+  head.innerHTML = '<th class="scenario-th">Scenario</th>' + profiles.map(p => `<th>${p}</th>`).join('');
+
+  // Body
+  const body = document.getElementById('matrix-body');
+  body.innerHTML = '';
+  for (const sc of scenarios) {
+    const tr = document.createElement('tr');
+    const stride = rows.find(r => r.scenario === sc)?.stride_hc || '?';
+    const niceName = SCENARIO_NAMES[sc] || sc;
+    tr.innerHTML = `<th class="scenario-th"><span class="stride-letter">${stride}</span>${niceName}</th>`;
+    for (const p of profiles) {
+      const row = rows.find(r => r.scenario === sc && r.control_profile === p);
+      if (!row) {
+        tr.innerHTML += `<td class="cell-empty">—</td>`;
+      } else {
+        const cls = `cell-${row.outcome.replace(/[^A-Z_]/g,'')}`;
+        const td = document.createElement('td');
+        td.className = cls;
+        td.textContent = row.outcome;
+        td.addEventListener('click', () => showDetail(row));
+        tr.appendChild(td);
+      }
+    }
+    body.appendChild(tr);
+  }
+
+  // Summary
+  renderSummary(profiles);
+}
+
+function renderSummary(profiles) {
+  const counts = { SUCCESS: 0, REACHABLE: 0, MITIGATED: 0, BLOCKED: 0, BLOCKED_NET: 0, BLOCKED_AUTH: 0, BLOCKED_HTTP: 0, ERROR: 0 };
+  for (const r of rows) {
+    const k = r.outcome.replace(/[^A-Z_]/g,'');
+    if (counts[k] !== undefined) counts[k]++;
+  }
+  const blocked = counts.BLOCKED + counts.BLOCKED_NET + counts.BLOCKED_AUTH + counts.BLOCKED_HTTP;
+  const succeeded = counts.SUCCESS + counts.REACHABLE;
+  const sum = document.getElementById('summary');
+  sum.innerHTML = `
+    <div class="summary-card"><div class="num">${rows.length}</div><div class="label">Total runs</div></div>
+    <div class="summary-card"><div class="num" style="color: var(--danger);">${succeeded}</div><div class="label">Attack succeeded</div></div>
+    <div class="summary-card"><div class="num" style="color: var(--warning);">${counts.MITIGATED}</div><div class="label">Mitigated</div></div>
+    <div class="summary-card"><div class="num" style="color: var(--success);">${blocked}</div><div class="label">Blocked</div></div>
+    <div class="summary-card"><div class="num">${profiles.length}</div><div class="label">Control profiles</div></div>
+  `;
+}
+
+function showDetail(row) {
+  const panel = document.getElementById('detail-panel');
+  panel.classList.remove('empty');
+  const cls = `cell-${row.outcome.replace(/[^A-Z_]/g,'')}`;
+  panel.innerHTML = `
+    <div class="det-header">
+      <h3 style="margin:0;">${SCENARIO_NAMES[row.scenario] || row.scenario} <span style="opacity:.5;">(${row.stride_hc})</span> × ${row.control_profile}</h3>
+      <span class="det-tag ${cls}">${row.outcome}</span>
+    </div>
+    <p><strong>Timestamp:</strong> ${row.timestamp}</p>
+    <p><strong>Detail:</strong></p>
+    <pre>${escapeHtml(row.detail)}</pre>
+  `;
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// Auto-load on page open
+loadSample();
+</script>
+</body>
+</html>
