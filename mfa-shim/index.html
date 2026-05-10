@@ -5,28 +5,29 @@
 <title>Pattern C MFA Shim — Reference Design</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 * { box-sizing: border-box; }
 :root {
-  --bg: #f8f5ec; --bg-alt: #efeadc; --bg-section: #fdfbf4;
-  --text: #1c1a17; --text-muted: #6a655c; --border: #d4cdbc;
-  --primary: #1f2937; --primary-light: #3d4b5c;
-  --accent: #a8492a;
-  --tech: #3d4b5c; --shim: #1f2937; --device: #4a6b3a;
-  --success: #4a6b3a; --warning: #a8662a; --danger: #a73a2a;
-  --warning-bg: #f5ead7;
+  --bg: #f5f6f8; --bg-alt: #eef0f3; --bg-section: #ffffff;
+  --text: #1a1a1a; --text-muted: #5a6470; --border: #e0e3e8;
+  --primary: #1a3a6b; --primary-light: #2c5599;
+  --accent: #1565c0;
+  --tech: #2c5599; --shim: #1a3a6b; --device: #2e7d32;
+  --success: #2e7d32; --warning: #ed6c02; --danger: #d32f2f;
+  --warning-bg: #fff4e0;
 }
-body { font-family: "Charter", "Iowan Old Style", "Sitka Text", Cambria, Georgia, "Times New Roman", serif; font-size: 16px; line-height: 1.65; color: var(--text); background: var(--bg); margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body { font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 16px; line-height: 1.6; color: var(--text); background: var(--bg); margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-header { background: #1f2937; border-bottom: 4px solid var(--accent); color: #f5f1e6; padding: 36px 0 22px; margin-bottom: 36px; }
-header h1 { margin: 0 0 6px; font-family: Georgia, "Times New Roman", serif; font-size: 32px; font-weight: 700; letter-spacing: -0.01em; }
-header .subtitle { margin: 0 0 18px; font-size: 15px; opacity: 0.85; font-style: italic; }
-header nav { display: flex; gap: 22px; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 14px; font-family: Georgia, "Times New Roman", serif; }
-header nav a { color: #f5f1e6; text-decoration: none; font-size: 14px; border-bottom: 1px solid transparent; padding-bottom: 2px; transition: border-color 0.15s; letter-spacing: 0.01em; }
-header nav a:hover { border-bottom-color: var(--accent); }
+header { background: var(--primary); color: #ffffff; padding: 24px 0 20px; margin-bottom: 32px; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+header h1 { margin: 0 0 4px; font-family: 'Open Sans', 'Segoe UI', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -0.005em; }
+header .subtitle { margin: 0 0 16px; font-size: 14px; opacity: 0.88; font-weight: 400; }
+header nav { display: flex; gap: 20px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.18); }
+header nav a { color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 500; padding: 4px 0; border-bottom: 2px solid transparent; transition: border-color 0.15s; }
+header nav a:hover { border-bottom-color: #ffffff; }
 main { padding-bottom: 64px; }
-section { margin-bottom: 40px; }
-h2 { font-family: Georgia, "Times New Roman", serif; font-size: 24px; font-weight: 700; margin: 0 0 12px; color: var(--primary); letter-spacing: -0.01em; }
-h3 { font-family: Georgia, "Times New Roman", serif; font-size: 18px; font-weight: 600; margin: 18px 0 10px; color: var(--primary); }
+section { margin-bottom: 32px; }
+h2 { font-family: 'Open Sans', 'Segoe UI', sans-serif; font-size: 22px; font-weight: 700; margin: 0 0 12px; color: var(--primary); }
+h3 { font-family: 'Open Sans', 'Segoe UI', sans-serif; font-size: 17px; font-weight: 600; margin: 18px 0 10px; color: var(--primary); }
 p { margin: 0 0 12px; }
 .card { background: var(--bg-section); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; }
 .notice { background: var(--warning-bg); border-left: 4px solid var(--warning); padding: 12px 16px; border-radius: 4px; margin: 16px 0; font-size: 14px; }
