@@ -8,11 +8,6 @@
 //     CIS ≥ 9          → minimum tier HIGH
 //     CIS = 7 or 8     → minimum tier MEDIUM
 //     CCD ≥ 8          → tier promoted by one level (capped at CRITICAL)
-//
-// All paper preset values reproduce exactly:
-//   Infusion pump:  CIS=9.0, ES=7.5, DCI=8.0, NEF=8.0, CCD=7.0 → 8.175 → CRITICAL
-//   PACS server:    CIS=5.5, ES=4.0, DCI=6.0, NEF=3.5, CCD=2.0 → 4.750 → MEDIUM
-//   ECG monitor:    CIS=7.5, ES=5.0, DCI=7.0, NEF=5.0, CCD=6.0 → 6.325 → HIGH
 
 'use strict';
 
@@ -29,19 +24,31 @@ const TIER_ORDER = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
 const TIER_ACTIONS = {
   CRITICAL: {
     timeline: 'Immediate / 24 hours',
-    text: 'Immediate isolation or shutdown of non-life-critical devices; 24-hour escalation to CISO and CMO; emergency vendor engagement; activate incident response plan.'
+    text: 'Immediate isolation or shutdown of non-life-critical devices; 24-hour escalation to CISO and CMO; emergency vendor engagement; activate incident response plan.',
+    owners: 'For CRITICAL: CISO + CMO + clinical engineering director within 24 hours.',
+    timelineInline: '24 hours',
+    review: 'Quarterly for CRITICAL devices.'
   },
   HIGH: {
     timeline: '30 days',
-    text: 'Remediation within 30 days; compensating controls deployed within 72 hours; weekly monitoring cadence; board-level reporting.'
+    text: 'Remediation within 30 days; compensating controls deployed within 72 hours; weekly monitoring cadence; board-level reporting.',
+    owners: 'For HIGH: CISO + clinical engineering director within 72 hours.',
+    timelineInline: '30 days',
+    review: 'Semi-annually for HIGH devices.'
   },
   MEDIUM: {
     timeline: '90 days',
-    text: 'Remediation within 90 days; compensating-control gap analysis; monthly monitoring; include in quarterly security review.'
+    text: 'Remediation within 90 days; compensating-control gap analysis; monthly monitoring; include in quarterly security review.',
+    owners: 'For MEDIUM: clinical engineering with InfoSec consultation within 1 week.',
+    timelineInline: '90 days',
+    review: 'Annually for MEDIUM devices.'
   },
   LOW: {
     timeline: '12 months',
-    text: 'Annual review cycle; document and accept residual risk per ISO 14971 cl.8 with CISO sign-off; include in next refresh budget cycle.'
+    text: 'Annual review cycle; document and accept residual risk per ISO 14971 cl.8 with CISO sign-off; include in next refresh budget cycle.',
+    owners: 'For LOW: clinical engineering, with InfoSec annual review.',
+    timelineInline: '12 months',
+    review: 'Annually for LOW devices.'
   }
 };
 
@@ -101,8 +108,6 @@ function compositeToTier(composite) {
 }
 
 function applyIrreversibilityFloor(tier, cis) {
-  // CIS = 9 or 10  → minimum HIGH
-  // CIS = 7 or 8   → minimum MEDIUM
   if (cis >= 9 && tierRank(tier) < tierRank('HIGH')) return 'HIGH';
   if (cis >= 7 && cis < 9 && tierRank(tier) < tierRank('MEDIUM')) return 'MEDIUM';
   return tier;
@@ -120,8 +125,6 @@ function tierRank(tier) { return TIER_ORDER.indexOf(tier); }
 
 function score(scores, weights) {
   const composite = computeComposite(scores, weights);
-  // Round to 3 decimal places before tier mapping to avoid floating-point precision issues
-  // (e.g., 6.0 × 0.35 + 6.0 × 0.25 + ... may compute as 5.9999999... in JS).
   const rounded = Math.round(composite * 1000) / 1000;
   const baseTier = compositeToTier(rounded);
   const afterFloor = applyIrreversibilityFloor(baseTier, scores.cis);
@@ -142,7 +145,6 @@ function score(scores, weights) {
   };
 }
 
-// Help text band lookup
 function helpFor(dim, value) {
   const bands = HELP_BY_BAND[dim] || [];
   for (const [lo, hi, text] of bands) {
@@ -155,9 +157,31 @@ function helpFor(dim, value) {
 
 if (typeof document !== 'undefined') {
   const dims = ['cis', 'es', 'dci', 'nef', 'ccd'];
+  let currentMode = 'guided';
+
+  // Guided mode reads from radio buttons; falls back to defaults that won't trigger nonsense
+  function readScoresGuided() {
+    const out = {};
+    let allAnswered = true;
+    for (const d of dims) {
+      const radios = document.querySelectorAll(`input[name="q-${d}"]:checked`);
+      if (radios.length > 0) {
+        out[d] = parseFloat(radios[0].value);
+      } else {
+        out[d] = 5.5; // neutral midpoint until answered
+        allAnswered = false;
+      }
+    }
+    out._allAnswered = allAnswered;
+    return out;
+  }
+
+  function readScoresDirect() {
+    return Object.fromEntries(dims.map(d => [d, parseFloat(document.getElementById(d).value)]));
+  }
 
   function readScores() {
-    return Object.fromEntries(dims.map(d => [d, parseFloat(document.getElementById(d).value)]));
+    return currentMode === 'guided' ? readScoresGuided() : readScoresDirect();
   }
 
   function readWeights() {
@@ -171,6 +195,7 @@ if (typeof document !== 'undefined') {
   }
 
   function updateOutputs() {
+    if (currentMode !== 'direct') return;
     dims.forEach(d => {
       const value = parseFloat(document.getElementById(d).value);
       document.getElementById(`${d}-out`).textContent = value.toFixed(1);
@@ -179,11 +204,16 @@ if (typeof document !== 'undefined') {
   }
 
   function updateWeightLabels(w) {
-    document.getElementById('weight-cis').textContent = (w.cis * 100).toFixed(0) + '%';
-    document.getElementById('weight-es').textContent  = (w.es  * 100).toFixed(0) + '%';
-    document.getElementById('weight-dci').textContent = (w.dci * 100).toFixed(0) + '%';
-    document.getElementById('weight-nef').textContent = (w.nef * 100).toFixed(0) + '%';
-    document.getElementById('weight-ccd').textContent = (w.ccd * 100).toFixed(0) + '% + tier promoter';
+    const cisEl = document.getElementById('weight-cis');
+    if (cisEl) cisEl.textContent = (w.cis * 100).toFixed(0) + '%';
+    const esEl = document.getElementById('weight-es');
+    if (esEl) esEl.textContent = (w.es * 100).toFixed(0) + '%';
+    const dciEl = document.getElementById('weight-dci');
+    if (dciEl) dciEl.textContent = (w.dci * 100).toFixed(0) + '%';
+    const nefEl = document.getElementById('weight-nef');
+    if (nefEl) nefEl.textContent = (w.nef * 100).toFixed(0) + '%';
+    const ccdEl = document.getElementById('weight-ccd');
+    if (ccdEl) ccdEl.textContent = (w.ccd * 100).toFixed(0) + '% + tier promoter';
 
     const sum = w.cis + w.es + w.dci + w.nef + w.ccd;
     const warning = document.getElementById('weight-warning');
@@ -209,10 +239,21 @@ if (typeof document !== 'undefined') {
     const card = document.getElementById('result-card');
     card.className = 'result-card tier-' + result.finalTier;
 
+    // Score-summary table
+    document.getElementById('rs-cis').textContent = scores.cis.toFixed(1);
+    document.getElementById('rs-es').textContent  = scores.es.toFixed(1);
+    document.getElementById('rs-dci').textContent = scores.dci.toFixed(1);
+    document.getElementById('rs-nef').textContent = scores.nef.toFixed(1);
+    document.getElementById('rs-ccd').textContent = scores.ccd.toFixed(1);
+
     // Explainer list
     const explain = document.getElementById('explain-list');
     explain.innerHTML = '';
     const items = [];
+
+    if (currentMode === 'guided' && !scores._allAnswered) {
+      items.push(`<span class="not-applied">Awaiting answers — answer all five questions for a final score. Showing partial result with neutral defaults for unanswered dimensions.</span>`);
+    }
 
     items.push(`Composite ${result.composite.toFixed(3)} → base tier <strong>${result.baseTier}</strong> from range mapping.`);
 
@@ -241,24 +282,54 @@ if (typeof document !== 'undefined') {
       explain.appendChild(li);
     });
 
-    // Action card
+    // Action card and next-steps owners/timeline/review
     const action = TIER_ACTIONS[result.finalTier];
     document.getElementById('result-action-text').textContent = action.text;
     document.getElementById('result-timeline').textContent = action.timeline;
+    const ownersEl = document.getElementById('next-owners');
+    if (ownersEl) ownersEl.textContent = action.owners;
+    const tinlEl = document.getElementById('next-timeline-inline');
+    if (tinlEl) tinlEl.textContent = action.timelineInline;
+    const reviewEl = document.getElementById('next-review');
+    if (reviewEl) reviewEl.textContent = action.review;
 
     updateOutputs();
     updateWeightLabels(weights);
 
-    // Stash latest result for export
     window._lastResult = result;
   }
 
-  // Initial wiring
+  function setMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.mode === mode);
+    });
+    document.querySelectorAll('.mode-panel').forEach(p => {
+      p.classList.toggle('active', p.id === 'mode-' + mode);
+    });
+    recompute();
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
-    dims.forEach(d => {
-      document.getElementById(d).addEventListener('input', recompute);
+    // Mode toggle
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => setMode(btn.dataset.mode));
     });
 
+    // Direct-mode sliders
+    dims.forEach(d => {
+      const el = document.getElementById(d);
+      if (el) el.addEventListener('input', recompute);
+    });
+
+    // Guided-mode radio buttons
+    dims.forEach(d => {
+      document.querySelectorAll(`input[name="q-${d}"]`).forEach(r => {
+        r.addEventListener('change', recompute);
+      });
+    });
+
+    // Weight inputs
     ['w-cis', 'w-es', 'w-dci', 'w-nef', 'w-ccd'].forEach(id => {
       document.getElementById(id).addEventListener('input', recompute);
     });
@@ -272,6 +343,7 @@ if (typeof document !== 'undefined') {
       recompute();
     });
 
+    // Presets — populate direct-mode sliders, switch to direct mode, and recompute
     document.querySelectorAll('.preset').forEach(btn => {
       btn.addEventListener('click', () => {
         document.getElementById('cis').value = btn.dataset.cis;
@@ -279,7 +351,7 @@ if (typeof document !== 'undefined') {
         document.getElementById('dci').value = btn.dataset.dci;
         document.getElementById('nef').value = btn.dataset.nef;
         document.getElementById('ccd').value = btn.dataset.ccd;
-        recompute();
+        setMode('direct');
         document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
       });
     });
@@ -304,7 +376,8 @@ if (typeof document !== 'undefined') {
         `Base tier: ${r.baseTier}`,
         `Irreversibility floor: ${r.floorActive ? 'applied → ' + r.afterFloor : 'not applied'}`,
         `CCD promoter: ${r.promoterActive ? 'applied → ' + r.finalTier : 'not applied'}`,
-        `Final tier: ${r.finalTier}`
+        `Final tier: ${r.finalTier}`,
+        `Action timeline: ${TIER_ACTIONS[r.finalTier].timeline}`
       ].join('\n');
       navigator.clipboard.writeText(summary).then(() => {
         const btn = document.getElementById('copy-summary');

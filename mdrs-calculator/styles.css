@@ -435,6 +435,315 @@ footer .disclaimer {
   margin-top: 8px;
 }
 
+/* ─────────── Intro / How-to-use section ─────────── */
+.intro-section {
+  background: linear-gradient(180deg, var(--bg-section) 0%, var(--bg) 100%);
+  padding: 28px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 20px;
+}
+
+.intro-grid h3 {
+  margin-top: 0;
+  font-size: 17px;
+}
+
+.intro-grid p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.workflow {
+  font-size: 14px;
+  padding-left: 20px;
+}
+
+.workflow li {
+  margin-bottom: 8px;
+}
+
+.workflow li strong {
+  color: var(--primary);
+}
+
+.workflow em {
+  color: var(--high);
+  font-weight: 600;
+  font-style: normal;
+  background: rgba(237, 125, 49, 0.12);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.callout {
+  background: #fff8e6;
+  border-left: 4px solid var(--high);
+  padding: 14px 18px;
+  border-radius: 0 6px 6px 0;
+  font-size: 14px;
+}
+
+@media (max-width: 800px) {
+  .intro-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* ─────────── Mode toggle ─────────── */
+.mode-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0 24px;
+}
+
+.mode-btn {
+  background: white;
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.mode-btn:hover {
+  border-color: var(--primary-light);
+  background: var(--bg-section);
+}
+
+.mode-btn.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+}
+
+.mode-btn .mode-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.mode-btn .mode-help {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.mode-panel {
+  display: none;
+}
+
+.mode-panel.active {
+  display: block;
+}
+
+.mode-intro {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+  .mode-toggle {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─────────── Guided-mode questions ─────────── */
+.question {
+  background: var(--bg-section);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+
+.question h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: var(--primary);
+}
+
+.question-prompt {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.question-help {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.options label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.1s, background 0.1s;
+}
+
+.options label:hover {
+  border-color: var(--primary-light);
+  background: #f9fbfd;
+}
+
+.options label:has(input:checked) {
+  border-color: var(--primary);
+  background: #eaf1f9;
+}
+
+.options input[type="radio"] {
+  margin-top: 3px;
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+
+.options .opt-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.options .opt-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ─────────── Direct-mode rubric expandable ─────────── */
+.rubric {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.rubric summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-light);
+  user-select: none;
+}
+
+.rubric summary:hover {
+  color: var(--primary);
+}
+
+.rubric ul {
+  margin-top: 10px;
+  padding-left: 20px;
+  font-size: 13px;
+}
+
+.rubric ul li {
+  margin-bottom: 4px;
+}
+
+.rubric-note {
+  font-size: 13px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: rgba(31, 56, 100, 0.06);
+  border-radius: 4px;
+}
+
+/* ─────────── Result enhancements: scores table and next steps ─────────── */
+.result-scores {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.result-scores h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.score-table th, .score-table td {
+  padding: 6px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.score-table th {
+  background: var(--bg-alt);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.score-table td:nth-child(2) {
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
+  color: var(--primary);
+  width: 80px;
+}
+
+.score-table td:nth-child(3) {
+  color: var(--text-muted);
+  width: 120px;
+}
+
+.next-steps {
+  background: var(--bg-section);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--low);
+  padding: 18px 22px;
+  border-radius: 0 8px 8px 0;
+  margin-top: 16px;
+}
+
+.next-steps h3 {
+  margin: 0 0 12px;
+  color: var(--primary);
+  font-size: 17px;
+}
+
+.next-steps ol {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 14px;
+}
+
+.next-steps li {
+  margin-bottom: 8px;
+  line-height: 1.55;
+}
+
+.next-steps strong {
+  color: var(--primary-light);
+}
+
 @media (max-width: 600px) {
   .result-card {
     grid-template-columns: 1fr;

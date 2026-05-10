@@ -18,9 +18,19 @@ For deployment via GitHub Pages, push to a `gh-pages` branch or enable Pages on 
 
 ## What it does
 
-The calculator implements paper Section 5 in full:
+The calculator implements paper Section 5 in full and **guides users through an assessment** rather than asking for raw numbers cold. Two modes:
 
-1. **Five-dimension scoring** (CIS, ES, DCI, NEF, CCD), each on a 1–10 scale, with built-in scoring guidance per band.
+### Guided assessment mode (default for new users)
+
+Five plain-English multiple-choice questions, one per dimension. Each option is annotated with concrete examples ("life-sustaining devices: ventilators, infusion pumps in active therapy, pacemaker programmers, dialysis"). The calculator assigns the appropriate score (the midpoint of the relevant band) automatically. No numerical familiarity required.
+
+### Direct entry mode (for power users)
+
+Five sliders, each with an expandable **Show scoring guide** that surfaces the full Table 5 rubric inline. Faster for analysts who already know how to map device facts to scores.
+
+### Common to both modes
+
+1. **Five-dimension scoring** (CIS, ES, DCI, NEF, CCD), each on a 1–10 scale.
 2. **Weighted composite** per equation (1):
 
    ```
@@ -33,9 +43,11 @@ The calculator implements paper Section 5 in full:
 4. **CCD-driven tier promoter**: CCD ≥ 8 promotes the resulting tier by one level (capped at CRITICAL).
 5. **Tier mapping** with inclusive lower bounds: ≥ 8.0 CRITICAL, ≥ 6.0 HIGH, ≥ 3.5 MEDIUM, < 3.5 LOW.
 6. **"Why this tier?" explainer** describes which adjustments fired and why.
-7. **Configurable weights** for sensitivity analysis.
-8. **Three preset profiles** matching paper Table 7: large-volume infusion pump (CRITICAL, 8.175), PACS server (MEDIUM, 4.750), bedside ECG monitor (HIGH, 6.325).
-9. **JSON export** of the full result object for documentation in HIPAA risk analyses, ISO 14971 risk management files, and FDA 524B postmarket evidence.
+7. **Scores-assigned table** showing which numbers were used in the composite.
+8. **"What to do with this score" panel** with concrete next steps tied to the resulting tier (who to convene, what timeline, what documentation, what review cadence).
+9. **Configurable weights** for sensitivity analysis.
+10. **Three preset profiles** matching paper Table 7.
+11. **JSON export** of the full result object.
 
 ## Verification
 

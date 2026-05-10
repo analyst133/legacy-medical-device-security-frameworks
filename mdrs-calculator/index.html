@@ -14,6 +14,7 @@
     <h1>MDRS Calculator</h1>
     <p class="subtitle">Medical Device Risk Score — reference implementation with irreversibility-driven tier floor and CCD promoter</p>
     <nav>
+      <a href="#how-to-use">How to use</a>
       <a href="#calculator">Calculator</a>
       <a href="#presets">Presets</a>
       <a href="#weights">Weights</a>
@@ -25,47 +26,282 @@
 
 <main class="container">
 
-  <section id="calculator">
-    <h2>1. Score a device</h2>
-    <p>Enter a value between 1 and 10 for each dimension. The composite, tier floor, CCD promoter, and final tier are computed live.</p>
+  <section id="how-to-use" class="intro-section">
+    <h2>How to use this tool</h2>
 
-    <div class="grid">
-      <div class="dimension">
-        <label for="cis">Clinical Impact Score (CIS) <span class="weight" id="weight-cis">35%</span></label>
-        <input type="range" id="cis" min="1" max="10" step="0.5" value="9">
-        <output for="cis" id="cis-out">9.0</output>
-        <p class="help" id="cis-help">9–10: life-sustaining (ventilators, infusion pumps, pacemaker programmers)</p>
+    <div class="intro-grid">
+      <div>
+        <h3>What MDRS is</h3>
+        <p>The <strong>Medical Device Risk Score (MDRS)</strong> is a triage instrument: given facts about a legacy medical device, it produces one of four tiers (CRITICAL / HIGH / MEDIUM / LOW) and a corresponding action timeline. Use it to <em>prioritise remediation work</em> across a fleet of devices.</p>
+        <p>MDRS is <strong>not</strong>: a vulnerability scanner, an asset inventory tool, a compliance attestation, or a substitute for a clinical-engineering risk file. It complements ISO 14971 and HIPAA risk analysis — it does not replace them.</p>
       </div>
 
-      <div class="dimension">
-        <label for="es">Exploitability Score (ES) <span class="weight" id="weight-es">25%</span></label>
-        <input type="range" id="es" min="1" max="10" step="0.5" value="7.5">
-        <output for="es" id="es-out">7.5</output>
-        <p class="help" id="es-help">7–8: network-accessible without public exploit</p>
-      </div>
-
-      <div class="dimension">
-        <label for="dci">Device Criticality Index (DCI) <span class="weight" id="weight-dci">20%</span></label>
-        <input type="range" id="dci" min="1" max="10" step="0.5" value="8">
-        <output for="dci" id="dci-out">8.0</output>
-        <p class="help" id="dci-help">7–8: redundancy with switchover &gt;30 min</p>
-      </div>
-
-      <div class="dimension">
-        <label for="nef">Network Exposure Factor (NEF) <span class="weight" id="weight-nef">15%</span></label>
-        <input type="range" id="nef" min="1" max="10" step="0.5" value="8">
-        <output for="nef" id="nef-out">8.0</output>
-        <p class="help" id="nef-help">7–8: internal network without VLAN isolation</p>
-      </div>
-
-      <div class="dimension">
-        <label for="ccd">Compensating Control Deficit (CCD) <span class="weight" id="weight-ccd">5% + tier promoter</span></label>
-        <input type="range" id="ccd" min="1" max="10" step="0.5" value="7">
-        <output for="ccd" id="ccd-out">7.0</output>
-        <p class="help" id="ccd-help">7–8: partial controls (1–2 STRIDE categories covered)</p>
+      <div>
+        <h3>Where MDRS fits in the assessment workflow</h3>
+        <ol class="workflow">
+          <li><strong>Inventory:</strong> clinical engineering identifies the device (model, OS, network interfaces, clinical use).</li>
+          <li><strong>Threat model:</strong> author a STRIDE-HC threat model for the device. <a href="https://github.com/analyst133/legacy-medical-device-security-frameworks/tree/main/stride-hc-templates" target="_blank" rel="noopener">Template ↗</a></li>
+          <li><strong>Compensating controls:</strong> author a Control Justification Record (CJR) for each constraint. <a href="https://github.com/analyst133/legacy-medical-device-security-frameworks/tree/main/cjr-templates" target="_blank" rel="noopener">Template ↗</a></li>
+          <li><strong>Score with MDRS:</strong> ← <em>you are here</em>. Use the threat model and CJRs to assign the five dimensions.</li>
+          <li><strong>Triage and act:</strong> the tier dictates timeline, escalation path, and review cadence.</li>
+        </ol>
       </div>
     </div>
 
+    <div class="callout">
+      <strong>First time using this?</strong> Choose <em>Guided assessment</em> mode below — it asks plain-English questions and assigns the scores for you. Once you're familiar with the dimensions, switch to <em>Direct entry</em> for faster scoring.
+    </div>
+  </section>
+
+  <section id="calculator">
+    <h2>1. Score a device</h2>
+
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="guided">
+        <span class="mode-label">Guided assessment</span>
+        <span class="mode-help">Answer five questions; the calculator assigns the scores</span>
+      </button>
+      <button class="mode-btn" data-mode="direct">
+        <span class="mode-label">Direct entry</span>
+        <span class="mode-help">Move sliders if you already know the dimension scores</span>
+      </button>
+    </div>
+
+    <!-- ───────────── Guided mode ───────────── -->
+    <div id="mode-guided" class="mode-panel active">
+      <p class="mode-intro">Answer each question by selecting the option that best describes the device. Your answers map onto the 1–10 scoring scale automatically.</p>
+
+      <div class="question" data-dim="cis">
+        <h3>Q1 — Clinical impact (CIS)</h3>
+        <p class="question-prompt">If this device <strong>fails or behaves incorrectly during clinical use</strong>, what is the worst plausible patient consequence?</p>
+        <div class="options">
+          <label><input type="radio" name="q-cis" value="9.5">
+            <span class="opt-title">Life-threatening or irreversible harm</span>
+            <span class="opt-desc">Life-sustaining devices: ventilators, infusion pumps in active therapy, pacemaker programmers, dialysis</span>
+          </label>
+          <label><input type="radio" name="q-cis" value="7.5">
+            <span class="opt-title">Significant clinical harm requiring intervention</span>
+            <span class="opt-desc">Critical monitoring: ICU monitors, surgical or anaesthesia equipment, telemetry on critical patients</span>
+          </label>
+          <label><input type="radio" name="q-cis" value="5.5">
+            <span class="opt-title">Delayed or incorrect diagnosis</span>
+            <span class="opt-desc">Diagnostic imaging or laboratory: PACS, MRI, CT, X-ray, lab analysers, point-of-care diagnostics</span>
+          </label>
+          <label><input type="radio" name="q-cis" value="3.5">
+            <span class="opt-title">Administrative disruption only</span>
+            <span class="opt-desc">Scheduling, EHR-adjacent workstations, pharmacy automation (non-dispensing)</span>
+          </label>
+          <label><input type="radio" name="q-cis" value="1.5">
+            <span class="opt-title">No direct clinical impact</span>
+            <span class="opt-desc">Non-clinical support: facilities devices, BMS, signage, kiosks</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="es">
+        <h3>Q2 — Exploitability (ES)</h3>
+        <p class="question-prompt">What is the <strong>easiest path</strong> by which an attacker could exploit a known weakness in this device?</p>
+        <div class="options">
+          <label><input type="radio" name="q-es" value="9.5">
+            <span class="opt-title">Network-accessible with a public exploit</span>
+            <span class="opt-desc">Internet- or wide-network-reachable, with a CVE that has a public proof-of-concept (e.g., on Exploit-DB or Metasploit)</span>
+          </label>
+          <label><input type="radio" name="q-es" value="7.5">
+            <span class="opt-title">Network-accessible without a public exploit</span>
+            <span class="opt-desc">Reachable from the corporate network; CVE published or class of weakness known, but no published exploit</span>
+          </label>
+          <label><input type="radio" name="q-es" value="5.5">
+            <span class="opt-title">Adjacent-network or physical-proximity required</span>
+            <span class="opt-desc">Same VLAN, Bluetooth, or close physical proximity required (e.g., RS-232 service port within an attended area)</span>
+          </label>
+          <label><input type="radio" name="q-es" value="3.5">
+            <span class="opt-title">Authenticated local or service-port access required</span>
+            <span class="opt-desc">Requires a valid (not default) credential or vendor service tooling</span>
+          </label>
+          <label><input type="radio" name="q-es" value="1.5">
+            <span class="opt-title">Privileged physical access only</span>
+            <span class="opt-desc">Inside a locked enclosure or a controlled service area, with no remote attack path</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="dci">
+        <h3>Q3 — Device criticality (DCI)</h3>
+        <p class="question-prompt">If this device <strong>becomes unavailable</strong>, what is the operational impact on the clinical service?</p>
+        <div class="options">
+          <label><input type="radio" name="q-dci" value="9.5">
+            <span class="opt-title">Single point of failure in critical care</span>
+            <span class="opt-desc">No redundant device available; loss directly impairs an active critical-care function</span>
+          </label>
+          <label><input type="radio" name="q-dci" value="7.5">
+            <span class="opt-title">Redundancy exists but switchover takes more than 30 minutes</span>
+            <span class="opt-desc">A spare can be brought online, but the gap is significant for the clinical workflow</span>
+          </label>
+          <label><input type="radio" name="q-dci" value="5.5">
+            <span class="opt-title">Multiple redundant devices, switchover under 15 minutes</span>
+            <span class="opt-desc">Loss is noticeable but absorbed quickly; e.g., one PACS workstation in a reading room of many</span>
+          </label>
+          <label><input type="radio" name="q-dci" value="3.5">
+            <span class="opt-title">Manual workaround available</span>
+            <span class="opt-desc">Clinical workflow can continue with paper, alternative device, or alternative procedure</span>
+          </label>
+          <label><input type="radio" name="q-dci" value="1.5">
+            <span class="opt-title">Non-critical; loss is tolerable</span>
+            <span class="opt-desc">Convenience or efficiency device; no immediate clinical impact</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="nef">
+        <h3>Q4 — Network exposure (NEF)</h3>
+        <p class="question-prompt">How is this device <strong>exposed to potential attack surfaces</strong> (network and physical)?</p>
+        <div class="options">
+          <label><input type="radio" name="q-nef" value="9.5">
+            <span class="opt-title">Internet-facing OR exposed unprotected service port in public space</span>
+            <span class="opt-desc">Reachable from the public internet, OR has an RS-232/USB service port accessible in a corridor or unattended area</span>
+          </label>
+          <label><input type="radio" name="q-nef" value="7.5">
+            <span class="opt-title">Internal network, no VLAN isolation</span>
+            <span class="opt-desc">Reachable from any host on the corporate network; flat or weakly-segmented network design</span>
+          </label>
+          <label><input type="radio" name="q-nef" value="5.5">
+            <span class="opt-title">VLAN-isolated with permissive ACLs</span>
+            <span class="opt-desc">Dedicated VLAN exists but ACLs allow broad access; some service-port exposure</span>
+          </label>
+          <label><input type="radio" name="q-nef" value="3.5">
+            <span class="opt-title">VLAN-isolated with restrictive ACLs and physical-access controls</span>
+            <span class="opt-desc">Strict ACLs (only known peers); device located in attended clinical space</span>
+          </label>
+          <label><input type="radio" name="q-nef" value="1.5">
+            <span class="opt-title">Air-gapped, attended-only physical access</span>
+            <span class="opt-desc">No network connectivity; in a locked area with controlled entry</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="ccd">
+        <h3>Q5 — Compensating Control Deficit (CCD)</h3>
+        <p class="question-prompt">How <strong>comprehensive are the compensating controls</strong> currently in place for this device, across the six STRIDE-HC categories (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege)?</p>
+        <p class="question-help">A higher score means <em>weaker</em> coverage. CCD ≥ 8 promotes the resulting tier by one level — even mid-range composite scores escalate when controls are missing.</p>
+        <div class="options">
+          <label><input type="radio" name="q-ccd" value="9.5">
+            <span class="opt-title">No compensating controls in place</span>
+            <span class="opt-desc">Device sits on the network as designed by the vendor, with no additional controls</span>
+          </label>
+          <label><input type="radio" name="q-ccd" value="7.5">
+            <span class="opt-title">Partial controls — 1 to 2 STRIDE-HC categories covered</span>
+            <span class="opt-desc">Some basic controls (e.g., a VLAN, or a perimeter firewall rule) but most categories unaddressed</span>
+          </label>
+          <label><input type="radio" name="q-ccd" value="5.5">
+            <span class="opt-title">Controls covering 3 to 4 STRIDE-HC categories</span>
+            <span class="opt-desc">Multiple compensating controls; some categories still without coverage</span>
+          </label>
+          <label><input type="radio" name="q-ccd" value="3.5">
+            <span class="opt-title">Comprehensive controls but not formally tested</span>
+            <span class="opt-desc">All six categories addressed by documented controls; no penetration test or harness validation in last 12 months</span>
+          </label>
+          <label><input type="radio" name="q-ccd" value="1.5">
+            <span class="opt-title">Comprehensive controls, validated annually</span>
+            <span class="opt-desc">All six categories addressed; effectiveness validated by penetration test or empirical harness within last 12 months</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────────── Direct-entry mode ───────────── -->
+    <div id="mode-direct" class="mode-panel">
+      <p class="mode-intro">Set each dimension on a 1–10 scale. Click <em>Show scoring guide</em> for the full rubric per dimension.</p>
+
+      <div class="grid">
+        <div class="dimension">
+          <label for="cis">Clinical Impact Score (CIS) <span class="weight" id="weight-cis">35%</span></label>
+          <input type="range" id="cis" min="1" max="10" step="0.5" value="9">
+          <output for="cis" id="cis-out">9.0</output>
+          <p class="help" id="cis-help">9–10: life-sustaining (ventilators, infusion pumps, pacemaker programmers)</p>
+          <details class="rubric">
+            <summary>Show scoring guide</summary>
+            <ul>
+              <li><strong>9–10:</strong> Life-sustaining — ventilators, infusion pumps in active therapy, pacemaker programmers, dialysis machines. Failure or attack causes irreversible harm.</li>
+              <li><strong>7–8:</strong> Critical clinical monitoring — ICU monitors, surgical equipment, anaesthesia delivery. Failure causes significant harm requiring clinical intervention.</li>
+              <li><strong>5–6:</strong> Diagnostic imaging or laboratory — PACS, MRI, CT, X-ray, lab analysers. Failure delays or distorts diagnosis.</li>
+              <li><strong>3–4:</strong> Administrative — scheduling, billing, EHR-adjacent workstations. Failure disrupts operations but not patient care directly.</li>
+              <li><strong>1–2:</strong> Non-clinical — facilities, signage, BMS, kiosks. No direct patient impact.</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="dimension">
+          <label for="es">Exploitability Score (ES) <span class="weight" id="weight-es">25%</span></label>
+          <input type="range" id="es" min="1" max="10" step="0.5" value="7.5">
+          <output for="es" id="es-out">7.5</output>
+          <p class="help" id="es-help">7–8: network-accessible without public exploit</p>
+          <details class="rubric">
+            <summary>Show scoring guide</summary>
+            <ul>
+              <li><strong>9–10:</strong> Network-accessible with public exploit. Internet- or wide-network-reachable; CVE with proof-of-concept on Exploit-DB or Metasploit.</li>
+              <li><strong>7–8:</strong> Network-accessible without public exploit. CVE or known weakness, no published PoC.</li>
+              <li><strong>5–6:</strong> Adjacent-network or physical-proximity required. Same VLAN, Bluetooth, or service port within attended area.</li>
+              <li><strong>3–4:</strong> Authenticated local or service-port access required. Valid credential or vendor service tool.</li>
+              <li><strong>1–2:</strong> Privileged physical access only. Inside locked enclosure; no remote path.</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="dimension">
+          <label for="dci">Device Criticality Index (DCI) <span class="weight" id="weight-dci">20%</span></label>
+          <input type="range" id="dci" min="1" max="10" step="0.5" value="8">
+          <output for="dci" id="dci-out">8.0</output>
+          <p class="help" id="dci-help">7–8: redundancy with switchover &gt;30 min</p>
+          <details class="rubric">
+            <summary>Show scoring guide</summary>
+            <ul>
+              <li><strong>9–10:</strong> Single point of failure in critical care. No backup; loss impairs critical function immediately.</li>
+              <li><strong>7–8:</strong> Redundancy exists but switchover &gt; 30 min. Spare available but transition gap is operationally significant.</li>
+              <li><strong>5–6:</strong> Multiple redundant devices, switchover &lt; 15 min. Quick recovery; minor operational impact.</li>
+              <li><strong>3–4:</strong> Manual workaround available. Paper, alternative device, or alternative procedure exists.</li>
+              <li><strong>1–2:</strong> Non-critical. Loss is tolerable; convenience or efficiency only.</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="dimension">
+          <label for="nef">Network Exposure Factor (NEF) <span class="weight" id="weight-nef">15%</span></label>
+          <input type="range" id="nef" min="1" max="10" step="0.5" value="8">
+          <output for="nef" id="nef-out">8.0</output>
+          <p class="help" id="nef-help">7–8: internal network without VLAN isolation</p>
+          <details class="rubric">
+            <summary>Show scoring guide</summary>
+            <ul>
+              <li><strong>9–10:</strong> Internet-facing OR exposed unprotected service port in public space.</li>
+              <li><strong>7–8:</strong> Internal network, no VLAN isolation. Flat or weakly-segmented design.</li>
+              <li><strong>5–6:</strong> VLAN-isolated with permissive ACLs. Dedicated VLAN, broad access rules.</li>
+              <li><strong>3–4:</strong> VLAN-isolated with restrictive ACLs and physical-access controls.</li>
+              <li><strong>1–2:</strong> Air-gapped, attended-only physical access.</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="dimension">
+          <label for="ccd">Compensating Control Deficit (CCD) <span class="weight" id="weight-ccd">5% + tier promoter</span></label>
+          <input type="range" id="ccd" min="1" max="10" step="0.5" value="7">
+          <output for="ccd" id="ccd-out">7.0</output>
+          <p class="help" id="ccd-help">7–8: partial controls (1–2 STRIDE categories covered)</p>
+          <details class="rubric">
+            <summary>Show scoring guide</summary>
+            <ul>
+              <li><strong>9–10:</strong> No compensating controls in place. Device deployed as vendor-shipped.</li>
+              <li><strong>7–8:</strong> Partial controls — 1–2 STRIDE-HC categories covered.</li>
+              <li><strong>5–6:</strong> Controls in 3–4 STRIDE-HC categories.</li>
+              <li><strong>3–4:</strong> Comprehensive controls, not formally tested.</li>
+              <li><strong>1–2:</strong> Comprehensive controls, validated annually (pen-test or harness).</li>
+            </ul>
+            <p class="rubric-note"><strong>CCD promoter:</strong> CCD ≥ 8 promotes the resulting tier by one level. This addresses devices with weak controls that would otherwise not meet a high tier on the composite alone.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────────── Result card ───────────── -->
     <div class="result-card" id="result-card">
       <div class="result-tier" id="result-tier">CRITICAL</div>
       <div class="result-composite">
@@ -79,6 +315,20 @@
         </ul>
       </div>
 
+      <div class="result-scores">
+        <h3>Scores assigned</h3>
+        <table class="score-table">
+          <thead><tr><th>Dimension</th><th>Score</th><th>Weight</th></tr></thead>
+          <tbody>
+            <tr><td>Clinical Impact (CIS)</td><td id="rs-cis">—</td><td>35%</td></tr>
+            <tr><td>Exploitability (ES)</td><td id="rs-es">—</td><td>25%</td></tr>
+            <tr><td>Device Criticality (DCI)</td><td id="rs-dci">—</td><td>20%</td></tr>
+            <tr><td>Network Exposure (NEF)</td><td id="rs-nef">—</td><td>15%</td></tr>
+            <tr><td>Compensating Control Deficit (CCD)</td><td id="rs-ccd">—</td><td>5% + promoter</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <div class="result-actions">
         <button id="export-json">Export as JSON</button>
         <button id="copy-summary">Copy summary</button>
@@ -89,6 +339,17 @@
       <h3>Recommended response (per MDRS Table 6)</h3>
       <p id="result-action-text">Immediate isolation or shutdown of non-life-critical devices; 24-hour escalation to CISO and CMO; emergency vendor engagement; activate incident response plan.</p>
       <p class="timeline"><strong>Action timeline:</strong> <span id="result-timeline">Immediate / 24 hours</span></p>
+    </div>
+
+    <div class="next-steps">
+      <h3>What to do with this score</h3>
+      <ol>
+        <li><strong>Document.</strong> Attach the JSON export (above) to the device's risk record. This satisfies ISO 14971 cl.5–8 risk evaluation evidence and HIPAA §164.308(a)(1)(ii)(A) risk analysis evidence.</li>
+        <li><strong>Convene.</strong> Notify the appropriate owners. <span id="next-owners">For CRITICAL: CISO + CMO + clinical engineering director within 24 hours.</span></li>
+        <li><strong>Plan.</strong> Within the action timeline (<span id="next-timeline-inline">24 hours</span>), produce or update Control Justification Records (CJRs) for any constraints that cannot be addressed by patching. <a href="https://github.com/analyst133/legacy-medical-device-security-frameworks/tree/main/cjr-templates" target="_blank" rel="noopener">CJR template ↗</a></li>
+        <li><strong>Validate.</strong> For HIGH and CRITICAL devices, validate compensating-control effectiveness either by penetration test or via the empirical test harness. <a href="https://github.com/analyst133/legacy-medical-device-security-frameworks/tree/main/test-harness" target="_blank" rel="noopener">Test harness ↗</a></li>
+        <li><strong>Review.</strong> Set the next review date in the device's risk file. <span id="next-review">Quarterly for CRITICAL; semi-annually for HIGH; annually for MEDIUM and LOW.</span></li>
+      </ol>
     </div>
 
   </section>
@@ -179,18 +440,8 @@
       </tbody>
     </table>
 
-    <h3>Scoring guidance</h3>
-    <p>Refer to paper Table 5 for full scoring criteria per dimension. Brief reminders:</p>
-    <ul>
-      <li><strong>CIS (Clinical Impact)</strong>: 9–10 life-sustaining; 7–8 critical monitoring; 5–6 diagnostic imaging; 3–4 administrative; 1–2 non-clinical.</li>
-      <li><strong>ES (Exploitability)</strong>: 9–10 network-accessible with public exploit; 5–6 adjacent-network or physical proximity; 1–2 privileged physical access only.</li>
-      <li><strong>DCI (Criticality)</strong>: 9–10 single point of failure; 5–6 redundant with &lt;15 min switchover; 1–4 manual workaround.</li>
-      <li><strong>NEF (Exposure)</strong>: 9–10 internet-facing or exposed unprotected service port; 5–6 VLAN-isolated with permissive ACLs; 1–2 air-gapped.</li>
-      <li><strong>CCD (Compensating Control Deficit)</strong>: 9–10 no controls; 5–6 controls in 3–4 STRIDE categories; 1–2 comprehensive validated.</li>
-    </ul>
-
     <h3>Verification</h3>
-    <p>Test cases verifying the scoring logic, tier floor, CCD promoter, and equation arithmetic are provided in <code>tests/test-cases.json</code>. All three paper preset values (8.175, 4.750, 6.325) reproduce exactly.</p>
+    <p>Test cases verifying the scoring logic, tier floor, CCD promoter, and equation arithmetic are provided in <code>tests/test-cases.json</code>. All three paper preset values (8.175, 4.750, 6.325) reproduce exactly. Run <code>node tests/run-tests.js</code> to verify.</p>
   </section>
 
   <footer>
