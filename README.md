@@ -51,7 +51,7 @@ This repository is archived on Zenodo. Use the **concept DOI** to cite the artif
 ```bibtex
 @software{mohiuddin2026legacy_artifacts,
   title   = {Legacy Medical Device Security Frameworks: Companion Artifacts},
-  author  = {Mohiuddin, Khaja T.},
+  author  = {Mohiuddin, Khaja T. and Bernia, Brad},
   year    = {2026},
   doi     = {10.5281/zenodo.20113684},
   url     = {https://doi.org/10.5281/zenodo.20113684},
@@ -60,7 +60,7 @@ This repository is archived on Zenodo. Use the **concept DOI** to cite the artif
 
 @article{mohiuddin2026legacy,
   title  = {A Practical Cybersecurity Framework for Legacy Medical Devices},
-  author = {Mohiuddin, Khaja T.},
+  author = {Mohiuddin, Khaja T. and Bernia, Brad},
   year   = {2026},
   note   = {Submitted}
 }

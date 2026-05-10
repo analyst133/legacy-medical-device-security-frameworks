@@ -6,6 +6,9 @@ authors:
   - given-names: "Khaja T."
     family-names: "Mohiuddin"
     affiliation: "University of New Haven"
+  - given-names: "Brad"
+    family-names: "Bernia"
+    affiliation: "University of Michigan – Dearborn"
 abstract: >-
   Open-source companion artifact suite for the paper "A Practical Cybersecurity
   Framework for Legacy Medical Devices". Five integrated practitioner-oriented
@@ -42,5 +45,8 @@ preferred-citation:
     - given-names: "Khaja T."
       family-names: "Mohiuddin"
       affiliation: "University of New Haven"
+    - given-names: "Brad"
+      family-names: "Bernia"
+      affiliation: "University of Michigan – Dearborn"
   year: 2026
   notes: "Submitted"
