@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CJR Builder — Control Justification Record</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { box-sizing: border-box; }
+:root {
+  --bg: #ffffff; --bg-alt: #f7f8fa; --bg-section: #fafbfc;
+  --text: #1a1a1a; --text-muted: #666; --border: #e1e4e8;
+  --primary: #1f3864; --primary-light: #2f5496;
+  --chip-bg: #eef2f7; --chip-active: #1f3864; --chip-active-text: #fff;
+  --warning-bg: #fff4e6; --warning-border: #c65911;
+  --success: #2e7d32; --danger: #c00000;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.6; color: var(--text); background: var(--bg); margin: 0; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+header { background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%); color: white; padding: 32px 0 24px; margin-bottom: 32px; }
+header h1 { margin: 0 0 4px; font-size: 32px; font-weight: 700; }
+header .subtitle { margin: 0 0 16px; font-size: 15px; opacity: 0.9; }
+header nav { display: flex; gap: 24px; flex-wrap: wrap; }
+header nav a { color: white; text-decoration: none; font-size: 14px; border-bottom: 2px solid transparent; padding-bottom: 2px; transition: border-color 0.15s; }
+header nav a:hover { border-bottom-color: white; }
+main { padding-bottom: 64px; }
+section { margin-bottom: 32px; }
+h2 { font-size: 22px; margin: 0 0 12px; color: var(--primary); }
+h3 { font-size: 17px; margin: 18px 0 10px; color: var(--primary-light); }
+h4 { font-size: 14px; margin: 14px 0 6px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+p { margin: 0 0 12px; }
+.card { background: var(--bg-section); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; }
+.section-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 12px; }
+.section-card h3 { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: 200px 1fr; gap: 10px 16px; align-items: center; }
+.grid2 label { font-weight: 600; font-size: 14px; }
+.grid2 input, .grid2 textarea, .grid2 select { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; font-family: inherit; }
+.grid2 textarea { resize: vertical; min-height: 60px; }
+.full-width { grid-column: 1 / -1; }
+textarea.tall { min-height: 100px; }
+.chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.chip { display: inline-block; background: var(--chip-bg); padding: 5px 12px; border-radius: 16px; font-size: 13px; cursor: pointer; user-select: none; border: 1px solid transparent; transition: all 0.12s; }
+.chip:hover { background: #dde4ec; }
+.chip.selected { background: var(--chip-active); color: var(--chip-active-text); }
+.checkbox-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 6px 12px; margin: 8px 0; }
+.checkbox-row label { font-size: 14px; cursor: pointer; padding: 4px 0; }
+.checkbox-row input[type=checkbox] { margin-right: 6px; vertical-align: middle; }
+.stride-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; }
+.stride-row label { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--bg-alt); border-radius: 16px; cursor: pointer; font-size: 13px; font-weight: 600; }
+.stride-row label.s-selected { background: var(--primary); color: white; }
+.risk-table { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 12px 0; }
+.risk-cell { background: var(--bg-alt); padding: 12px; border-radius: 6px; }
+.risk-cell h4 { margin: 0 0 6px; color: var(--primary-light); }
+.risk-cell select { width: 100%; padding: 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; }
+.risk-cell textarea { width: 100%; padding: 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; margin-top: 6px; resize: vertical; min-height: 50px; font-family: inherit; }
+.effectiveness-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 8px 0; }
+.eff-card { padding: 12px; border: 2px solid var(--border); border-radius: 6px; cursor: pointer; transition: all 0.15s; background: white; }
+.eff-card:hover { border-color: var(--primary-light); }
+.eff-card.selected { border-color: var(--primary); background: var(--bg-alt); }
+.eff-card h4 { margin: 0 0 4px; }
+.eff-card .desc { font-size: 12px; color: var(--text-muted); }
+.eff-card.high h4 { color: var(--success); }
+.eff-card.medium h4 { color: var(--warning-border); }
+.eff-card.low h4 { color: var(--danger); }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; padding: 20px; background: var(--bg-alt); border-radius: 8px; border: 1px solid var(--border); }
+.btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-light); }
+.btn-secondary { background: white; color: var(--primary); border: 1px solid var(--primary); }
+.btn-secondary:hover { background: var(--bg-alt); }
+.notice { background: var(--warning-bg); border-left: 4px solid var(--warning-border); padding: 12px 16px; border-radius: 4px; margin: 16px 0; font-size: 14px; }
+.refs-list { list-style: none; padding: 0; margin: 8px 0; }
+.refs-list li { display: flex; gap: 8px; margin-bottom: 4px; align-items: center; }
+.refs-list input { flex: 1; padding: 6px 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; font-family: inherit; }
+.refs-list button { background: var(--bg-alt); border: 1px solid var(--border); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+.helper { font-size: 13px; color: var(--text-muted); margin: 6px 0; font-style: italic; }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>CJR Builder</h1>
+    <p class="subtitle">Author a Control Justification Record — defensible across HIPAA, ISO 14971, AAMI TIR57/97, and FDA §524B</p>
+    <nav>
+      <a href="../">Repo</a>
+      <a href="../mdrs-calculator/">MDRS Calculator</a>
+      <a href="../stride-hc-templates/">STRIDE-HC Builder</a>
+      <a href="../test-harness/">Test Harness</a>
+      <a href="../mfa-shim/">MFA Shim</a>
+      <a href="https://github.com/analyst133/legacy-medical-device-security-frameworks">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+<div class="notice">
+  <strong>First time?</strong> Read <a href="./WALKTHROUGH.md">WALKTHROUGH.md</a> for the conceptual tour. This builder walks you through the same 10 sections as the markdown template — fill in what you know, leave the rest as TBD, and generate a markdown CJR you can drop into your evidence system.
+</div>
+
+<section class="section-card">
+  <h3>1. Device identification</h3>
+  <div class="grid2">
+    <label>CJR-ID</label><input id="cjr-id" placeholder="e.g., CJR-EMPump-001-MFA">
+    <label>Status</label>
+    <select id="status"><option>Draft</option><option>Under Review</option><option>Approved</option><option>Retired</option></select>
+    <label>Device name & model</label><input id="device-name" placeholder="e.g., ExampleMed Volumetric Infusion Pump v3.2">
+    <label>Manufacturer</label><input id="manufacturer" placeholder="e.g., ExampleMed Inc.">
+    <label>Device class</label><input id="device-class" placeholder="e.g., Class II (FDA)">
+    <label>Archetype</label>
+    <select id="archetype">
+      <option value="">— pick —</option>
+      <option value="Archetype 1 (general-purpose-OS legacy)">Archetype 1 — general-purpose OS</option>
+      <option value="Archetype 2 (embedded RTOS legacy)">Archetype 2 — embedded RTOS</option>
+    </select>
+    <label>MDS² reference</label><input id="mds2" placeholder="e.g., ExampleMed-IP3.2-MDS2-2024">
+    <label>Asset inventory IDs</label><input id="asset-ids" placeholder="e.g., pump-vlan-volumetric-ip32">
+    <label>Deployment count</label><input id="deployment" placeholder="e.g., 240 units across ICU and oncology">
+    <label>STRIDE-HC threat model</label><input id="stride-link" placeholder="e.g., stride-hc-templates/examples/infusion-pump.md">
+    <label>MDRS score & tier</label><input id="mdrs-tier" placeholder="e.g., 8.175 → CRITICAL">
+  </div>
+</section>
+
+<section class="section-card">
+  <h3>2. Standard control and constraint</h3>
+  <div class="grid2">
+    <label>Standard control</label>
+    <input id="standard-control" placeholder="e.g., Multi-factor authentication for administrative access">
+    <label>Constraint type</label>
+    <div>
+      <select id="constraint-type">
+        <option value="">— pick the dominant constraint —</option>
+        <option>Multi-factor authentication not supported by device</option>
+        <option>No encryption of data in transit supported</option>
+        <option>No patching possible (vendor end-of-life or FDA clearance constraint)</option>
+        <option>Shared or hardcoded credentials (network-side)</option>
+        <option>No audit logging capability</option>
+        <option>Legacy general-purpose OS (Archetype 1)</option>
+        <option>Legacy embedded RTOS (Archetype 2)</option>
+        <option>Hardcoded service-port credential (RS-232, USB, proprietary)</option>
+        <option>USB and removable media interfaces</option>
+        <option>PHI display in shared / observable environment</option>
+        <option>Device substitution risk</option>
+        <option>Vendor field-service unsupervised access</option>
+        <option>Service-mode password disclosed in technical manual or leaked</option>
+        <option>Proximity wireless on legacy device</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <label class="full-width">Constraint detail</label>
+    <textarea id="constraint-detail" class="full-width tall" placeholder="Cite the source of truth (vendor advisory ID, MDS² section, manual page). State the nature of the constraint (technical / regulatory / vendor-policy / FDA-clearance). State why it won't go away soon (vendor roadmap, EOL date)."></textarea>
+  </div>
+</section>
+
+<section class="section-card">
+  <h3>3. Threat addressed</h3>
+  <h4>3.1 STRIDE-HC categories this constraint exposes</h4>
+  <div class="stride-row" id="stride-toggles">
+    <label data-stride="S"><input type="checkbox" data-stride="S">S — Spoofing</label>
+    <label data-stride="T"><input type="checkbox" data-stride="T">T — Tampering</label>
+    <label data-stride="R"><input type="checkbox" data-stride="R">R — Repudiation</label>
+    <label data-stride="I"><input type="checkbox" data-stride="I">I — Information Disclosure</label>
+    <label data-stride="D"><input type="checkbox" data-stride="D">D — Denial of Service</label>
+    <label data-stride="E"><input type="checkbox" data-stride="E">E — Elevation of Privilege</label>
+  </div>
+  <h4>3.2 Threat scenarios (network + physical/insider)</h4>
+  <textarea id="threat-scenarios" class="tall" style="width:100%" placeholder="List the specific scenarios from your STRIDE-HC threat model. Both network-attacker and physical/insider where applicable."></textarea>
+
+  <h4>3.3 Initial risk assessment (pre-control)</h4>
+  <div class="risk-table">
+    <div class="risk-cell">
+      <h4>Likelihood</h4>
+      <select id="initial-likelihood"><option value="">—</option><option>Low</option><option>Medium</option><option>High</option></select>
+      <textarea id="initial-likelihood-r" placeholder="rationale"></textarea>
+    </div>
+    <div class="risk-cell">
+      <h4>Severity</h4>
+      <select id="initial-severity"><option value="">—</option><option>Low</option><option>Medium</option><option>High</option></select>
+      <textarea id="initial-severity-r" placeholder="rationale"></textarea>
+    </div>
+    <div class="risk-cell">
+      <h4>Detectability</h4>
+      <select id="initial-detect"><option value="">—</option><option>Easy</option><option>Moderate</option><option>Difficult</option></select>
+      <textarea id="initial-detect-r" placeholder="rationale"></textarea>
+    </div>
+  </div>
+</section>
+
+<section class="section-card">
+  <h3>4. Compensating control(s) selected</h3>
+  <div class="grid2">
+    <label class="full-width">4.1 Control description</label>
+    <textarea id="control-desc" class="full-width tall" placeholder="e.g., Pattern A — Upstream PAM gateway using CyberArk PSM v12.x, brokering all network connections to the pump management interface."></textarea>
+    <label class="full-width">4.2 Playbook reference</label>
+    <textarea id="playbook-ref" class="full-width" placeholder="e.g., Paper §3.2 Table 2, 'MFA not supported'. Pattern A described in §3.4."></textarea>
+    <label class="full-width">4.3 How the control addresses the threat</label>
+    <textarea id="control-mechanism" class="full-width tall" placeholder="Walk through each scenario from 3.2 individually. Say *how* the control affects each one."></textarea>
+    <label class="full-width">4.4 Design principles (Equivalence, Independence, Proportionality, Auditability)</label>
+    <textarea id="design-principles" class="full-width tall" placeholder="One sentence per principle. Why the control meets each."></textarea>
+    <label class="full-width">4.5 Implementation references</label>
+    <textarea id="implementation" class="full-width tall" placeholder="Platform/version, network ACL specifics, MFA factor, retention policy, change-management process."></textarea>
+  </div>
+</section>
+
+<section class="section-card">
+  <h3>5. Residual risk evaluation (ISO 14971 cl.8)</h3>
+  <h4>5.1 Residual risk after control deployment</h4>
+  <div class="risk-table">
+    <div class="risk-cell">
+      <h4>Likelihood (residual)</h4>
+      <select id="residual-likelihood"><option value="">—</option><option>Low</option><option>Medium</option><option>High</option></select>
+      <textarea id="residual-likelihood-r" placeholder="rationale"></textarea>
+    </div>
+    <div class="risk-cell">
+      <h4>Severity (residual)</h4>
+      <select id="residual-severity"><option value="">—</option><option>Low</option><option>Medium</option><option>High</option></select>
+      <textarea id="residual-severity-r" placeholder="rationale (usually unchanged)"></textarea>
+    </div>
+    <div class="risk-cell">
+      <h4>Detectability (residual)</h4>
+      <select id="residual-detect"><option value="">—</option><option>Easy</option><option>Moderate</option><option>Difficult</option></select>
+      <textarea id="residual-detect-r" placeholder="rationale"></textarea>
+    </div>
+  </div>
+  <div class="grid2">
+    <label class="full-width">5.2 Residual risk acceptability</label>
+    <textarea id="acceptability" class="full-width" placeholder="Reference your organisation's risk-acceptance criteria; state whether acceptable and why."></textarea>
+    <label class="full-width">5.3 Risk acceptance authority</label>
+    <input id="acceptance-auth" placeholder="e.g., CISO (K. Williams), with CMO concurrence under LMD-RISK-2026-001">
+  </div>
+</section>
+
+<section class="section-card">
+  <h3>6. Effectiveness rating</h3>
+  <div class="effectiveness-options" id="eff-options">
+    <div class="eff-card high" data-rating="High" onclick="setEffectiveness('High')">
+      <h4>High</h4>
+      <div class="desc">Equivalent protection to standard control; validated by penetration testing or harness output.</div>
+    </div>
+    <div class="eff-card medium" data-rating="Medium" onclick="setEffectiveness('Medium')">
+      <h4>Medium</h4>
+      <div class="desc">Partially addresses the threat; residual risk elevated but manageable.</div>
+    </div>
+    <div class="eff-card low" data-rating="Low" onclick="setEffectiveness('Low')">
+      <h4>Low</h4>
+      <div class="desc">Minimal mitigation; formal risk acceptance per ISO 14971 cl.8 required.</div>
+    </div>
+  </div>
+  <p class="helper">Rating must be validated, not asserted. Cite the test-harness CSV or pentest report below.</p>
+  <textarea id="validation" style="width:100%" placeholder="Validation evidence — pentest report ID, harness run CSV path, design review minutes, tabletop exercise notes."></textarea>
+</section>
+
+<section class="section-card">
+  <h3>7. Normative references</h3>
+  <p class="helper">Click to add common references. Reference <em>specific clauses</em>, not whole standards.</p>
+  <div class="chip-list" id="ref-chips"></div>
+  <ul class="refs-list" id="refs-list"></ul>
+  <button class="btn btn-secondary" onclick="addRef('')" type="button">+ Add custom reference</button>
+</section>
+
+<section class="section-card">
+  <h3>8. Approval and review</h3>
+  <div class="grid2">
+    <label>Author</label><input id="author" placeholder="Name, role">
+    <label>Reviewer — Clinical Eng.</label><input id="reviewer-ce" placeholder="Name, role">
+    <label>Reviewer — InfoSec</label><input id="reviewer-is" placeholder="Name, role">
+    <label>Approver — CISO</label><input id="approver-ciso" placeholder="Name">
+    <label>Approver — Dir. Clinical Eng.</label><input id="approver-dce" placeholder="Name">
+    <label>Approval date</label><input id="approval-date" type="date">
+    <label>Effective date</label><input id="effective-date" type="date">
+    <label>Next scheduled review</label><input id="next-review" type="date">
+    <label class="full-width">Trigger conditions for early review</label>
+    <textarea id="triggers" class="full-width" placeholder="e.g., Vendor security advisory, new firmware CVE, PAM platform end-of-support, loss of MFA service availability"></textarea>
+  </div>
+</section>
+
+<section class="section-card">
+  <h3>9. Linked records</h3>
+  <div class="grid2">
+    <label>STRIDE-HC threat model</label><input id="link-stride" placeholder="filename or system reference">
+    <label>MDS² disclosure</label><input id="link-mds2" placeholder="reference">
+    <label>Vendor security advisories</label><input id="link-vendor" placeholder="reference if applicable">
+    <label>Penetration test report</label><input id="link-pentest" placeholder="report ID">
+    <label>Test harness output</label><input id="link-harness" placeholder="e.g., test-harness/results/run-2026-q1.csv">
+    <label>Related CJRs</label><input id="link-related" placeholder="other CJR-IDs for the same device">
+  </div>
+</section>
+
+<section>
+  <div class="actions">
+    <button class="btn btn-primary" onclick="downloadMarkdown()">Download CJR as Markdown (.md)</button>
+    <button class="btn btn-secondary" onclick="previewMarkdown()">Preview Markdown</button>
+    <button class="btn btn-secondary" onclick="loadExample()">Load example (no-MFA pump)</button>
+    <button class="btn btn-secondary" onclick="resetForm()">Reset</button>
+  </div>
+  <div id="preview" style="display:none; margin-top:16px;">
+    <h3>Preview</h3>
+    <pre id="preview-text" style="background: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto; max-height: 500px; font-size: 13px; line-height: 1.5;"></pre>
+  </div>
+</section>
+
+</main>
+
+<script>
+'use strict';
+
+const COMMON_REFS = [
+  'ISO 14971:2019, cl.7 (Risk control measures)',
+  'ISO 14971:2019, cl.8 (Evaluation of overall residual risk)',
+  'AAMI TIR57:2016, §6 (Security risk control)',
+  'AAMI TIR97, §6 (Postmarket security risk control)',
+  'HIPAA Security Rule, 45 CFR §164.308(a)(1)(ii)(B) (Risk management)',
+  'HIPAA Security Rule, 45 CFR §164.312(d) (Person or entity authentication)',
+  'HIPAA Security Rule, 45 CFR §164.312(b) (Audit controls)',
+  'FDA 2023 Cybersecurity Guidance, §VII.A.4 (Authentication)',
+  'FDA 2023 Cybersecurity Guidance, §VII.A.6 (Residual risk evaluation)',
+  'NIST SP 800-82r3, IA-2 (Identification and Authentication)',
+  'IEC 62443-3-3, SR 1.7 (Strength of authenticators)',
+  'HSCC HIC-MaLTS (2023), Practice 5.2 (Privileged access management)'
+];
+
+let refs = [];
+let effectivenessRating = '';
+
+function renderRefChips() {
+  const wrap = document.getElementById('ref-chips');
+  wrap.innerHTML = '';
+  for (const r of COMMON_REFS) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.textContent = r;
+    if (refs.includes(r)) chip.classList.add('selected');
+    chip.addEventListener('click', () => {
+      const idx = refs.indexOf(r);
+      if (idx >= 0) refs.splice(idx, 1);
+      else refs.push(r);
+      renderRefChips();
+      renderRefsList();
+    });
+    wrap.appendChild(chip);
+  }
+}
+
+function renderRefsList() {
+  const list = document.getElementById('refs-list');
+  list.innerHTML = '';
+  refs.forEach((r, i) => {
+    const li = document.createElement('li');
+    const inp = document.createElement('input');
+    inp.value = r;
+    inp.addEventListener('input', e => { refs[i] = e.target.value; });
+    const btn = document.createElement('button');
+    btn.textContent = 'remove';
+    btn.type = 'button';
+    btn.addEventListener('click', () => { refs.splice(i, 1); renderRefChips(); renderRefsList(); });
+    li.appendChild(inp);
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+}
+
+function addRef(text) { refs.push(text); renderRefsList(); renderRefChips(); }
+
+function setEffectiveness(r) {
+  effectivenessRating = r;
+  document.querySelectorAll('.eff-card').forEach(c => c.classList.toggle('selected', c.dataset.rating === r));
+}
+
+// Wire stride checkboxes
+document.querySelectorAll('#stride-toggles input').forEach(cb => {
+  cb.addEventListener('change', () => {
+    cb.closest('label').classList.toggle('s-selected', cb.checked);
+  });
+});
+
+function v(id) { return document.getElementById(id).value.trim(); }
+function vorTBD(id) { return v(id) || '[TBD]'; }
+
+function checkedStrides() {
+  return [...document.querySelectorAll('#stride-toggles input:checked')].map(cb => cb.dataset.stride);
+}
+
+function buildMarkdown() {
+  const strideLetters = checkedStrides();
+  const strideNames = { S: 'Spoofing', T: 'Tampering', R: 'Repudiation', I: 'Information Disclosure', D: 'Denial of Service', E: 'Elevation of Privilege' };
+  let md = `# Control Justification Record (CJR)\n\n`;
+  md += `**CJR-ID:** ${vorTBD('cjr-id')}\n`;
+  md += `**Status:** ${v('status') || 'Draft'}\n`;
+  md += `**Version:** 1.0\n\n`;
+  md += `## 1. Device identification\n\n| Field | Value |\n|---|---|\n`;
+  md += `| Device name and model | ${vorTBD('device-name')} |\n`;
+  md += `| Manufacturer | ${vorTBD('manufacturer')} |\n`;
+  md += `| Device class (FDA / EU MDR) | ${vorTBD('device-class')} |\n`;
+  md += `| Device archetype | ${vorTBD('archetype')} |\n`;
+  md += `| MDS² reference | ${vorTBD('mds2')} |\n`;
+  md += `| Asset inventory IDs | ${vorTBD('asset-ids')} |\n`;
+  md += `| Deployment count | ${vorTBD('deployment')} |\n`;
+  md += `| Linked STRIDE-HC threat model | ${vorTBD('stride-link')} |\n`;
+  md += `| Current MDRS score and tier | ${vorTBD('mdrs-tier')} |\n\n`;
+  md += `## 2. Standard control and constraint\n\n### 2.1 Standard control that cannot be applied\n\n${v('standard-control') || '[TBD]'}\n\n`;
+  md += `### 2.2 Constraint preventing standard control\n\n**${v('constraint-type') || '[Constraint type TBD]'}**\n\n`;
+  md += `### 2.3 Constraint detail\n\n${v('constraint-detail') || '[Cite source of truth, nature, and persistence of constraint.]'}\n\n`;
+  md += `## 3. Threat addressed\n\n### 3.1 STRIDE-HC mapping\n\n`;
+  if (strideLetters.length === 0) md += `_(no categories selected)_\n\n`;
+  else for (const l of strideLetters) md += `- **${l}** — ${strideNames[l]}\n`;
+  md += `\n### 3.2 Threat scenario summary\n\n${v('threat-scenarios') || '[Cite scenarios from the linked STRIDE-HC threat model.]'}\n\n`;
+  md += `### 3.3 Initial risk assessment (pre-control)\n\n`;
+  md += `| Dimension | Score | Rationale |\n|---|---|---|\n`;
+  md += `| Likelihood | ${v('initial-likelihood') || '[TBD]'} | ${v('initial-likelihood-r') || '[rationale]'} |\n`;
+  md += `| Severity | ${v('initial-severity') || '[TBD]'} | ${v('initial-severity-r') || '[rationale]'} |\n`;
+  md += `| Detectability | ${v('initial-detect') || '[TBD]'} | ${v('initial-detect-r') || '[rationale]'} |\n\n`;
+  md += `## 4. Compensating control(s) selected\n\n`;
+  md += `### 4.1 Control description\n\n${v('control-desc') || '[TBD]'}\n\n`;
+  md += `### 4.2 Reference to Compensating Controls Playbook\n\n${v('playbook-ref') || '[TBD]'}\n\n`;
+  md += `### 4.3 How the control addresses the threat\n\n${v('control-mechanism') || '[TBD]'}\n\n`;
+  md += `### 4.4 Why this control is appropriate (design principles)\n\n${v('design-principles') || '[Equivalence / Independence / Proportionality / Auditability — one sentence each.]'}\n\n`;
+  md += `### 4.5 Implementation references\n\n${v('implementation') || '[Platform, configuration, retention, workflow.]'}\n\n`;
+  md += `## 5. Residual risk evaluation (ISO 14971 cl.8)\n\n### 5.1 Risk after control deployment\n\n`;
+  md += `| Dimension | Score | Rationale |\n|---|---|---|\n`;
+  md += `| Likelihood (residual) | ${v('residual-likelihood') || '[TBD]'} | ${v('residual-likelihood-r') || '[rationale]'} |\n`;
+  md += `| Severity (residual) | ${v('residual-severity') || '[TBD]'} | ${v('residual-severity-r') || '[rationale]'} |\n`;
+  md += `| Detectability (residual) | ${v('residual-detect') || '[TBD]'} | ${v('residual-detect-r') || '[rationale]'} |\n\n`;
+  md += `### 5.2 Residual risk acceptability\n\n${v('acceptability') || '[State acceptable/not, with reasoning.]'}\n\n`;
+  md += `### 5.3 Risk acceptance authority\n\n${v('acceptance-auth') || '[TBD]'}\n\n`;
+  md += `## 6. Effectiveness rating\n\n**${effectivenessRating || '[Rating TBD]'}**\n\n**Validation evidence:** ${v('validation') || '[Cite pentest report, harness output, design review.]'}\n\n`;
+  md += `## 7. Normative references\n\n`;
+  if (refs.length === 0) md += `_(no references added)_\n\n`;
+  else for (const r of refs.filter(x => x.trim())) md += `- ${r}\n`;
+  md += `\n## 8. Approval and review\n\n| Field | Value |\n|---|---|\n`;
+  md += `| Author | ${vorTBD('author')} |\n`;
+  md += `| Reviewer (Clinical Engineering) | ${vorTBD('reviewer-ce')} |\n`;
+  md += `| Reviewer (InfoSec) | ${vorTBD('reviewer-is')} |\n`;
+  md += `| Approver (CISO) | ${vorTBD('approver-ciso')} |\n`;
+  md += `| Approver (Director of Clinical Engineering) | ${vorTBD('approver-dce')} |\n`;
+  md += `| Approval date | ${vorTBD('approval-date')} |\n`;
+  md += `| Effective date | ${vorTBD('effective-date')} |\n`;
+  md += `| Next scheduled review | ${vorTBD('next-review')} |\n`;
+  md += `| Trigger conditions for early review | ${v('triggers') || '[TBD]'} |\n\n`;
+  md += `## 9. Linked records\n\n| Record type | Reference |\n|---|---|\n`;
+  md += `| STRIDE-HC threat model | ${vorTBD('link-stride')} |\n`;
+  md += `| MDS² disclosure | ${vorTBD('link-mds2')} |\n`;
+  md += `| Vendor security advisories | ${vorTBD('link-vendor')} |\n`;
+  md += `| Penetration test report | ${vorTBD('link-pentest')} |\n`;
+  md += `| Test harness output | ${vorTBD('link-harness')} |\n`;
+  md += `| Related CJRs | ${vorTBD('link-related')} |\n\n`;
+  md += `## 10. Change log\n\n| Version | Date | Author | Change summary |\n|---|---|---|---|\n`;
+  md += `| 1.0 | ${v('approval-date') || '[YYYY-MM-DD]'} | ${v('author') || '[Author]'} | Initial CJR for ${v('constraint-type') || '[constraint]'} on ${v('device-name') || '[device]'} |\n`;
+  return md;
+}
+
+function downloadFile(name, content, type='text/plain') {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 100);
+}
+
+function slug(s) {
+  return (s || 'cjr').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50) || 'cjr';
+}
+
+function downloadMarkdown() {
+  const id = v('cjr-id') || slug(v('device-name'));
+  downloadFile(`${id}.md`, buildMarkdown(), 'text/markdown');
+}
+function previewMarkdown() {
+  document.getElementById('preview').style.display = '';
+  document.getElementById('preview-text').textContent = buildMarkdown();
+  document.getElementById('preview').scrollIntoView({ behavior: 'smooth' });
+}
+
+function loadExample() {
+  document.getElementById('cjr-id').value = 'CJR-EMPump-001-MFA';
+  document.getElementById('status').value = 'Approved';
+  document.getElementById('device-name').value = 'ExampleMed Volumetric Infusion Pump v3.2';
+  document.getElementById('manufacturer').value = 'ExampleMed Inc.';
+  document.getElementById('device-class').value = 'Class II (FDA)';
+  document.getElementById('archetype').value = 'Archetype 2 (embedded RTOS legacy)';
+  document.getElementById('mds2').value = 'ExampleMed-IP3.2-MDS2-2024';
+  document.getElementById('deployment').value = '240 units across ICU and oncology';
+  document.getElementById('stride-link').value = 'stride-hc-templates/examples/infusion-pump.md';
+  document.getElementById('mdrs-tier').value = '8.175 → CRITICAL';
+  document.getElementById('standard-control').value = 'Multi-factor authentication for administrative access to the device management interface.';
+  document.getElementById('constraint-type').value = 'Multi-factor authentication not supported by device';
+  document.getElementById('constraint-detail').value = 'MFA not supported. Hardcoded service-mode password documented in vendor service manual. Firmware does not support per-user accounts. Vendor advisory ExampleMed-2024-03 confirms MFA not on roadmap due to FDA 510(k) clearance constraints. Constraint is technical and regulatory.';
+  // Check S, R, E
+  document.querySelector('input[data-stride="S"]').checked = true;
+  document.querySelector('input[data-stride="S"]').closest('label').classList.add('s-selected');
+  document.querySelector('input[data-stride="R"]').checked = true;
+  document.querySelector('input[data-stride="R"]').closest('label').classList.add('s-selected');
+  document.querySelector('input[data-stride="E"]').checked = true;
+  document.querySelector('input[data-stride="E"]').closest('label').classList.add('s-selected');
+  document.getElementById('threat-scenarios').value = 'Network: default credential exploitation via mgmt interface; lateral movement to peer pumps. Physical: service-mode credential abuse via service port; vendor-impersonation social engineering.';
+  document.getElementById('initial-likelihood').value = 'High';
+  document.getElementById('initial-likelihood-r').value = 'Public disclosure of service credential places this in the high-likelihood band.';
+  document.getElementById('initial-severity').value = 'High';
+  document.getElementById('initial-severity-r').value = 'Successful exploitation enables therapy parameter modification on a Class II infusion device.';
+  document.getElementById('initial-detect').value = 'Difficult';
+  document.getElementById('initial-detect-r').value = 'Device generates no authentication audit log; detection depends entirely on upstream observation.';
+  document.getElementById('control-desc').value = 'Pattern A — Upstream PAM (CyberArk PSM v12.x) brokers all network connections to the pump management interface. Users authenticate to the PAM with individual MFA. PAM retrieves the hardcoded credential from a vault and connects on the user\'s behalf.';
+  document.getElementById('playbook-ref').value = 'Paper §3.2 Table 2, "MFA not supported" constraint. Pattern A described in §3.4.';
+  document.getElementById('control-mechanism').value = 'Hardcoded credential never leaves the vault, eliminating network discovery. Pump management interface reachable only from PAM gateway IP via VLAN ACL. PAM enforces individual MFA. Session recording provides per-user attribution.';
+  document.getElementById('design-principles').value = 'Equivalence: MFA enforced at PAM provides equivalent protection. Independence: control does not depend on any pump capability. Proportionality: CRITICAL tier; PAM with MFA is strongest network control. Auditability: HIPAA §164.312(b), ISO 14971 cl.7.4, AAMI TIR57 §6.3.';
+  document.getElementById('implementation').value = 'CyberArk PSM v12.x; pump VLAN ACL inbound permit only from PAM gateway IP/32 to TCP/8080; session retention 90 days online, 7 years archived; MFA factor Duo Push or hardware token; emergency break-glass available with elevated audit and 4-hour CISO review.';
+  document.getElementById('residual-likelihood').value = 'Low';
+  document.getElementById('residual-likelihood-r').value = 'Credential no longer network-discoverable.';
+  document.getElementById('residual-severity').value = 'High';
+  document.getElementById('residual-severity-r').value = 'Unchanged. Control reduces likelihood, not severity.';
+  document.getElementById('residual-detect').value = 'Easy';
+  document.getElementById('residual-detect-r').value = 'PAM session logging provides full per-user visibility.';
+  document.getElementById('acceptability').value = 'Acceptable under LMD-RISK-2026-001 (residual likelihood ≤ Low, validated detection capability, quarterly monitoring review).';
+  document.getElementById('acceptance-auth').value = 'CISO with CMO concurrence under LMD-RISK-2026-001.';
+  setEffectiveness('High');
+  document.getElementById('validation').value = 'Pentest report PT-2026-Q1-014 + test harness scenario 05-eop-default-credential.py.';
+  refs = COMMON_REFS.slice(0, 8);
+  renderRefChips();
+  renderRefsList();
+  document.getElementById('author').value = 'S. Patel, Senior Clinical Engineer';
+  document.getElementById('reviewer-ce').value = 'M. Robinson, Director of Clinical Engineering';
+  document.getElementById('reviewer-is').value = 'J. Chen, Lead Security Architect';
+  document.getElementById('approver-ciso').value = 'K. Williams';
+  document.getElementById('approver-dce').value = 'M. Robinson';
+  document.getElementById('triggers').value = 'ExampleMed Inc. security advisory; new VxWorks 6.9 CVE; PAM platform end-of-support; pump VLAN architecture change; loss of MFA service availability.';
+  document.getElementById('link-stride').value = 'stride-hc-templates/examples/infusion-pump.md';
+  document.getElementById('link-mds2').value = 'ExampleMed-IP3.2-MDS2-2024';
+  document.getElementById('link-pentest').value = 'PT-2026-Q1-014';
+  document.getElementById('link-harness').value = 'test-harness/results/empump-v32-2026-q1.csv';
+  document.getElementById('link-related').value = 'CJR-EMPump-002-Encryption, CJR-EMPump-003-ServicePort';
+}
+
+function resetForm() {
+  if (!confirm('Reset all fields?')) return;
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    if (el.type === 'checkbox') el.checked = false;
+    else el.value = '';
+  });
+  document.querySelectorAll('.s-selected').forEach(el => el.classList.remove('s-selected'));
+  document.querySelectorAll('.eff-card.selected').forEach(el => el.classList.remove('selected'));
+  refs = [];
+  effectivenessRating = '';
+  renderRefChips();
+  renderRefsList();
+  document.getElementById('preview').style.display = 'none';
+}
+
+renderRefChips();
+renderRefsList();
+</script>
+</body>
+</html>
