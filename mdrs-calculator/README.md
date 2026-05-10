@@ -6,15 +6,16 @@ This is the headline artifact of the companion repository for the paper *"A Prac
 
 ## Run it
 
-The calculator is a pure HTML/CSS/JavaScript application with **zero build dependencies**. To use it locally, open `index.html` in any modern browser:
+**Live in your browser — no install required:**
+**[https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/](https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/)**
+
+Or locally — the calculator is a pure HTML/CSS/JavaScript application with **zero build dependencies**. Open `index.html` in any modern browser:
 
 ```bash
 open index.html        # macOS
 xdg-open index.html    # Linux
 start index.html       # Windows
 ```
-
-For deployment via GitHub Pages, push to a `gh-pages` branch or enable Pages on `main` for the `mdrs-calculator/` subdirectory. No build step.
 
 ## What it does
 
