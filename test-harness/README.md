@@ -4,6 +4,8 @@ A Dockerised multi-container test environment for **empirical evaluation of comp
 
 > **Status:** Functional prototype. The harness implements a representative Archetype 2 (embedded RTOS legacy) infusion pump emulator, a clinical workstation, an attacker container with five scenarios mapped to STRIDE-HC categories, and a compose-profile-based controls overlay. It is intended to support the empirical claim made by paper §9.3 and to be extended by contributors with additional device archetypes, scenarios, and controls.
 
+> **Designing or running experiments?** See [`METHODOLOGY.md`](./METHODOLOGY.md) for experimental design, expected outcome matrix, statistical considerations, limitations, and how harness output feeds CJR effectiveness validation and MDRS CCD scoring.
+
 ## What the harness is for
 
 Compensating controls in legacy medical device security are typically deployed without quantitative measurement of their effectiveness. The harness addresses this gap by providing a reproducible environment in which:

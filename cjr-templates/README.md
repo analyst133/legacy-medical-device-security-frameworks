@@ -40,6 +40,8 @@ cjr-templates/
 
 ## How to use
 
+**First time writing a CJR? Start with [`WALKTHROUGH.md`](./WALKTHROUGH.md)** — a 30-minute tutorial that takes you from constraint to approved record using a worked example. The summary below is a reference for users who have done one already.
+
 ### For HDOs
 
 1. For each device-constraint pair in your inventory, create a CJR using `cjr-template.md` as the base.

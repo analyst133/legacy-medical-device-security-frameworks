@@ -204,7 +204,7 @@ This is the integration the paper claims: not five tools sharing a directory, bu
 | If you want to… | Read |
 |---|---|
 | Build a STRIDE-HC threat model from scratch | [`stride-hc-templates/WALKTHROUGH.md`](./stride-hc-templates/WALKTHROUGH.md) |
-| Write a CJR for a new compensating control | [`cjr-templates/README.md`](./cjr-templates/README.md) + the three worked examples in `cjr-templates/examples/` |
+| Write a CJR for a new compensating control | [`cjr-templates/WALKTHROUGH.md`](./cjr-templates/WALKTHROUGH.md) — 30-minute first-author tutorial |
 | Run the test harness | [`test-harness/README.md`](./test-harness/README.md) |
 | Understand the MDRS methodology | [`mdrs-calculator/docs/methodology.md`](./mdrs-calculator/docs/methodology.md) |
 | Adapt the MFA shim for production hardware | [`mfa-shim/ARCHITECTURE.md`](./mfa-shim/ARCHITECTURE.md) + [`mfa-shim/FDA-CONSIDERATIONS.md`](./mfa-shim/FDA-CONSIDERATIONS.md) |
