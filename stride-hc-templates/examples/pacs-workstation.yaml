@@ -1,0 +1,196 @@
+stride_hc_version: "1.0"
+
+device:
+  name: "Generic PACS Imaging Workstation"
+  model: "Vendor X PACS Reading Station v8.4"
+  manufacturer: "Vendor X"
+  device_class: "Class II (FDA, image display application)"
+  umdns_code: "13985"
+  gmdn_code: "37618"
+  mds2_reference: "VendorX-PACS-RS-v8.4-MDS2-2023"
+  archetype: "A1"   # General-purpose-OS legacy
+
+  technical:
+    operating_system: "Windows 7 Pro x64 (EOL)"
+    os_eol: true
+    networking:
+      - "Gigabit Ethernet"
+      - "DICOM over TCP/104 (no TLS)"
+      - "DICOM TLS over TCP/2762 (configurable, not always enabled)"
+      - "HL7 v2 to RIS over TCP/2575"
+    authentication: "Local Windows account with shared technologist credentials"
+    patching: "Vendor delivers cumulative patches quarterly; OS no longer receives Microsoft updates"
+    audit_logging: "Windows Security Event Log; vendor application log"
+    physical_interfaces:
+      - "USB-A (multiple, for image import from CD/DVD or USB)"
+      - "DVD-RW drive"
+      - "Card reader for badge-based unlock (optional)"
+      - "Standard keyboard, mouse, dual displays"
+
+  deployment:
+    count: 38
+    locations: ["Radiology reading rooms", "Emergency department imaging review"]
+    clinical_use: "Diagnostic image review and reporting"
+
+threat_categories:
+
+  - id: "S"
+    name: "Spoofing"
+    caw: 1.2
+    network_scenarios:
+      - "ARP cache poisoning to redirect DICOM traffic"
+      - "Forged DICOM transfers from spoofed modality"
+      - "Compromised RIS server forging HL7 worklist entries"
+    physical_scenarios:
+      - "Rogue user authenticating with shared technologist credentials"
+      - "Unattended workstation hijack during break"
+      - "USB device emulating keyboard for credential injection"
+    detection_methods:
+      - framework_v_category: "ueba"
+        description: "Anomalous DICOM transfer patterns by source AE-Title"
+      - framework_v_category: "physical_access_correlation"
+        description: "Badge-to-workstation correlation; absence of badge during active session flagged"
+    compensating_controls:
+      - playbook_constraint: "Shared/hardcoded credentials"
+        control: "PAM with individual MFA upstream (Pattern A); session recording"
+      - playbook_constraint: "Hardcoded service-port credential"
+        control: "USB device control (Endpoint Protection rule allowing only HID-class on whitelist)"
+    coverage_for_ccd: "full"
+
+  - id: "T"
+    name: "Tampering"
+    caw: 1.1
+    network_scenarios:
+      - "Malware introduction via Windows 7 vulnerability (e.g., EternalBlue)"
+      - "DICOM image manipulation in transit (e.g., CT-GAN class attacks per Mirsky et al.)"
+      - "Configuration tampering via SMB share with weak ACL"
+    physical_scenarios:
+      - "Malware introduction via USB or CD/DVD during image import"
+      - "Configuration tamper via local administrator login"
+      - "Replacement of DICOM viewer DLL via local file write"
+    detection_methods:
+      - framework_v_category: "protocol_dpi"
+        description: "DICOM-aware proxy logging all study transfers; checksum verification"
+      - framework_v_category: "ueba"
+        description: "EDR agent baseline detecting anomalous DLL loads"
+      - framework_v_category: "passive_fingerprinting"
+        description: "File integrity monitoring on critical Windows directories"
+    compensating_controls:
+      - playbook_constraint: "Legacy general-purpose OS (Windows XP/7)"
+        control: "Application allowlisting (e.g., Carbon Black or Tripwire)"
+      - playbook_constraint: "USB and removable media interfaces"
+        control: "USB media control (only signed, organisation-issued media); CD/DVD reads scanned by EDR"
+      - playbook_constraint: "No patching possible"
+        control: "Virtual patching via network IPS for known Windows 7 CVEs"
+    coverage_for_ccd: "full"
+
+  - id: "R"
+    name: "Repudiation"
+    caw: 0.9
+    network_scenarios:
+      - "Anonymous DICOM transfers without strong AE-Title authentication"
+      - "Image-export events not attributable to a specific user"
+    physical_scenarios:
+      - "Reading session by user logged in with shared credentials"
+      - "PHI capture via DVD burn or USB export by unidentified user"
+    detection_methods:
+      - framework_v_category: "ueba"
+        description: "Windows Security log forwarded to SIEM with high-fidelity badge correlation"
+      - framework_v_category: "physical_access_correlation"
+        description: "Badge tap to workstation correlation; deviation from scheduled radiologist shift flagged"
+    compensating_controls:
+      - playbook_constraint: "Shared/hardcoded credentials"
+        control: "Individual MFA via PAM (Pattern A); session recording for elevated actions"
+      - playbook_constraint: "No audit logging capability"
+        control: "Sysmon and EDR endpoint telemetry forwarded to SIEM"
+    coverage_for_ccd: "full"
+
+  - id: "I"
+    name: "Information Disclosure"
+    caw: 1.2
+    network_scenarios:
+      - "DICOM in transit with cleartext PHI on shared segment"
+      - "Memory scraping via Windows 7 vulnerability"
+      - "Unprotected data export via SMB share"
+    physical_scenarios:
+      - "Unattended workstation with PHI displayed in reading room visible from corridor"
+      - "Bulk PHI export to USB or DVD"
+      - "Shoulder-surfing during reading session"
+    detection_methods:
+      - framework_v_category: "protocol_dpi"
+        description: "DLP at DICOM proxy; alert on bulk transfer"
+      - framework_v_category: "ueba"
+        description: "EDR detection of mass-file-access events"
+    compensating_controls:
+      - playbook_constraint: "No encryption (data in transit)"
+        control: "Force DICOM TLS for all modality and PACS server connections; deprecate cleartext port"
+      - playbook_constraint: "PHI display in shared/observable environment"
+        control: "Reading rooms physically secured; auto-screen-lock at 5 min idle; display privacy filters"
+      - playbook_constraint: "USB and removable media interfaces"
+        control: "USB media control; DVD-burn requires admin approval workflow"
+    coverage_for_ccd: "full"
+
+  - id: "D"
+    name: "Denial of Service"
+    caw: 1.5
+    network_scenarios:
+      - "Network flooding disrupts modality-to-PACS image flow"
+      - "Ransomware encrypting DICOM cache"
+      - "Targeted Windows 7 SMB exploit causing crash"
+    physical_scenarios:
+      - "Power or network disconnection at workstation"
+      - "Display destruction"
+    detection_methods:
+      - framework_v_category: "ueba"
+        description: "Workstation availability monitoring; SIEM alert on unexpected reboot"
+      - framework_v_category: "ueba"
+        description: "Ransomware behavioural detection (mass file rename / encryption)"
+    compensating_controls:
+      - playbook_constraint: "Legacy general-purpose OS (Windows XP/7)"
+        control: "Application allowlisting prevents ransomware execution"
+      - playbook_constraint: "No patching possible"
+        control: "Virtual patching for SMB-class vulnerabilities; SMB v1 disabled"
+      - playbook_constraint: "Vendor field-service unsupervised access"
+        control: "Backup workstation staged in each reading room; UPS with 30-minute runtime"
+    coverage_for_ccd: "full"
+
+  - id: "E"
+    name: "Elevation of Privilege"
+    caw: 1.1
+    network_scenarios:
+      - "Windows 7 local privilege escalation CVE exploitation post-foothold"
+      - "Lateral movement to PACS server via compromised credential"
+    physical_scenarios:
+      - "Local administrator credential abuse"
+      - "Boot from USB to bypass disk encryption (if BitLocker not enforced)"
+    detection_methods:
+      - framework_v_category: "ueba"
+        description: "EDR detection of token manipulation and privilege escalation patterns"
+      - framework_v_category: "protocol_dpi"
+        description: "Network IDS detection of post-exploitation tooling on the wire"
+    compensating_controls:
+      - playbook_constraint: "Legacy general-purpose OS (Windows XP/7)"
+        control: "Application allowlisting; LAPS for local admin password rotation; BitLocker enforced"
+      - playbook_constraint: "Shared/hardcoded credentials"
+        control: "Local admin password rotated weekly via LAPS; PAM brokering for any admin function"
+    coverage_for_ccd: "full"
+
+mdrs_inputs_derived:
+  ccd_score: 2
+  ccd_rationale: |
+    All six STRIDE categories have comprehensive controls, validated through
+    annual penetration testing. Application allowlisting, PAM, EDR, network IPS,
+    and DICOM proxy collectively close most attack paths. CCD = 2 reflects
+    "comprehensive controls, validated annually".
+
+document_control:
+  author: "Clinical Engineering / InfoSec / Radiology IT joint authoring"
+  reviewer: "CISO and Radiology Director"
+  approval_date: "2026-03-15"
+  next_review: "2027-03-15"
+  linked_cjrs:
+    - "CJR-PACS-001-Win7Patching"
+    - "CJR-PACS-002-DICOMTLS"
+    - "CJR-PACS-003-USBControl"
+  current_mdrs_score: 4.750
+  current_mdrs_tier: "MEDIUM"

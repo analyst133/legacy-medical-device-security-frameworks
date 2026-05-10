@@ -1,0 +1,196 @@
+# STRIDE-HC Threat Model — YAML schema (illustrative example)
+#
+# This file documents the schema by example. For machine-readable validation,
+# pair with stride-hc-schema.json (JSON Schema).
+#
+# All STRIDE-HC threat models should follow this structure.
+
+stride_hc_version: "1.0"
+
+device:
+  name: "ExampleMed Volumetric Infusion Pump"
+  model: "v3.2"
+  manufacturer: "ExampleMed Inc."
+  device_class: "Class II (FDA)"
+  umdns_code: "16495"
+  gmdn_code: "35143"
+  mds2_reference: "ExampleMed-IP3.2-MDS2-2024"
+  archetype: "A2"   # A1 (general-purpose-OS legacy) or A2 (embedded RTOS legacy)
+
+  technical:
+    operating_system: "VxWorks 6.9"
+    os_eol: true
+    networking:
+      - "Ethernet 100Mbit"
+      - "HL7 v2 over TCP/2575 (no TLS)"
+    authentication: "Hardcoded service-mode credential; no per-user login"
+    patching: "EOL — manufacturer no longer issues patches"
+    audit_logging: "None on device; only at upstream nursing station"
+    physical_interfaces:
+      - "RS-232 service port"
+      - "USB-A (firmware update)"
+      - "Bluetooth (paired display)"
+
+  deployment:
+    count: 240
+    locations: ["ICU", "Oncology"]
+    clinical_use: "Continuous medication infusion"
+
+threat_categories:
+
+  - id: "S"
+    name: "Spoofing"
+    caw: 1.2
+    network_scenarios:
+      - "ARP cache poisoning to redirect device traffic"
+      - "Forged HL7/DICOM messages from spoofed source"
+      - "Rogue device impersonation on shared VLAN"
+    physical_scenarios:
+      - "Substituted device with cloned identifier"
+      - "Vendor-impersonation social engineering at device location"
+      - "Cloned RFID/NFC token used for proximity authentication"
+    detection_methods:
+      - framework_v_category: "passive_fingerprinting"
+        description: "Network sensor with longitudinal fingerprint store"
+      - framework_v_category: "physical_access_correlation"
+        description: "Badge-correlation analytics"
+      - framework_v_category: "ueba"
+        description: "Network UEBA peer-set anomaly"
+    compensating_controls:
+      - playbook_constraint: "MFA not supported"
+        control: "802.1X port-based access control with MAB allowlist"
+      - playbook_constraint: "Device substitution risk"
+        control: "Tamper-evident asset tags with serialised identifier"
+      - playbook_constraint: "Vendor field-service unsupervised access"
+        control: "Vendor-escort policy with badge correlation"
+    coverage_for_ccd: "partial"  # full / partial / none
+
+  - id: "T"
+    name: "Tampering"
+    caw: 1.1
+    network_scenarios:
+      - "Unauthorised firmware push from compromised vendor channel"
+      - "Configuration tampering via management interface"
+    physical_scenarios:
+      - "Firmware injection via USB or service port"
+      - "Configuration tamper via local console or service-mode PIN"
+      - "Physical replacement of removable storage"
+    detection_methods:
+      - framework_v_category: "passive_fingerprinting"
+        description: "File integrity inferred from network-adjacent monitoring"
+      - framework_v_category: "physical_access_correlation"
+        description: "Tamper-evident seal inspection (monthly cadence)"
+    compensating_controls:
+      - playbook_constraint: "USB and removable media interfaces"
+        control: "Logical USB disablement; physical port blockers"
+      - playbook_constraint: "Hardcoded service-port credential"
+        control: "Inline MFA shim (Pattern C) at service port"
+    coverage_for_ccd: "partial"
+
+  - id: "R"
+    name: "Repudiation"
+    caw: 0.9
+    network_scenarios:
+      - "Unattributable configuration changes via shared service account"
+      - "Untraceable data access via cleartext protocol"
+    physical_scenarios:
+      - "Service-mode access by unidentified technician"
+      - "Bedside changes to therapy parameters by unidentified clinician"
+      - "PHI capture by mobile-phone photography"
+    detection_methods:
+      - framework_v_category: "ueba"
+        description: "Network PCAP with retention"
+      - framework_v_category: "physical_access_correlation"
+        description: "Badge-to-device correlation analytics"
+    compensating_controls:
+      - playbook_constraint: "No audit logging capability"
+        control: "Network-level logging pipeline; syslog proxy"
+      - playbook_constraint: "Shared/hardcoded credentials (network-side)"
+        control: "PAM with individual auth upstream (Pattern A)"
+    coverage_for_ccd: "partial"
+
+  - id: "I"
+    name: "Information Disclosure"
+    caw: 1.2
+    network_scenarios:
+      - "PHI interception on shared network segment (cleartext HL7 v2)"
+      - "Unprotected data export via management interface"
+    physical_scenarios:
+      - "PHI display photographed in shared environment"
+      - "Bulk PHI export to USB at service port"
+      - "Eavesdropping on proximity wireless (BLE/NFC)"
+    detection_methods:
+      - framework_v_category: "protocol_dpi"
+        description: "Protocol-aware IDS flagging cleartext PHI"
+      - framework_v_category: "ueba"
+        description: "DLP at network gateway"
+    compensating_controls:
+      - playbook_constraint: "No encryption of data in transit"
+        control: "IPSec tunnel encapsulating cleartext streams"
+      - playbook_constraint: "PHI display in shared/observable environment"
+        control: "Privacy filters; PHI minimisation"
+    coverage_for_ccd: "full"
+
+  - id: "D"
+    name: "Denial of Service"
+    caw: 1.5
+    network_scenarios:
+      - "Network flooding disrupts real-time monitoring"
+      - "Targeted protocol-parser crash (URGENT/11-class)"
+      - "Resource exhaustion via malformed messages"
+    physical_scenarios:
+      - "Power or network cable disconnection at device location"
+      - "Physical destruction or theft"
+      - "Service-mode reset rendering device unavailable"
+    detection_methods:
+      - framework_v_category: "ueba"
+        description: "Availability monitoring with alerting"
+      - framework_v_category: "side_channel"
+        description: "Environmental monitoring (power/thermal anomaly)"
+    compensating_controls:
+      - playbook_constraint: "Legacy embedded RTOS"
+        control: "Dedicated VLAN with QoS priority; rate limiting"
+      - playbook_constraint: "Vendor field-service unsupervised access"
+        control: "Backup device staging; physical access controls"
+    coverage_for_ccd: "partial"
+
+  - id: "E"
+    name: "Elevation of Privilege"
+    caw: 1.1
+    network_scenarios:
+      - "Default credential exploitation via network management interface"
+      - "Lateral movement to adjacent clinical systems"
+    physical_scenarios:
+      - "Service-mode credential abuse via physical port"
+      - "Vendor-service-tool privilege abuse"
+      - "Unauthorised access to administrative menus via undocumented key sequence"
+    detection_methods:
+      - framework_v_category: "protocol_dpi"
+        description: "IDS/IPS with legacy OS exploit signatures"
+      - framework_v_category: "ueba"
+        description: "Privilege escalation monitoring"
+    compensating_controls:
+      - playbook_constraint: "No patching possible"
+        control: "Virtual patching via IPS"
+      - playbook_constraint: "Hardcoded service-port credential"
+        control: "Inline MFA shim (Pattern C); PAM upstream (Pattern A)"
+    coverage_for_ccd: "partial"
+
+mdrs_inputs_derived:
+  ccd_score: 7      # partial coverage in 5/6 categories → CCD = 7 (partial = 7-8 band)
+  ccd_rationale: |
+    Five of six categories have partial control coverage, with Information
+    Disclosure being fully covered. Per the CCD scoring rubric, this places
+    the device at the upper end of the partial-coverage band (CCD = 7).
+
+document_control:
+  author: "Clinical Engineering / InfoSec joint authoring"
+  reviewer: "CISO and Director of Clinical Engineering"
+  approval_date: "2026-04-10"
+  next_review: "2027-04-10"
+  linked_cjrs:
+    - "CJR-EMPump-001-MFA"
+    - "CJR-EMPump-002-Encryption"
+    - "CJR-EMPump-003-ServicePort"
+  current_mdrs_score: 8.175
+  current_mdrs_tier: "CRITICAL"

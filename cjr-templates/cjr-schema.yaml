@@ -1,0 +1,149 @@
+# Control Justification Record — YAML schema (illustrative example)
+#
+# This file documents the schema by example. For machine-readable validation,
+# pair with cjr-schema.json (JSON Schema).
+
+cjr_id: "CJR-EMPump-001-MFA"
+cjr_version: "1.0"
+status: "Approved"   # Draft / Approved / Under Review / Retired
+schema_version: "1.0"
+
+device:
+  name: "ExampleMed Volumetric Infusion Pump"
+  model: "v3.2"
+  manufacturer: "ExampleMed Inc."
+  device_class: "Class II (FDA)"
+  archetype: "A2"
+  mds2_reference: "ExampleMed-IP3.2-MDS2-2024"
+  asset_inventory_reference: "Asset register: pump-vlan-volumetric-ip32"
+  deployment_count: 240
+  linked_threat_model: "stride-hc-empump-v32.yaml"
+  current_mdrs_score: 8.175
+  current_mdrs_tier: "CRITICAL"
+
+constraint:
+  standard_control: "Multi-factor authentication for administrative access"
+  constraint_category: "MFA not supported"   # see cjr-schema.json for enum
+  constraint_detail: |
+    The device exposes a management interface on TCP/8080 protected only by a
+    hardcoded service-mode password documented in the vendor service manual.
+    The device firmware does not support per-user accounts, MFA, or any
+    third-party authentication delegation. Vendor confirms (advisory
+    ExampleMed-2024-03) that MFA support is not on the firmware roadmap due to
+    FDA clearance constraints on the existing model.
+
+threat:
+  stride_hc_categories: ["S", "R", "E"]
+  scenarios:
+    - "Default credential exploitation via management interface (network attacker)"
+    - "Service-mode credential abuse via service port (physical/insider attacker)"
+    - "Vendor-impersonation social engineering using disclosed credential"
+    - "Lateral movement to peer pumps after credential reuse on shared service account"
+  initial_risk:
+    likelihood: "High"
+    severity: "High"
+    detectability: "Difficult"
+    rationale: |
+      Public disclosure of service credential places this in the high-likelihood
+      band. Severity is high because successful exploitation enables therapy
+      parameter modification on a Class II infusion device. Detectability is
+      difficult because the device generates no authentication audit log.
+
+compensating_control:
+  description: |
+    Pattern A (upstream PAM): A privileged-access-management gateway brokers
+    all network connections to the pump management interface. Users authenticate
+    to the PAM with individual MFA. PAM retrieves the hardcoded service
+    credential from a vault and connects to the pump on the user's behalf.
+    All sessions are recorded.
+  playbook_reference: "Paper §3.2 Table 2 — 'MFA not supported' constraint"
+  how_addresses_threat: |
+    The hardcoded credential never leaves the vault. Network discovery of
+    the credential becomes operationally useless because the management
+    interface is only reachable from the PAM gateway IP, and PAM enforces
+    MFA before bridging the connection. Session recording provides post-hoc
+    attribution that addresses the Repudiation residual.
+  appropriateness:
+    equivalent_protection: |
+      MFA is enforced at the PAM gateway. From the user's perspective the
+      authentication experience is equivalent to native MFA on the pump.
+    independence: |
+      The control does not depend on any pump capability; it is implemented
+      entirely upstream in network architecture.
+    proportionality: |
+      The pump's MDRS tier is CRITICAL; PAM with MFA is the strongest
+      compensating control available for this constraint, appropriate to
+      the tier.
+    auditability: |
+      All sessions logged at the PAM with full keystroke or screen capture.
+      Compliant with HIPAA §164.312(b) (audit controls), ISO 14971 cl.7.4,
+      AAMI TIR57 §6.3.
+  implementation_references:
+    - "PAM platform: CyberArk PSM v12.x"
+    - "Network ACL: pump-vlan inbound permit only from pam-gateway-ip"
+    - "PAM session recording retention: 90 days online, 7 years archived"
+    - "MFA factor: Duo Push or hardware token"
+
+residual_risk:
+  likelihood: "Low"
+  severity: "High"
+  detectability: "Easy"
+  rationale: |
+    Likelihood reduced from High to Low: the credential is no longer
+    discoverable via the network. Severity is unchanged (the harm potential
+    if exploitation occurs remains the same). Detectability improved from
+    Difficult to Easy: PAM session logging provides full visibility.
+  acceptable: true
+  acceptance_authority: "CISO, with CMO concurrence (legacy program standing approval, ref: LMD-RISK-2026-001)"
+
+effectiveness:
+  rating: "High"
+  validation_evidence: |
+    Annual penetration test (Vendor: Pen Test Co, Report PT-2026-Q1-014)
+    confirmed PAM enforcement is effective; no bypass identified.
+    Test harness scenario test-harness/attacker/05-default-credential
+    confirms compensating control prevents credential discovery on the
+    network.
+
+normative_references:
+  - "ISO 14971:2019, cl.7.4"
+  - "AAMI TIR57:2016, §6.3"
+  - "AAMI TIR97, §6.2"
+  - "HIPAA Security Rule, 45 CFR §164.308(a)(1)(ii)(B)"
+  - "HIPAA Security Rule, 45 CFR §164.312(d) (person/entity authentication)"
+  - "HIPAA Security Rule, 45 CFR §164.312(b) (audit controls)"
+  - "FDA 2023 Cybersecurity Guidance, §VII.A.4"
+  - "NIST SP 800-82r3, IA-2"
+  - "PCI-DSS v4.0, Req 8.4"
+  - "HSCC HIC-MaLTS (2023), Practice 5.2"
+
+approval:
+  author: "S. Patel, Senior Clinical Engineer"
+  reviewer_clinical_engineering: "M. Robinson, Director of Clinical Engineering"
+  reviewer_infosec: "J. Chen, Lead Security Architect"
+  approver_ciso: "K. Williams"
+  approver_clinical_engineering_director: "M. Robinson"
+  approval_date: "2026-04-10"
+  effective_date: "2026-05-01"
+  next_review: "2027-04-10"
+  trigger_conditions:
+    - "ExampleMed Inc. security advisory published"
+    - "New CVE published for VxWorks 6.9 affecting management interface"
+    - "PAM platform end-of-support announcement"
+    - "Material change to pump VLAN architecture"
+    - "Loss of MFA service availability"
+
+linked_records:
+  threat_model: "stride-hc-empump-v32.yaml"
+  mds2_disclosure: "ExampleMed-IP3.2-MDS2-2024"
+  pen_test_report: "PT-2026-Q1-014"
+  harness_output: "test-harness/results/empump-v32-2026-q1.csv"
+  related_cjrs:
+    - "CJR-EMPump-002-Encryption"
+    - "CJR-EMPump-003-ServicePort"
+
+change_log:
+  - version: "1.0"
+    date: "2026-04-10"
+    author: "S. Patel"
+    summary: "Initial CJR for MFA constraint on ExampleMed Volumetric Infusion Pump v3.2"

@@ -1,0 +1,60 @@
+# Pattern C MFA Shim — example configuration
+#
+# Copy to config.yaml and replace placeholders. Do NOT commit a real config.yaml
+# with TOTP secrets — the .gitignore at the repository root excludes it.
+
+shim:
+  id: "shim-empump-001"
+  description: "ICU bay 4A — ExampleMed Volumetric Infusion Pump v3.2"
+
+serial:
+  # Path to the technician-side serial endpoint. In development this is a
+  # virtual serial port created via socat:
+  #   socat -d -d PTY,link=/tmp/shim-tech,raw,echo=0 PTY,link=/tmp/shim-dev,raw,echo=0
+  # In production this is /dev/ttyAMA0 or similar on the shim hardware.
+  technician_side_path: "/tmp/shim-tech"
+  device_side_path: "/tmp/shim-dev"
+  baudrate: 9600
+
+totp:
+  # RFC 6238 standard parameters
+  period: 30
+  digits: 6
+  window: 1            # ±1 step tolerance (60 seconds total)
+  max_failures: 5      # Failures within lockout_seconds → lockout
+  lockout_seconds: 300
+
+storage:
+  # Local non-volatile storage for sessions, heartbeats, and alerts.
+  # In production hardware this is on encrypted eMMC or SD with wear-levelling.
+  root: "/var/lib/shim"
+
+tamper:
+  heartbeat_period: 60.0   # seconds
+  # Sensors are configured here in production hardware. The prototype runs
+  # without sensors by default. To inject test events, use the prototype's
+  # admin interface (not exposed by default).
+
+siem:
+  # In production deployments, configure the SIEM transport here. The default
+  # is a no-op transport — local recording continues normally.
+  transport: "noop"
+  # transport: "https"
+  # endpoint: "https://siem.example.org/ingest"
+  # client_cert: "/etc/shim/client.crt"
+  # client_key: "/etc/shim/client.key"
+
+# Technician identity database. In production this is loaded from a central
+# source (LDAP, Active Directory, an enrolment service, etc.) — not a static
+# YAML. Static entries here are for the prototype.
+technicians:
+  - technician_id: "alice@example.org"
+    totp_secret: "JBSWY3DPEHPK3PXP"     # 16-char base32 — replace with output of:
+                                        #   python -c "import pyotp; print(pyotp.random_base32())"
+    enrolment_date: "2026-04-01"
+    notes: "Vendor service technician — ExampleMed Inc. contract 2024-2026"
+
+  - technician_id: "bob@example.org"
+    totp_secret: "JFAVAU2GMUKDOMRX"
+    enrolment_date: "2026-04-15"
+    notes: "In-house clinical engineering"

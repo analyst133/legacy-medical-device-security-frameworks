@@ -1,0 +1,109 @@
+#  Legacy Medical Device Security Test Harness
+#
+#  Brings up an emulated Archetype 2 medical device (large-volume infusion pump),
+#  a clinical workstation generating realistic traffic, and an attacker container
+#  with scripted scenarios mapped to STRIDE-HC categories.
+#
+#  Profiles toggle compensating controls:
+#    --profile ips           IPS virtual patching sidecar
+#    --profile pam           PAM upstream (Pattern A) gateway
+#    --profile segmentation  Network segmentation
+#    --profile all           All controls combined
+#
+#  Default (no profile) runs baseline — no compensating controls.
+
+services:
+
+  target:
+    build: ./target-device
+    container_name: harness-target
+    networks:
+      pump-net:
+        ipv4_address: 172.28.10.20
+    ports:
+      - "127.0.0.1:8080:8080"   # mgmt interface (host-bound for diagnostic access)
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('127.0.0.1', 8080))"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  workstation:
+    build: ./clinical-workstation
+    container_name: harness-workstation
+    depends_on:
+      target:
+        condition: service_healthy
+    environment:
+      TARGET_HOST: 172.28.10.20
+      TARGET_HL7_PORT: "2575"
+      TARGET_MGMT_PORT: "8080"
+    networks:
+      pump-net:
+        ipv4_address: 172.28.10.30
+
+  attacker:
+    build: ./attacker
+    container_name: harness-attacker
+    depends_on:
+      target:
+        condition: service_healthy
+    environment:
+      TARGET_HOST: 172.28.10.20
+      TARGET_HL7_PORT: "2575"
+      TARGET_MGMT_PORT: "8080"
+      WORKSTATION_HOST: 172.28.10.30
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      pump-net:
+        ipv4_address: 172.28.10.99
+    volumes:
+      - ./results:/results
+    command: ["sleep", "infinity"]
+
+  # ──────────── Control profiles ────────────
+
+  ips:
+    build: ./controls/ips
+    container_name: harness-ips
+    profiles: ["ips", "all"]
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      pump-net:
+        ipv4_address: 172.28.10.5
+    environment:
+      PROTECTED_TARGETS: "172.28.10.20"
+
+  pam:
+    build: ./controls/pam
+    container_name: harness-pam
+    profiles: ["pam", "all"]
+    networks:
+      pump-net:
+        ipv4_address: 172.28.10.10
+    environment:
+      VAULT_CREDENTIAL: "service:Vendor1234"   # the hardcoded device credential
+      PROTECTED_TARGET: "172.28.10.20"
+
+  segmentation:
+    build: ./controls/segmentation
+    container_name: harness-segmentation
+    profiles: ["segmentation", "all"]
+    cap_add:
+      - NET_ADMIN
+    networks:
+      pump-net:
+        ipv4_address: 172.28.10.1
+    command: ["python", "/app/segmentation.py"]
+
+networks:
+  pump-net:
+    name: harness-pump-net
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.10.0/24

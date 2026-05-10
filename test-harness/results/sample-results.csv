@@ -1,0 +1,26 @@
+timestamp,scenario,stride_hc,control_profile,outcome,detail
+2026-04-15T09:14:22,01-spoofing-arp-poisoning,S,baseline,REACHABLE,L3 reachable; ARP entry: 172.28.10.20 dev eth0 lladdr 02:42:ac:1c:0a:14 REACHABLE
+2026-04-15T09:14:25,02-tampering-firmware-injection,T,baseline,SUCCESS,Firmware injection succeeded; reported version: 0.0.1-attacker-controlled
+2026-04-15T09:14:38,03-info-disclosure-cleartext-hl7,I,baseline,SUCCESS,HL7 PHI captured in cleartext; patient MRN observed: 4729183
+2026-04-15T09:14:46,04-dos-protocol-flood,D,baseline,SUCCESS,Target HL7 listener unreachable post-attack (DoS achieved)
+2026-04-15T09:14:53,05-eop-default-credential,E,baseline,SUCCESS,Successful EoP — modified infusion rate from 100.0 to 1000.0 mL/h on patient MRN 4729183
+2026-04-15T09:16:08,01-spoofing-arp-poisoning,S,ips,REACHABLE,L3 reachable; ARP entry: 172.28.10.20 dev eth0 lladdr 02:42:ac:1c:0a:14 REACHABLE
+2026-04-15T09:16:11,02-tampering-firmware-injection,T,ips,BLOCKED_NET,Network blocked: <urlopen error [Errno 111] Connection refused>
+2026-04-15T09:16:24,03-info-disclosure-cleartext-hl7,I,ips,SUCCESS,HL7 PHI captured in cleartext; patient MRN observed: 8392104
+2026-04-15T09:16:36,04-dos-protocol-flood,D,ips,MITIGATED,Oversize message reached target but availability preserved
+2026-04-15T09:16:42,05-eop-default-credential,E,ips,BLOCKED_NET,Network unreachable: <urlopen error [Errno 111] Connection refused>
+2026-04-15T09:18:01,01-spoofing-arp-poisoning,S,pam,REACHABLE,L3 reachable; ARP entry: 172.28.10.20 dev eth0 lladdr 02:42:ac:1c:0a:14 REACHABLE
+2026-04-15T09:18:04,02-tampering-firmware-injection,T,pam,BLOCKED_AUTH,Authentication required (PAM upstream may have stripped attacker auth)
+2026-04-15T09:18:17,03-info-disclosure-cleartext-hl7,I,pam,SUCCESS,HL7 PHI captured in cleartext; patient MRN observed: 1845627
+2026-04-15T09:18:25,04-dos-protocol-flood,D,pam,SUCCESS,Target HL7 listener unreachable post-attack (DoS achieved)
+2026-04-15T09:18:32,05-eop-default-credential,E,pam,BLOCKED_AUTH,Authentication failed (unexpected — PAM may have stripped or rotated credential)
+2026-04-15T09:19:51,01-spoofing-arp-poisoning,S,segmentation,BLOCKED,Target unreachable — segmentation or IPS blocked the path
+2026-04-15T09:19:54,02-tampering-firmware-injection,T,segmentation,BLOCKED_NET,"Network blocked: <urlopen error [Errno 113] No route to host>"
+2026-04-15T09:20:07,03-info-disclosure-cleartext-hl7,I,segmentation,BLOCKED,No HL7 traffic visible on attacker's network position
+2026-04-15T09:20:13,04-dos-protocol-flood,D,segmentation,BLOCKED,Target unreachable before attack — segmentation in effect
+2026-04-15T09:20:16,05-eop-default-credential,E,segmentation,BLOCKED_NET,"Network unreachable: <urlopen error [Errno 113] No route to host>"
+2026-04-15T09:21:35,01-spoofing-arp-poisoning,S,all,BLOCKED,Target unreachable — segmentation or IPS blocked the path
+2026-04-15T09:21:38,02-tampering-firmware-injection,T,all,BLOCKED_NET,"Network blocked: <urlopen error [Errno 113] No route to host>"
+2026-04-15T09:21:51,03-info-disclosure-cleartext-hl7,I,all,BLOCKED,No HL7 traffic visible on attacker's network position
+2026-04-15T09:21:57,04-dos-protocol-flood,D,all,BLOCKED,Target unreachable before attack — segmentation in effect
+2026-04-15T09:22:00,05-eop-default-credential,E,all,BLOCKED_NET,"Network unreachable: <urlopen error [Errno 113] No route to host>"

@@ -1,0 +1,200 @@
+{
+  "$comment": "MDRS calculator test cases. Each test specifies inputs, expected composite, and expected final tier. Used by tests/run-tests.js to verify the implementation matches paper Section 5.",
+  "tests": [
+    {
+      "name": "Paper preset 1: large-volume infusion pump",
+      "category": "preset",
+      "inputs": { "cis": 9.0, "es": 7.5, "dci": 8.0, "nef": 8.0, "ccd": 7.0 },
+      "expected": {
+        "composite": 8.175,
+        "baseTier": "CRITICAL",
+        "floorActive": false,
+        "afterFloor": "CRITICAL",
+        "promoterActive": false,
+        "finalTier": "CRITICAL"
+      }
+    },
+    {
+      "name": "Paper preset 2: PACS server",
+      "category": "preset",
+      "inputs": { "cis": 5.5, "es": 4.0, "dci": 6.0, "nef": 3.5, "ccd": 2.0 },
+      "expected": {
+        "composite": 4.750,
+        "baseTier": "MEDIUM",
+        "floorActive": false,
+        "afterFloor": "MEDIUM",
+        "promoterActive": false,
+        "finalTier": "MEDIUM"
+      }
+    },
+    {
+      "name": "Paper preset 3: bedside ECG monitor",
+      "category": "preset",
+      "inputs": { "cis": 7.5, "es": 5.0, "dci": 7.0, "nef": 5.0, "ccd": 6.0 },
+      "expected": {
+        "composite": 6.325,
+        "baseTier": "HIGH",
+        "floorActive": false,
+        "afterFloor": "HIGH",
+        "promoterActive": false,
+        "finalTier": "HIGH"
+      }
+    },
+    {
+      "name": "Floor activation: low exploitability life-sustaining device",
+      "category": "floor",
+      "inputs": { "cis": 9.0, "es": 1.0, "dci": 1.0, "nef": 1.0, "ccd": 1.0 },
+      "expected": {
+        "composite": 3.8,
+        "baseTier": "MEDIUM",
+        "floorActive": true,
+        "afterFloor": "HIGH",
+        "promoterActive": false,
+        "finalTier": "HIGH"
+      }
+    },
+    {
+      "name": "Floor activation: critical-monitoring device with very low everything else",
+      "category": "floor",
+      "inputs": { "cis": 7.0, "es": 1.0, "dci": 1.0, "nef": 1.0, "ccd": 1.0 },
+      "expected": {
+        "composite": 3.1,
+        "baseTier": "LOW",
+        "floorActive": true,
+        "afterFloor": "MEDIUM",
+        "promoterActive": false,
+        "finalTier": "MEDIUM"
+      }
+    },
+    {
+      "name": "Floor not triggered for CIS = 6.5",
+      "category": "floor",
+      "inputs": { "cis": 6.5, "es": 1.0, "dci": 1.0, "nef": 1.0, "ccd": 1.0 },
+      "expected": {
+        "composite": 2.925,
+        "baseTier": "LOW",
+        "floorActive": false,
+        "afterFloor": "LOW",
+        "promoterActive": false,
+        "finalTier": "LOW"
+      }
+    },
+    {
+      "name": "Floor and promoter together: CIS=9 + CCD=9",
+      "category": "floor+promoter",
+      "inputs": { "cis": 9.0, "es": 1.0, "dci": 1.0, "nef": 1.0, "ccd": 9.0 },
+      "expected": {
+        "composite": 4.2,
+        "baseTier": "MEDIUM",
+        "floorActive": true,
+        "afterFloor": "HIGH",
+        "promoterActive": true,
+        "finalTier": "CRITICAL"
+      }
+    },
+    {
+      "name": "CCD promoter alone: HIGH to CRITICAL",
+      "category": "promoter",
+      "inputs": { "cis": 7.0, "es": 7.0, "dci": 7.0, "nef": 7.0, "ccd": 9.0 },
+      "expected": {
+        "composite": 7.1,
+        "baseTier": "HIGH",
+        "floorActive": false,
+        "afterFloor": "HIGH",
+        "promoterActive": true,
+        "finalTier": "CRITICAL"
+      }
+    },
+    {
+      "name": "CCD promoter ceiling: cannot promote above CRITICAL",
+      "category": "promoter",
+      "inputs": { "cis": 10.0, "es": 10.0, "dci": 10.0, "nef": 10.0, "ccd": 10.0 },
+      "expected": {
+        "composite": 10.0,
+        "baseTier": "CRITICAL",
+        "floorActive": false,
+        "afterFloor": "CRITICAL",
+        "promoterActive": false,
+        "finalTier": "CRITICAL"
+      }
+    },
+    {
+      "name": "CCD just below promoter threshold",
+      "category": "promoter",
+      "inputs": { "cis": 6.0, "es": 6.0, "dci": 6.0, "nef": 6.0, "ccd": 7.5 },
+      "expected": {
+        "composite": 6.075,
+        "baseTier": "HIGH",
+        "floorActive": false,
+        "afterFloor": "HIGH",
+        "promoterActive": false,
+        "finalTier": "HIGH"
+      }
+    },
+    {
+      "name": "Tier boundary: composite exactly 8.0 to CRITICAL",
+      "category": "boundary",
+      "inputs": { "cis": 8.0, "es": 8.0, "dci": 8.0, "nef": 8.0, "ccd": 8.0 },
+      "expected": {
+        "composite": 8.0,
+        "baseTier": "CRITICAL",
+        "floorActive": false,
+        "afterFloor": "CRITICAL",
+        "promoterActive": false,
+        "finalTier": "CRITICAL"
+      }
+    },
+    {
+      "name": "Tier boundary: composite exactly 6.0 to HIGH",
+      "category": "boundary",
+      "inputs": { "cis": 6.0, "es": 6.0, "dci": 6.0, "nef": 6.0, "ccd": 6.0 },
+      "expected": {
+        "composite": 6.0,
+        "baseTier": "HIGH",
+        "floorActive": false,
+        "afterFloor": "HIGH",
+        "promoterActive": false,
+        "finalTier": "HIGH"
+      }
+    },
+    {
+      "name": "Tier boundary: composite exactly 3.5 to MEDIUM",
+      "category": "boundary",
+      "inputs": { "cis": 3.5, "es": 3.5, "dci": 3.5, "nef": 3.5, "ccd": 3.5 },
+      "expected": {
+        "composite": 3.5,
+        "baseTier": "MEDIUM",
+        "floorActive": false,
+        "afterFloor": "MEDIUM",
+        "promoterActive": false,
+        "finalTier": "MEDIUM"
+      }
+    },
+    {
+      "name": "Tier boundary: composite just below 3.5",
+      "category": "boundary",
+      "inputs": { "cis": 3.0, "es": 3.0, "dci": 3.0, "nef": 3.0, "ccd": 3.0 },
+      "expected": {
+        "composite": 3.0,
+        "baseTier": "LOW",
+        "floorActive": false,
+        "afterFloor": "LOW",
+        "promoterActive": false,
+        "finalTier": "LOW"
+      }
+    },
+    {
+      "name": "Minimum: all dimensions at 1.0",
+      "category": "boundary",
+      "inputs": { "cis": 1.0, "es": 1.0, "dci": 1.0, "nef": 1.0, "ccd": 1.0 },
+      "expected": {
+        "composite": 1.0,
+        "baseTier": "LOW",
+        "floorActive": false,
+        "afterFloor": "LOW",
+        "promoterActive": false,
+        "finalTier": "LOW"
+      }
+    }
+  ]
+}

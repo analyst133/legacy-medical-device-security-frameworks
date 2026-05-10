@@ -1,0 +1,52 @@
+cff-version: 1.2.0
+title: "Legacy Medical Device Security Frameworks"
+message: "If you use this work, please cite it using the metadata from this file."
+type: software
+authors:
+  - given-names: "Khaja T."
+    family-names: "Mohiuddin"
+    affiliation: "University of New Haven"
+  - given-names: "Brad"
+    family-names: "Bernia"
+    affiliation: "University of Michigan – Dearborn"
+abstract: >-
+  Open-source companion artifact suite for the paper "A Practical Cybersecurity
+  Framework for Legacy Medical Devices". Five integrated practitioner-oriented
+  frameworks for healthcare delivery organisations and medical device
+  manufacturers operating under legacy device constraints, comprising:
+  the Medical Device Risk Score (MDRS) reference calculator with
+  irreversibility-driven tier floor; STRIDE-HC threat-modelling templates
+  for the dual network/physical attack surface; Control Justification Record
+  templates aligned to ISO 14971, AAMI TIR57, and FDA 524B; a Dockerised
+  empirical test harness; and a software reference design for the inline
+  service-port multi-factor authentication shim (Pattern C).
+keywords:
+  - "legacy medical devices"
+  - "healthcare cybersecurity"
+  - "compensating controls"
+  - "threat modelling"
+  - "STRIDE-HC"
+  - "medical device risk score"
+  - "MDRS"
+  - "network segmentation"
+  - "behavioural monitoring"
+  - "physical attackers"
+  - "insider threats"
+  - "ISO 14971"
+  - "HIPAA"
+  - "FDA"
+license: Apache-2.0
+repository-code: "https://github.com/analyst133/legacy-medical-device-security-frameworks"
+url: "https://github.com/analyst133/legacy-medical-device-security-frameworks"
+preferred-citation:
+  type: article
+  title: "A Practical Cybersecurity Framework for Legacy Medical Devices"
+  authors:
+    - given-names: "Khaja T."
+      family-names: "Mohiuddin"
+      affiliation: "University of New Haven"
+    - given-names: "Brad"
+      family-names: "Bernia"
+      affiliation: "University of Michigan – Dearborn"
+  year: 2026
+  notes: "Submitted"

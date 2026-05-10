@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MDRS Calculator — Medical Device Risk Score</title>
+<meta name="description" content="Reference implementation of the Medical Device Risk Score with irreversibility-driven tier floor and CCD promoter.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>MDRS Calculator</h1>
+    <p class="subtitle">Medical Device Risk Score — reference implementation with irreversibility-driven tier floor and CCD promoter</p>
+    <nav>
+      <a href="#calculator">Calculator</a>
+      <a href="#presets">Presets</a>
+      <a href="#weights">Weights</a>
+      <a href="#methodology">Methodology</a>
+      <a href="https://github.com/analyst133/legacy-medical-device-security-frameworks" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+  <section id="calculator">
+    <h2>1. Score a device</h2>
+    <p>Enter a value between 1 and 10 for each dimension. The composite, tier floor, CCD promoter, and final tier are computed live.</p>
+
+    <div class="grid">
+      <div class="dimension">
+        <label for="cis">Clinical Impact Score (CIS) <span class="weight" id="weight-cis">35%</span></label>
+        <input type="range" id="cis" min="1" max="10" step="0.5" value="9">
+        <output for="cis" id="cis-out">9.0</output>
+        <p class="help" id="cis-help">9–10: life-sustaining (ventilators, infusion pumps, pacemaker programmers)</p>
+      </div>
+
+      <div class="dimension">
+        <label for="es">Exploitability Score (ES) <span class="weight" id="weight-es">25%</span></label>
+        <input type="range" id="es" min="1" max="10" step="0.5" value="7.5">
+        <output for="es" id="es-out">7.5</output>
+        <p class="help" id="es-help">7–8: network-accessible without public exploit</p>
+      </div>
+
+      <div class="dimension">
+        <label for="dci">Device Criticality Index (DCI) <span class="weight" id="weight-dci">20%</span></label>
+        <input type="range" id="dci" min="1" max="10" step="0.5" value="8">
+        <output for="dci" id="dci-out">8.0</output>
+        <p class="help" id="dci-help">7–8: redundancy with switchover &gt;30 min</p>
+      </div>
+
+      <div class="dimension">
+        <label for="nef">Network Exposure Factor (NEF) <span class="weight" id="weight-nef">15%</span></label>
+        <input type="range" id="nef" min="1" max="10" step="0.5" value="8">
+        <output for="nef" id="nef-out">8.0</output>
+        <p class="help" id="nef-help">7–8: internal network without VLAN isolation</p>
+      </div>
+
+      <div class="dimension">
+        <label for="ccd">Compensating Control Deficit (CCD) <span class="weight" id="weight-ccd">5% + tier promoter</span></label>
+        <input type="range" id="ccd" min="1" max="10" step="0.5" value="7">
+        <output for="ccd" id="ccd-out">7.0</output>
+        <p class="help" id="ccd-help">7–8: partial controls (1–2 STRIDE categories covered)</p>
+      </div>
+    </div>
+
+    <div class="result-card" id="result-card">
+      <div class="result-tier" id="result-tier">CRITICAL</div>
+      <div class="result-composite">
+        <span class="label">Composite</span>
+        <span class="value" id="result-composite">8.175</span>
+      </div>
+
+      <div class="result-explain">
+        <h3>Why this tier?</h3>
+        <ul id="explain-list">
+        </ul>
+      </div>
+
+      <div class="result-actions">
+        <button id="export-json">Export as JSON</button>
+        <button id="copy-summary">Copy summary</button>
+      </div>
+    </div>
+
+    <div class="result-action-tier" id="result-action-tier">
+      <h3>Recommended response (per MDRS Table 6)</h3>
+      <p id="result-action-text">Immediate isolation or shutdown of non-life-critical devices; 24-hour escalation to CISO and CMO; emergency vendor engagement; activate incident response plan.</p>
+      <p class="timeline"><strong>Action timeline:</strong> <span id="result-timeline">Immediate / 24 hours</span></p>
+    </div>
+
+  </section>
+
+  <section id="presets">
+    <h2>2. Worked example presets (paper Table 7)</h2>
+    <p>Three reference profiles from the paper. Click any preset to load its values into the calculator above.</p>
+
+    <div class="preset-grid">
+      <button class="preset" data-cis="9.0" data-es="7.5" data-dci="8.0" data-nef="8.0" data-ccd="7.0">
+        <h3>Large-volume infusion pump</h3>
+        <p>EOL embedded RTOS · No authentication · Exposed RS-232 service port · Partial controls</p>
+        <p class="expected">Expected: <strong>CRITICAL</strong> · composite 8.175</p>
+      </button>
+
+      <button class="preset" data-cis="5.5" data-es="4.0" data-dci="6.0" data-nef="3.5" data-ccd="2.0">
+        <h3>PACS server</h3>
+        <p>DICOM · OS patched within vendor window · VLAN-isolated · Comprehensive validated controls</p>
+        <p class="expected">Expected: <strong>MEDIUM</strong> · composite 4.750</p>
+      </button>
+
+      <button class="preset" data-cis="7.5" data-es="5.0" data-dci="7.0" data-nef="5.0" data-ccd="6.0">
+        <h3>Bedside ECG monitor</h3>
+        <p>Proprietary OS · Segmented VLAN · Partial controls · Exposed BLE</p>
+        <p class="expected">Expected: <strong>HIGH</strong> · composite 6.325</p>
+      </button>
+    </div>
+  </section>
+
+  <section id="weights">
+    <h2>3. Sensitivity analysis: configurable weights</h2>
+    <p>Default weights reflect the paper's expert-judgement assignment. Adjust here to evaluate sensitivity. The CCD weight may be set above its default 5%, but its operational role as a tier promoter (CCD ≥ 8) is preserved regardless of weight.</p>
+
+    <div class="weights-grid">
+      <div class="weight-input">
+        <label for="w-cis">CIS weight</label>
+        <input type="number" id="w-cis" min="0" max="1" step="0.05" value="0.35">
+      </div>
+      <div class="weight-input">
+        <label for="w-es">ES weight</label>
+        <input type="number" id="w-es" min="0" max="1" step="0.05" value="0.25">
+      </div>
+      <div class="weight-input">
+        <label for="w-dci">DCI weight</label>
+        <input type="number" id="w-dci" min="0" max="1" step="0.05" value="0.20">
+      </div>
+      <div class="weight-input">
+        <label for="w-nef">NEF weight</label>
+        <input type="number" id="w-nef" min="0" max="1" step="0.05" value="0.15">
+      </div>
+      <div class="weight-input">
+        <label for="w-ccd">CCD weight</label>
+        <input type="number" id="w-ccd" min="0" max="1" step="0.05" value="0.05">
+      </div>
+      <div class="weight-input">
+        <button id="reset-weights">Reset to defaults</button>
+      </div>
+    </div>
+
+    <p id="weight-warning" class="warning hidden">Warning: weights do not sum to 1.000 (current sum: <span id="weight-sum"></span>). The composite formula assumes weights sum to 1.</p>
+
+    <h3>Tier floor and CCD promoter rules (not configurable)</h3>
+    <ul>
+      <li><strong>Irreversibility floor:</strong> CIS = 9 or 10 → minimum tier HIGH; CIS = 7 or 8 → minimum tier MEDIUM.</li>
+      <li><strong>CCD promoter:</strong> CCD ≥ 8 promotes the resulting tier by one level (capped at CRITICAL).</li>
+      <li>These rules implement the paper's central novel contribution and are not subject to weight tuning.</li>
+    </ul>
+  </section>
+
+  <section id="methodology">
+    <h2>4. Methodology</h2>
+
+    <h3>The composite</h3>
+    <p>The Medical Device Risk Score composite is a weighted sum across five dimensions, each scored 1–10:</p>
+
+    <pre class="equation">MDRS_comp = (CIS × 0.35) + (ES × 0.25) + (DCI × 0.20) + (NEF × 0.15) + (CCD × 0.05)</pre>
+
+    <h3>Tier mapping</h3>
+    <table class="tier-table">
+      <thead>
+        <tr><th>Tier</th><th>Composite range (with floor and promoter applied)</th><th>Action timeline</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>CRITICAL</strong></td><td>≥ 8.0, or promoted from HIGH via CCD ≥ 8</td><td>Immediate / 24 hours</td></tr>
+        <tr><td><strong>HIGH</strong></td><td>6.0 ≤ score &lt; 8.0, or any device with CIS ≥ 9</td><td>30 days</td></tr>
+        <tr><td><strong>MEDIUM</strong></td><td>3.5 ≤ score &lt; 6.0, or any device with CIS = 7–8</td><td>90 days</td></tr>
+        <tr><td><strong>LOW</strong></td><td>&lt; 3.5</td><td>12 months</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Scoring guidance</h3>
+    <p>Refer to paper Table 5 for full scoring criteria per dimension. Brief reminders:</p>
+    <ul>
+      <li><strong>CIS (Clinical Impact)</strong>: 9–10 life-sustaining; 7–8 critical monitoring; 5–6 diagnostic imaging; 3–4 administrative; 1–2 non-clinical.</li>
+      <li><strong>ES (Exploitability)</strong>: 9–10 network-accessible with public exploit; 5–6 adjacent-network or physical proximity; 1–2 privileged physical access only.</li>
+      <li><strong>DCI (Criticality)</strong>: 9–10 single point of failure; 5–6 redundant with &lt;15 min switchover; 1–4 manual workaround.</li>
+      <li><strong>NEF (Exposure)</strong>: 9–10 internet-facing or exposed unprotected service port; 5–6 VLAN-isolated with permissive ACLs; 1–2 air-gapped.</li>
+      <li><strong>CCD (Compensating Control Deficit)</strong>: 9–10 no controls; 5–6 controls in 3–4 STRIDE categories; 1–2 comprehensive validated.</li>
+    </ul>
+
+    <h3>Verification</h3>
+    <p>Test cases verifying the scoring logic, tier floor, CCD promoter, and equation arithmetic are provided in <code>tests/test-cases.json</code>. All three paper preset values (8.175, 4.750, 6.325) reproduce exactly.</p>
+  </section>
+
+  <footer>
+    <p>Reference implementation. Apache-2.0 licensed. Part of the <a href="https://github.com/analyst133/legacy-medical-device-security-frameworks">Legacy Medical Device Security Frameworks</a> project.</p>
+    <p class="disclaimer">This is research output. Not regulatory advice. Specific compensating-control selections must be validated against the deploying organisation's risk acceptance criteria.</p>
+  </footer>
+
+</main>
+
+<script src="calculator.js"></script>
+</body>
+</html>

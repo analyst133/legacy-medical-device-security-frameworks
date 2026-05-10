@@ -1,0 +1,191 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/analyst133/legacy-medical-device-security-frameworks/cjr-schema.json",
+  "title": "Control Justification Record (CJR)",
+  "description": "Schema for Control Justification Record documents per paper Section 3.5.",
+  "type": "object",
+  "required": ["cjr_id", "schema_version", "device", "constraint", "threat", "compensating_control", "residual_risk", "approval"],
+  "properties": {
+    "cjr_id": {
+      "type": "string",
+      "pattern": "^CJR-[A-Za-z0-9]+(-[A-Za-z0-9]+)*$",
+      "description": "Unique CJR identifier."
+    },
+    "cjr_version": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["Draft", "Approved", "Under Review", "Retired"]
+    },
+    "schema_version": { "type": "string" },
+
+    "device": {
+      "type": "object",
+      "required": ["name", "manufacturer", "archetype"],
+      "properties": {
+        "name": { "type": "string" },
+        "model": { "type": "string" },
+        "manufacturer": { "type": "string" },
+        "device_class": { "type": "string" },
+        "archetype": { "type": "string", "enum": ["A1", "A2"] },
+        "mds2_reference": { "type": "string" },
+        "asset_inventory_reference": { "type": "string" },
+        "deployment_count": { "type": "integer", "minimum": 0 },
+        "linked_threat_model": { "type": "string" },
+        "current_mdrs_score": { "type": "number" },
+        "current_mdrs_tier": {
+          "type": "string",
+          "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+        }
+      }
+    },
+
+    "constraint": {
+      "type": "object",
+      "required": ["standard_control", "constraint_category", "constraint_detail"],
+      "properties": {
+        "standard_control": { "type": "string" },
+        "constraint_category": {
+          "type": "string",
+          "enum": [
+            "MFA not supported",
+            "No encryption (data in transit)",
+            "No patching possible",
+            "Shared/hardcoded credentials (network-side)",
+            "No audit logging capability",
+            "Legacy general-purpose OS (Archetype 1)",
+            "Legacy embedded RTOS (Archetype 2)",
+            "Hardcoded service-port credential",
+            "USB and removable media interfaces",
+            "PHI display in shared/observable environment",
+            "Device substitution risk",
+            "Vendor field-service unsupervised access",
+            "Service-mode password disclosed",
+            "Proximity wireless on legacy device",
+            "Other"
+          ]
+        },
+        "constraint_detail": { "type": "string" }
+      }
+    },
+
+    "threat": {
+      "type": "object",
+      "required": ["stride_hc_categories", "scenarios", "initial_risk"],
+      "properties": {
+        "stride_hc_categories": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["S", "T", "R", "I", "D", "E"] },
+          "minItems": 1
+        },
+        "scenarios": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "initial_risk": {
+          "type": "object",
+          "required": ["likelihood", "severity", "detectability", "rationale"],
+          "properties": {
+            "likelihood": { "type": "string", "enum": ["Low", "Medium", "High"] },
+            "severity": { "type": "string", "enum": ["Low", "Medium", "High"] },
+            "detectability": { "type": "string", "enum": ["Easy", "Moderate", "Difficult"] },
+            "rationale": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "compensating_control": {
+      "type": "object",
+      "required": ["description", "how_addresses_threat", "appropriateness"],
+      "properties": {
+        "description": { "type": "string" },
+        "playbook_reference": { "type": "string" },
+        "how_addresses_threat": { "type": "string" },
+        "appropriateness": {
+          "type": "object",
+          "properties": {
+            "equivalent_protection": { "type": "string" },
+            "independence": { "type": "string" },
+            "proportionality": { "type": "string" },
+            "auditability": { "type": "string" }
+          }
+        },
+        "implementation_references": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "residual_risk": {
+      "type": "object",
+      "required": ["likelihood", "severity", "detectability", "acceptable"],
+      "properties": {
+        "likelihood": { "type": "string", "enum": ["Low", "Medium", "High"] },
+        "severity": { "type": "string", "enum": ["Low", "Medium", "High"] },
+        "detectability": { "type": "string", "enum": ["Easy", "Moderate", "Difficult"] },
+        "rationale": { "type": "string" },
+        "acceptable": { "type": "boolean" },
+        "acceptance_authority": { "type": "string" }
+      }
+    },
+
+    "effectiveness": {
+      "type": "object",
+      "properties": {
+        "rating": { "type": "string", "enum": ["High", "Medium", "Low"] },
+        "validation_evidence": { "type": "string" }
+      }
+    },
+
+    "normative_references": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "approval": {
+      "type": "object",
+      "required": ["author", "approval_date", "next_review"],
+      "properties": {
+        "author": { "type": "string" },
+        "reviewer_clinical_engineering": { "type": "string" },
+        "reviewer_infosec": { "type": "string" },
+        "approver_ciso": { "type": "string" },
+        "approver_clinical_engineering_director": { "type": "string" },
+        "approval_date": { "type": "string", "format": "date" },
+        "effective_date": { "type": "string", "format": "date" },
+        "next_review": { "type": "string", "format": "date" },
+        "trigger_conditions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "linked_records": {
+      "type": "object",
+      "properties": {
+        "threat_model": { "type": "string" },
+        "mds2_disclosure": { "type": "string" },
+        "pen_test_report": { "type": "string" },
+        "harness_output": { "type": "string" },
+        "related_cjrs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "change_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["version", "date", "author", "summary"],
+        "properties": {
+          "version": { "type": "string" },
+          "date": { "type": "string", "format": "date" },
+          "author": { "type": "string" },
+          "summary": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/analyst133/legacy-medical-device-security-frameworks/stride-hc-schema.json",
+  "title": "STRIDE-HC Threat Model",
+  "description": "Schema for STRIDE-HC threat-model documents per paper Section 4. Threat models in YAML or JSON form should validate against this schema.",
+  "type": "object",
+  "required": ["stride_hc_version", "device", "threat_categories"],
+  "properties": {
+    "stride_hc_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Schema version. Current: 1.0"
+    },
+    "device": {
+      "type": "object",
+      "required": ["name", "archetype"],
+      "properties": {
+        "name": { "type": "string" },
+        "model": { "type": "string" },
+        "manufacturer": { "type": "string" },
+        "device_class": { "type": "string" },
+        "umdns_code": { "type": "string" },
+        "gmdn_code": { "type": "string" },
+        "mds2_reference": { "type": "string" },
+        "archetype": {
+          "type": "string",
+          "enum": ["A1", "A2"],
+          "description": "A1 = general-purpose-OS legacy; A2 = embedded RTOS legacy"
+        },
+        "technical": {
+          "type": "object",
+          "properties": {
+            "operating_system": { "type": "string" },
+            "os_eol": { "type": "boolean" },
+            "networking": { "type": "array", "items": { "type": "string" } },
+            "authentication": { "type": "string" },
+            "patching": { "type": "string" },
+            "audit_logging": { "type": "string" },
+            "physical_interfaces": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "deployment": {
+          "type": "object",
+          "properties": {
+            "count": { "type": "integer", "minimum": 0 },
+            "locations": { "type": "array", "items": { "type": "string" } },
+            "clinical_use": { "type": "string" }
+          }
+        }
+      }
+    },
+    "threat_categories": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "description": "Exactly six STRIDE-HC categories: S, T, R, I, D, E.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "caw"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": ["S", "T", "R", "I", "D", "E"]
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "Spoofing",
+              "Tampering",
+              "Repudiation",
+              "Information Disclosure",
+              "Denial of Service",
+              "Elevation of Privilege"
+            ]
+          },
+          "caw": {
+            "type": "number",
+            "description": "Clinical Availability Weight. Defaults: DoS=1.5, S/I=1.2, T/E=1.1, R=0.9.",
+            "minimum": 0.5,
+            "maximum": 2.0
+          },
+          "network_scenarios": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Network-attacker threat scenarios for this category."
+          },
+          "physical_scenarios": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Physical / insider-attacker threat scenarios for this category."
+          },
+          "detection_methods": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["framework_v_category", "description"],
+              "properties": {
+                "framework_v_category": {
+                  "type": "string",
+                  "enum": [
+                    "ueba",
+                    "protocol_dpi",
+                    "passive_fingerprinting",
+                    "physical_access_correlation",
+                    "side_channel"
+                  ]
+                },
+                "description": { "type": "string" }
+              }
+            }
+          },
+          "compensating_controls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["playbook_constraint", "control"],
+              "properties": {
+                "playbook_constraint": {
+                  "type": "string",
+                  "description": "Reference to a constraint type from the Compensating Controls Playbook (paper Section 3, Tables 2 and 3)."
+                },
+                "control": {
+                  "type": "string",
+                  "description": "The compensating control deployed for this scenario."
+                }
+              }
+            }
+          },
+          "coverage_for_ccd": {
+            "type": "string",
+            "enum": ["full", "partial", "none"],
+            "description": "Coverage assessment used to derive the MDRS CCD score."
+          }
+        }
+      }
+    },
+    "mdrs_inputs_derived": {
+      "type": "object",
+      "properties": {
+        "ccd_score": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "CCD score derived from coverage_for_ccd assessments across all six STRIDE categories."
+        },
+        "ccd_rationale": { "type": "string" }
+      }
+    },
+    "document_control": {
+      "type": "object",
+      "properties": {
+        "author": { "type": "string" },
+        "reviewer": { "type": "string" },
+        "approval_date": { "type": "string", "format": "date" },
+        "next_review": { "type": "string", "format": "date" },
+        "linked_cjrs": { "type": "array", "items": { "type": "string" } },
+        "current_mdrs_score": { "type": "number" },
+        "current_mdrs_tier": {
+          "type": "string",
+          "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+        }
+      }
+    }
+  }
+}
