@@ -4,20 +4,20 @@
 * { box-sizing: border-box; }
 
 :root {
-  --bg: #f5f6f8;
-  --bg-alt: #eef0f3;
+  --bg: #ffffff;
+  --bg-alt: #f5f7fa;
   --bg-section: #ffffff;
   --text: #1a1a1a;
   --text-muted: #5a6470;
-  --border: #e0e3e8;
-  --primary: #1a3a6b;
-  --primary-light: #2c5599;
-  --accent: #1565c0;
+  --border: #dde1e6;
+  --primary: #00274C;        /* Michigan Blue */
+  --primary-light: #0F4480;
+  --accent: #FFCB05;         /* Maize */
   --critical: #d32f2f;
   --high: #ed6c02;
   --medium: #f9a825;
   --low: #2e7d32;
-  --warning-bg: #fff4e0;
+  --warning-bg: #fff8e1;
   --warning-border: #ed6c02;
 }
 
@@ -40,6 +40,7 @@ body {
 
 header {
   background: var(--primary);
+  border-bottom: 4px solid var(--accent);
   color: #ffffff;
   padding: 24px 0 20px;
   margin-bottom: 32px;
@@ -80,7 +81,7 @@ header nav a {
 }
 
 header nav a:hover {
-  border-bottom-color: #ffffff;
+  border-bottom-color: var(--accent);
 }
 
 main {

@@ -8,22 +8,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 * { box-sizing: border-box; }
 :root {
-  --bg: #f5f6f8; --bg-alt: #eef0f3; --bg-section: #ffffff;
-  --text: #1a1a1a; --text-muted: #5a6470; --border: #e0e3e8;
-  --primary: #1a3a6b; --primary-light: #2c5599;
-  --accent: #1565c0;
-  --chip-bg: #e8eef5; --chip-active: #1a3a6b; --chip-active-text: #ffffff;
-  --warning-bg: #fff4e0; --warning-border: #ed6c02;
+  --bg: #ffffff; --bg-alt: #f5f7fa; --bg-section: #ffffff;
+  --text: #1a1a1a; --text-muted: #5a6470; --border: #dde1e6;
+  --primary: #00274C; --primary-light: #0F4480;
+  --accent: #FFCB05;
+  --chip-bg: #e8edf3; --chip-active: #00274C; --chip-active-text: #ffffff;
+  --warning-bg: #fff8e1; --warning-border: #ed6c02;
   --success: #2e7d32; --danger: #d32f2f;
 }
 body { font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 16px; line-height: 1.6; color: var(--text); background: var(--bg); margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-header { background: var(--primary); color: #ffffff; padding: 24px 0 20px; margin-bottom: 32px; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+header { background: var(--primary); border-bottom: 4px solid var(--accent); color: #ffffff; padding: 24px 0 20px; margin-bottom: 32px; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
 header h1 { margin: 0 0 4px; font-family: 'Open Sans', 'Segoe UI', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -0.005em; }
 header .subtitle { margin: 0 0 16px; font-size: 14px; opacity: 0.88; font-weight: 400; }
 header nav { display: flex; gap: 20px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.18); }
 header nav a { color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 500; padding: 4px 0; border-bottom: 2px solid transparent; transition: border-color 0.15s; }
-header nav a:hover { border-bottom-color: #ffffff; }
+header nav a:hover { border-bottom-color: var(--accent); }
 main { padding-bottom: 64px; }
 section { margin-bottom: 32px; }
 h2 { font-family: 'Open Sans', 'Segoe UI', sans-serif; font-size: 22px; font-weight: 700; margin: 0 0 12px; color: var(--primary); }
