@@ -1,33 +1,48 @@
 /* MDRS Calculator stylesheet */
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 * { box-sizing: border-box; }
 
 :root {
-  --bg: #ffffff;
-  --bg-alt: #f5f7fa;
-  --bg-section: #ffffff;
-  --text: #1a1a1a;
-  --text-muted: #5a6470;
-  --border: #dde1e6;
-  --primary: #00274C;        /* Michigan Blue */
-  --primary-light: #0F4480;
-  --accent: #FFCB05;         /* Maize */
-  --critical: #d32f2f;
-  --high: #ed6c02;
-  --medium: #f9a825;
-  --low: #2e7d32;
-  --warning-bg: #fff8e1;
-  --warning-border: #ed6c02;
+  --blue: #00274C;
+  --blue-700: #003366;
+  --maize: #FFCB05;
+  --maize-soft: #FFF4CC;
+  --ink: #0B1426;
+  --muted: #5A6675;
+  --line: #E5E9F0;
+  --bg: #FFFFFF;
+  --bg-soft: #FAFBFC;
+  --good: #1E7E4C;
+  --good-soft: #E6F4EC;
+  --bad: #C42B2B;
+  --bad-soft: #FBEAEA;
+  --warn: #B7791F;
+  --warn-soft: #FFF6E0;
+  /* legacy aliases preserved for existing rules below */
+  --primary: var(--blue);
+  --primary-light: var(--blue-700);
+  --accent: var(--maize);
+  --text: var(--ink);
+  --text-muted: var(--muted);
+  --border: var(--line);
+  --bg-alt: var(--bg-soft);
+  --bg-section: var(--bg);
+  --critical: var(--bad);
+  --high: var(--warn);
+  --medium: #C8A02E;
+  --low: var(--good);
+  --warning-bg: var(--warn-soft);
+  --warning-border: var(--warn);
 }
 
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
 body {
-  font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--text);
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
   background: var(--bg);
-  margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -35,53 +50,83 @@ body {
 .container {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 28px;
 }
 
 header {
-  background: var(--primary);
-  border-bottom: 4px solid var(--accent);
-  color: #ffffff;
-  padding: 24px 0 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  padding: 28px 0 22px;
   margin-bottom: 32px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
 }
 
+header .container { display: block; }
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.brand-mark .logo {
+  width: 44px; height: 44px;
+  border-radius: 4px;
+  background: var(--blue);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.brand-mark .logo::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  background: var(--maize);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+.brand-mark .meta { display: flex; flex-direction: column; gap: 2px; }
+
 header h1 {
-  margin: 0 0 4px;
-  font-family: 'Open Sans', 'Segoe UI', sans-serif;
+  margin: 0;
+  font-family: 'Fraunces', Georgia, serif;
   font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.005em;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--blue);
 }
 
 header .subtitle {
-  margin: 0 0 16px;
-  font-size: 14px;
-  opacity: 0.88;
-  font-weight: 400;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 header nav {
   display: flex;
-  gap: 20px;
+  gap: 22px;
   flex-wrap: wrap;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.18);
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
 }
 
 header nav a {
-  color: #ffffff;
+  color: var(--blue);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
+  letter-spacing: 0.02em;
   padding: 4px 0;
   border-bottom: 2px solid transparent;
   transition: border-color 0.15s;
 }
 
 header nav a:hover {
-  border-bottom-color: var(--accent);
+  border-bottom-color: var(--maize);
 }
 
 main {
@@ -89,26 +134,36 @@ main {
 }
 
 section {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 h2 {
-  font-family: 'Open Sans', 'Segoe UI', sans-serif;
+  font-family: 'Fraunces', Georgia, serif;
   font-size: 22px;
-  font-weight: 700;
-  margin: 0 0 12px;
-  color: var(--primary);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0 0 14px;
+  color: var(--blue);
 }
 
 h3 {
-  font-family: 'Open Sans', 'Segoe UI', sans-serif;
+  font-family: 'Fraunces', Georgia, serif;
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: -0.005em;
   margin: 20px 0 10px;
-  color: var(--primary);
+  color: var(--blue);
 }
 
-h4 { font-family: 'Open Sans', 'Segoe UI', sans-serif; font-size: 15px; font-weight: 600; margin: 14px 0 8px; color: var(--text); }
+h4 {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 14px 0 8px;
+  color: var(--muted);
+}
 
 p { margin: 0 0 12px; }
 
@@ -155,10 +210,10 @@ pre.equation {
 }
 
 .dimension {
-  background: var(--bg-section);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
 }
 
 .dimension label {
@@ -183,10 +238,10 @@ pre.equation {
 
 .dimension output {
   display: inline-block;
-  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+  font-family: 'JetBrains Mono', "SF Mono", Menlo, Consolas, monospace;
   font-size: 20px;
-  font-weight: 700;
-  color: var(--primary);
+  font-weight: 500;
+  color: var(--blue);
   margin-bottom: 4px;
 }
 
@@ -199,8 +254,8 @@ pre.equation {
 
 /* Result card */
 .result-card {
-  background: linear-gradient(135deg, #f7f9fc 0%, #eef2f7 100%);
-  border: 2px solid var(--border);
+  background: var(--bg-soft);
+  border: 2px solid var(--line);
   border-radius: 12px;
   padding: 28px;
   margin: 32px 0;

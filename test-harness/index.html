@@ -4,31 +4,44 @@
 <meta charset="UTF-8">
 <title>Test Harness — Results Explorer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 * { box-sizing: border-box; }
 :root {
-  --bg: #ffffff; --bg-alt: #f5f7fa; --bg-section: #ffffff;
-  --text: #1a1a1a; --text-muted: #5a6470; --border: #dde1e6;
-  --primary: #00274C; --primary-light: #0F4480;
-  --accent: #FFCB05;
-  --success: #2e7d32; --success-bg: #e8f5e9;
-  --warning: #ed6c02; --warning-bg: #fff8e1;
-  --danger: #d32f2f; --danger-bg: #fdeaea;
-  --neutral: #5a6470; --neutral-bg: #f5f7fa;
+  --blue: #00274C; --blue-700: #003366;
+  --maize: #FFCB05; --maize-soft: #FFF4CC;
+  --ink: #0B1426; --muted: #5A6675; --line: #E5E9F0;
+  --bg: #FFFFFF; --bg-soft: #FAFBFC;
+  --good: #1E7E4C; --good-soft: #E6F4EC;
+  --bad: #C42B2B; --bad-soft: #FBEAEA;
+  --warn: #B7791F; --warn-soft: #FFF6E0;
+  --primary: var(--blue); --primary-light: var(--blue-700); --accent: var(--maize);
+  --text: var(--ink); --text-muted: var(--muted); --border: var(--line);
+  --bg-alt: var(--bg-soft); --bg-section: var(--bg);
+  --success: var(--good); --success-bg: var(--good-soft);
+  --warning: var(--warn); --warning-bg: var(--warn-soft);
+  --danger: var(--bad); --danger-bg: var(--bad-soft);
+  --neutral: var(--muted); --neutral-bg: var(--bg-soft);
 }
-body { font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 16px; line-height: 1.6; color: var(--text); background: var(--bg); margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-header { background: var(--primary); border-bottom: 4px solid var(--accent); color: #ffffff; padding: 24px 0 20px; margin-bottom: 32px; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
-header h1 { margin: 0 0 4px; font-family: 'Open Sans', 'Segoe UI', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -0.005em; }
-header .subtitle { margin: 0 0 16px; font-size: 14px; opacity: 0.88; font-weight: 400; }
-header nav { display: flex; gap: 20px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.18); }
-header nav a { color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 500; padding: 4px 0; border-bottom: 2px solid transparent; transition: border-color 0.15s; }
-header nav a:hover { border-bottom-color: var(--accent); }
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
+body { font-family: 'Geist', system-ui, -apple-system, sans-serif; font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+header { background: var(--bg); border-bottom: 1px solid var(--line); color: var(--ink); padding: 28px 0 22px; margin-bottom: 32px; }
+.brand-mark { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.brand-mark .logo { width: 44px; height: 44px; border-radius: 4px; background: var(--blue); position: relative; flex-shrink: 0; }
+.brand-mark .logo::after { content: ""; position: absolute; inset: 8px; background: var(--maize); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.brand-mark .meta { display: flex; flex-direction: column; gap: 2px; }
+header h1 { margin: 0; font-family: 'Fraunces', Georgia, serif; font-size: 28px; font-weight: 500; letter-spacing: -0.02em; color: var(--blue); }
+header .subtitle { margin: 0; color: var(--muted); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 500; }
+header nav { display: flex; gap: 22px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--line); }
+header nav a { color: var(--blue); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; padding: 4px 0; border-bottom: 2px solid transparent; transition: border-color 0.15s; }
+header nav a:hover { border-bottom-color: var(--maize); }
 main { padding-bottom: 64px; }
-section { margin-bottom: 32px; }
-h2 { font-family: 'Open Sans', 'Segoe UI', sans-serif; font-size: 22px; font-weight: 700; margin: 0 0 12px; color: var(--primary); }
-h3 { font-family: 'Open Sans', 'Segoe UI', sans-serif; font-size: 17px; font-weight: 600; margin: 18px 0 10px; color: var(--primary); }
+section { margin-bottom: 24px; }
+h2 { font-family: 'Fraunces', Georgia, serif; font-size: 22px; font-weight: 500; letter-spacing: -0.01em; margin: 0 0 14px; color: var(--blue); }
+h3 { font-family: 'Fraunces', Georgia, serif; font-size: 17px; font-weight: 500; letter-spacing: -0.005em; margin: 18px 0 10px; color: var(--blue); }
 p { margin: 0 0 12px; }
 .card { background: var(--bg-section); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; }
 .controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 12px 0; }
@@ -70,8 +83,13 @@ p { margin: 0 0 12px; }
 <body>
 <header>
   <div class="container">
-    <h1>Test Harness — Results Explorer</h1>
-    <p class="subtitle">Visualize compensating-control effectiveness across STRIDE-HC scenarios from a harness CSV</p>
+    <div class="brand-mark">
+      <span class="logo" aria-hidden="true"></span>
+      <div class="meta">
+        <h1>Test Harness — Results Explorer</h1>
+        <p class="subtitle">Compensating-control effectiveness · STRIDE-HC scenarios · CSV input</p>
+      </div>
+    </div>
     <nav>
       <a href="../">Repo</a>
       <a href="../mdrs-calculator/">MDRS Calculator</a>
