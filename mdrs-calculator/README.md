@@ -6,8 +6,7 @@ This is the headline artifact of the companion repository for the paper *"A Prac
 
 ## Run it
 
-**Live in your browser — no install required:**
-**[https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/](https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/)**
+**[Open the live MDRS calculator →](https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/)** — no install required.
 
 Or locally — the calculator is a pure HTML/CSS/JavaScript application with **zero build dependencies**. Open `index.html` in any modern browser:
 

@@ -32,7 +32,7 @@ What do you do? Five artifacts, five steps.
 
 Open the calculator:
 
-- **Live:** [https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/](https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/)
+- **Live:** [Open the MDRS calculator →](https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/)
 - **Local:** [`mdrs-calculator/index.html`](./mdrs-calculator/index.html)
 
 The calculator runs in guided mode by default — answer five plain-English multiple-choice questions and it assigns the appropriate score. Or click **Direct entry** to use sliders if you already know the scores. For our infusion pump:

@@ -27,13 +27,13 @@ A substantial fraction of clinical medical devices run end-of-life operating sys
 
 **Every artifact has an interactive page in your browser — no install required:**
 
-| Artifact | Live page |
+| Artifact | What it does |
 |---|---|
-| MDRS Calculator | https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/ |
-| STRIDE-HC Builder | https://analyst133.github.io/legacy-medical-device-security-frameworks/stride-hc-templates/ |
-| CJR Builder | https://analyst133.github.io/legacy-medical-device-security-frameworks/cjr-templates/ |
-| Test Harness Results Explorer | https://analyst133.github.io/legacy-medical-device-security-frameworks/test-harness/ |
-| MFA Shim Demo (live TOTP gate) | https://analyst133.github.io/legacy-medical-device-security-frameworks/mfa-shim/ |
+| [**MDRS Calculator**](https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/) | Score a device across five dimensions → tier + next-steps panel |
+| [**STRIDE-HC Builder**](https://analyst133.github.io/legacy-medical-device-security-frameworks/stride-hc-templates/) | Pick archetype → tick scenarios → download filled `.md` + `.yaml` |
+| [**CJR Builder**](https://analyst133.github.io/legacy-medical-device-security-frameworks/cjr-templates/) | Fill 10 sections → download a defensible Control Justification Record |
+| [**Test Harness Results Explorer**](https://analyst133.github.io/legacy-medical-device-security-frameworks/test-harness/) | (Scenario × control) heatmap from a harness CSV — sample auto-loaded |
+| [**MFA Shim Demo**](https://analyst133.github.io/legacy-medical-device-security-frameworks/mfa-shim/) | Architecture diagram + working RFC 6238 TOTP gate in the browser |
 
 - **First time here?** Read [`SETUP.md`](./SETUP.md) — step-by-step install for Linux, macOS, and Windows.
 - **Want to understand how the artifacts fit together?** Read [`WALKTHROUGH.md`](./WALKTHROUGH.md) — cross-artifact tour using a worked infusion-pump example.

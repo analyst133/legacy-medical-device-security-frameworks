@@ -8,8 +8,7 @@ A step-by-step setup guide for new users. Every command is shown for **Linux**, 
 
 ## Step 0 — Try it with zero install
 
-**Open the live MDRS calculator:**
-**[https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/](https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/)**
+**[Open the live MDRS calculator →](https://analyst133.github.io/legacy-medical-device-security-frameworks/mdrs-calculator/)**
 
 This runs in any modern browser — no install, no clone, no setup. Answer the five guided questions or click one of the three paper presets to see the calculator reproduce paper Table 7 exactly.
 

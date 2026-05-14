@@ -2,8 +2,7 @@
 
 A Dockerised multi-container test environment for **empirical evaluation of compensating-control effectiveness** against the legacy medical device threat model defined in the paper.
 
-**Browse representative results in your browser — no install:**
-**[https://analyst133.github.io/legacy-medical-device-security-frameworks/test-harness/](https://analyst133.github.io/legacy-medical-device-security-frameworks/test-harness/)** — interactive heatmap of the (scenario × control profile) outcome matrix.
+**[Open the results explorer →](https://analyst133.github.io/legacy-medical-device-security-frameworks/test-harness/)** — interactive heatmap of the (scenario × control profile) outcome matrix; sample data auto-loaded, no install required.
 
 > **Status:** Functional prototype. The harness implements a representative Archetype 2 (embedded RTOS legacy) infusion pump emulator, a clinical workstation, an attacker container with five scenarios mapped to STRIDE-HC categories, and a compose-profile-based controls overlay. It is intended to support the empirical claim made by paper §9.3 and to be extended by contributors with additional device archetypes, scenarios, and controls.
 

@@ -2,8 +2,7 @@
 
 Templates for documenting compensating-control selections per paper Section 3.5.
 
-**Try the interactive builder in your browser — no install:**
-**[https://analyst133.github.io/legacy-medical-device-security-frameworks/cjr-templates/](https://analyst133.github.io/legacy-medical-device-security-frameworks/cjr-templates/)**
+**[Open the interactive CJR builder →](https://analyst133.github.io/legacy-medical-device-security-frameworks/cjr-templates/)** — no install required.
  CJRs serve as **shared evidence artifacts** across multiple regulatory and standards regimes:
 
 - **HIPAA Security Rule** (45 CFR §164.308): risk analysis and risk management documentation
