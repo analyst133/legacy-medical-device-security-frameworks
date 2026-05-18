@@ -1,0 +1,36 @@
+# Force LF line endings for text files so the repo behaves identically on
+# Linux, macOS, and Windows (Git Bash + WSL + PowerShell + CMD).
+
+* text=auto eol=lf
+
+# Source code
+*.py     text eol=lf
+*.js     text eol=lf
+*.html   text eol=lf
+*.css    text eol=lf
+*.sh     text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+*.json   text eol=lf
+*.md     text eol=lf
+*.txt    text eol=lf
+*.cff    text eol=lf
+
+# Windows-specific files keep CRLF
+*.bat    text eol=crlf
+*.cmd    text eol=crlf
+*.ps1    text eol=crlf
+
+# Binary — don't try to diff or convert
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.pdf    binary
+*.zip    binary
+*.tar.gz binary
+
+# Linguist hints — exclude generated / data files from language stats
+results/sample-results.csv linguist-generated=true
+*.yaml linguist-detectable=true
