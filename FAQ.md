@@ -80,14 +80,14 @@ Cite the **paper** for the research contribution and the **artifacts** (via Zeno
 ```bibtex
 @article{mohiuddin2026legacy,
   title  = {A Practical Cybersecurity Framework for Legacy Medical Devices},
-  author = {Mohiuddin, Khaja T. and Bernia, Brad},
+  author = {Mohiuddin, Khaja T. and Bernia, Brad and Gong, Wenbo},
   year   = {2026},
   note   = {Submitted}
 }
 
 @software{mohiuddin2026legacy_artifacts,
   title   = {Legacy Medical Device Security Frameworks: Companion Artifacts},
-  author  = {Mohiuddin, Khaja T. and Bernia, Brad},
+  author  = {Mohiuddin, Khaja T. and Bernia, Brad and Gong, Wenbo},
   year    = {2026},
   doi     = {10.5281/zenodo.20113684},
   url     = {https://doi.org/10.5281/zenodo.20113684},
