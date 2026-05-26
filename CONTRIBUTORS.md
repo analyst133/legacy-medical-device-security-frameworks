@@ -1,6 +1,6 @@
 # Contributors
 
-This repository accompanies the paper *"A Practical Cybersecurity Framework for Legacy Medical Devices"* and is the joint work of the paper's authors. All listed contributors participated in the research, framework design, and artifact development.
+This repository accompanies the paper [*"A Practical Cybersecurity Framework for Legacy Medical Devices"*](https://doi.org/10.30574/ijsra.2026.19.2.1164) (*International Journal of Science and Research Archive*, 19(2):1178–1195, 2026) and is the joint work of the paper's authors. All listed contributors participated in the research, framework design, and artifact development.
 
 ## Authors
 

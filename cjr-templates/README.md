@@ -1,6 +1,6 @@
 # Control Justification Record (CJR) Templates
 
-Templates for documenting compensating-control selections per paper Section 3.5.
+Templates for documenting compensating-control selections per [Mohiuddin, Bernia & Gong (2026), §3.5](https://doi.org/10.30574/ijsra.2026.19.2.1164).
 
 **[Open the interactive CJR builder →](https://analyst133.github.io/legacy-medical-device-security-frameworks/cjr-templates/)** — no install required.
  CJRs serve as **shared evidence artifacts** across multiple regulatory and standards regimes:

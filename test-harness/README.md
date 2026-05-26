@@ -1,6 +1,6 @@
 # Test Harness
 
-A Dockerised multi-container test environment for **empirical evaluation of compensating-control effectiveness** against the legacy medical device threat model defined in the paper.
+A Dockerised multi-container test environment for **empirical evaluation of compensating-control effectiveness** against the legacy medical device threat model defined in [Mohiuddin, Bernia & Gong (2026)](https://doi.org/10.30574/ijsra.2026.19.2.1164).
 
 **[Open the results explorer →](https://analyst133.github.io/legacy-medical-device-security-frameworks/test-harness/)** — interactive heatmap of the (scenario × control profile) outcome matrix; sample data auto-loaded, no install required.
 

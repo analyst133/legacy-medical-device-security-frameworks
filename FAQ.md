@@ -79,10 +79,18 @@ Cite the **paper** for the research contribution and the **artifacts** (via Zeno
 
 ```bibtex
 @article{mohiuddin2026legacy,
-  title  = {A Practical Cybersecurity Framework for Legacy Medical Devices},
-  author = {Mohiuddin, Khaja T. and Bernia, Bradley and Gong, Wenbo},
-  year   = {2026},
-  note   = {Submitted}
+  title     = {A Practical Cybersecurity Framework for Legacy Medical Devices},
+  author    = {Mohiuddin, Khaja T. and Bernia, Bradley and Gong, Wenbo},
+  journal   = {International Journal of Science and Research Archive},
+  volume    = {19},
+  number    = {2},
+  pages     = {1178--1195},
+  year      = {2026},
+  month     = {May},
+  publisher = {GSC Online Press},
+  doi       = {10.30574/ijsra.2026.19.2.1164},
+  url       = {https://doi.org/10.30574/ijsra.2026.19.2.1164},
+  issn      = {2582-8185}
 }
 
 @software{mohiuddin2026legacy_artifacts,

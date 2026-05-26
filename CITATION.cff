@@ -54,5 +54,15 @@ preferred-citation:
     - given-names: "Wenbo"
       family-names: "Gong"
       affiliation: "University of Michigan"
+  journal: "International Journal of Science and Research Archive"
+  publisher:
+    name: "GSC Online Press"
+  volume: 19
+  issue: "2"
+  start: 1178
+  end: 1195
   year: 2026
-  notes: "Submitted"
+  month: 5
+  doi: "10.30574/ijsra.2026.19.2.1164"
+  url: "https://doi.org/10.30574/ijsra.2026.19.2.1164"
+  issn: "2582-8185"
