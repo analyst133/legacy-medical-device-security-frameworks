@@ -264,7 +264,7 @@ You've now installed (or verified) every artifact you wanted. The substantive le
 | 4 | [`test-harness/METHODOLOGY.md`](test-harness/METHODOLOGY.md) | 10 min | How to design experiments + interpret results |
 | 5 | [`mfa-shim/FDA-CONSIDERATIONS.md`](mfa-shim/FDA-CONSIDERATIONS.md) | 10 min | Regulatory analysis of inline-device modification |
 
-The paper is the authoritative source — these walkthroughs are operational guides for adopting the framework, not a substitute for the paper's reasoning.
+[The paper](https://doi.org/10.30574/ijsra.2026.19.2.1164) is the authoritative source — these walkthroughs are operational guides for adopting the framework, not a substitute for the paper's reasoning.
 
 ---
 

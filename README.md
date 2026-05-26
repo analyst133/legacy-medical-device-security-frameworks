@@ -1,11 +1,13 @@
 # Legacy Medical Device Security Frameworks
 
+[![Paper](https://img.shields.io/badge/Paper-IJSRA%2019(2)%3A1178--1195-1a3a6b.svg)](https://doi.org/10.30574/ijsra.2026.19.2.1164)
+[![Paper DOI](https://img.shields.io/badge/Paper%20DOI-10.30574%2Fijsra.2026.19.2.1164-1a3a6b.svg)](https://doi.org/10.30574/ijsra.2026.19.2.1164)
+[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20113684.svg)](https://doi.org/10.5281/zenodo.20113684)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20113684.svg)](https://doi.org/10.5281/zenodo.20113684)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB.svg)](https://www.python.org/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED.svg)](https://docs.docker.com/compose/)
 
-Open-source companion artifacts for the paper **"A Practical Cybersecurity Framework for Legacy Medical Devices"**. Five integrated, practitioner-oriented frameworks for healthcare delivery organisations (HDOs) and medical device manufacturers operating under the constraints of legacy clinical environments.
+Open-source companion artifacts for the paper **["A Practical Cybersecurity Framework for Legacy Medical Devices"](https://doi.org/10.30574/ijsra.2026.19.2.1164)** (Mohiuddin, Bernia & Gong, *International Journal of Science and Research Archive*, 19(2):1178–1195, May 2026). Five integrated, practitioner-oriented frameworks for healthcare delivery organisations (HDOs) and medical device manufacturers operating under the constraints of legacy clinical environments.
 
 > **Status.** Research artifact suite. Suitable for evaluation, adaptation, and extension. Not a regulated medical device. Do not deploy in clinical production without independent validation appropriate to your environment.
 
@@ -58,12 +60,28 @@ cd ../mfa-shim/prototype && pip install -r requirements.txt && python -m pytest
 
 ## Citing this work
 
-This repository is archived on Zenodo. Use the **concept DOI** to cite the artifact suite — it always resolves to the latest version:
+Cite **the paper** for the research contribution and **the artifacts** (via the Zenodo concept DOI) for the implementation.
 
-- Concept DOI: [10.5281/zenodo.20113684](https://doi.org/10.5281/zenodo.20113684)
-- v1.0.0 release: [10.5281/zenodo.20113685](https://doi.org/10.5281/zenodo.20113685)
+- **Paper:** Mohiuddin, K. T., Bernia, B., & Gong, W. (2026). A practical cybersecurity framework for legacy medical devices. *International Journal of Science and Research Archive*, 19(2), 1178–1195. [https://doi.org/10.30574/ijsra.2026.19.2.1164](https://doi.org/10.30574/ijsra.2026.19.2.1164)
+- **Software (concept DOI, always latest):** [10.5281/zenodo.20113684](https://doi.org/10.5281/zenodo.20113684)
+- **Software (v1.0.0 versioned DOI):** [10.5281/zenodo.20113685](https://doi.org/10.5281/zenodo.20113685)
 
 ```bibtex
+@article{mohiuddin2026legacy,
+  title     = {A Practical Cybersecurity Framework for Legacy Medical Devices},
+  author    = {Mohiuddin, Khaja T. and Bernia, Bradley and Gong, Wenbo},
+  journal   = {International Journal of Science and Research Archive},
+  volume    = {19},
+  number    = {2},
+  pages     = {1178--1195},
+  year      = {2026},
+  month     = {May},
+  publisher = {GSC Online Press},
+  doi       = {10.30574/ijsra.2026.19.2.1164},
+  url       = {https://doi.org/10.30574/ijsra.2026.19.2.1164},
+  issn      = {2582-8185}
+}
+
 @software{mohiuddin2026legacy_artifacts,
   title   = {Legacy Medical Device Security Frameworks: Companion Artifacts},
   author  = {Mohiuddin, Khaja T. and Bernia, Bradley and Gong, Wenbo},
@@ -71,13 +89,6 @@ This repository is archived on Zenodo. Use the **concept DOI** to cite the artif
   doi     = {10.5281/zenodo.20113684},
   url     = {https://doi.org/10.5281/zenodo.20113684},
   version = {v1.0.0}
-}
-
-@article{mohiuddin2026legacy,
-  title  = {A Practical Cybersecurity Framework for Legacy Medical Devices},
-  author = {Mohiuddin, Khaja T. and Bernia, Bradley and Gong, Wenbo},
-  year   = {2026},
-  note   = {Submitted}
 }
 ```
 

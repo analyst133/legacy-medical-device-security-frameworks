@@ -1,6 +1,6 @@
 # MFA Shim — Pattern C Reference Design
 
-Software reference design for the **inline service-port multi-factor authentication shim** introduced in paper §3.4 as Pattern C.
+Software reference design for the **inline service-port multi-factor authentication shim** introduced in [Mohiuddin, Bernia & Gong (2026), §3.4](https://doi.org/10.30574/ijsra.2026.19.2.1164) as Pattern C.
 
 **[Open the MFA shim demo →](https://analyst133.github.io/legacy-medical-device-security-frameworks/mfa-shim/)** — architecture diagram, session-flow walkthrough, and a working RFC 6238 TOTP gate you can authenticate against. No install required.
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Paper published
+
+- The companion paper has been published in the *International Journal of Science and Research Archive*, vol. 19, no. 2, pp. 1178–1195 (May 2026). DOI: [10.30574/ijsra.2026.19.2.1164](https://doi.org/10.30574/ijsra.2026.19.2.1164). All citation metadata across `README.md`, `CITATION.cff`, and `FAQ.md` has been updated from "Submitted" to the full bibliographic record.
+
 ### Added
 
 - Interactive **MDRS calculator** improvements: a guided assessment mode (default for new users) alongside the existing direct-slider mode; explicit owners / timeline / review-cadence panel keyed to the resulting tier; scores-assigned table in the result card.

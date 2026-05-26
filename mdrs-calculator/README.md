@@ -2,7 +2,7 @@
 
 Reference implementation of the **Medical Device Risk Score** with the irreversibility-driven tier floor and Compensating Control Deficit (CCD) tier promoter.
 
-This is the headline artifact of the companion repository for the paper *"A Practical Cybersecurity Framework for Legacy Medical Devices"*.
+This is the headline artifact of the companion repository for the paper [*"A Practical Cybersecurity Framework for Legacy Medical Devices"*](https://doi.org/10.30574/ijsra.2026.19.2.1164) (Mohiuddin, Bernia & Gong, *International Journal of Science and Research Archive*, 19(2):1178–1195, 2026).
 
 ## Run it
 
