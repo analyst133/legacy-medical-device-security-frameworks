@@ -1,0 +1,9 @@
+# robots.txt for the live GitHub Pages site at
+# https://analyst133.github.io/legacy-medical-device-security-frameworks/
+#
+# Allow all well-behaved crawlers. Google Scholar in particular benefits
+# from being able to index the live calculator, builders, and walkthroughs
+# alongside the published paper at doi:10.30574/ijsra.2026.19.2.1164.
+
+User-agent: *
+Allow: /
