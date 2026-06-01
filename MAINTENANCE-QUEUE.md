@@ -17,9 +17,9 @@ When the queue runs out (or you've fallen behind), add new items at the bottom �
 ## Week 1 — Foundations
 
 ### Day 1 — Add `robots.txt` for Pages crawlability
-- [ ] **File:** `robots.txt` at repo root
+- [x] **File:** `robots.txt` at repo root
 - **Why:** Pages serves the file; search engines (Google Scholar in particular) find the live calculator and walkthroughs.
-- **Content:** `User-agent: *\nAllow: /\nSitemap: https://analyst133.github.io/legacy-medical-device-security-frameworks/sitemap.xml`
+- **Done:** Landed without the Sitemap reference; that line will be added on the day `sitemap.xml` is created.
 - **Commit:** `Add robots.txt for GitHub Pages crawlability`
 
 ### Day 2 — Add Dependabot config
