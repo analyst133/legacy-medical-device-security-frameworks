@@ -1,6 +1,6 @@
 {
   "title": "Legacy Medical Device Security Frameworks: Companion Artifacts",
-  "description": "Open-source companion artifact suite for the paper 'A Practical Cybersecurity Framework for Legacy Medical Devices'. Five integrated practitioner-oriented frameworks comprising: the Medical Device Risk Score (MDRS) reference calculator with irreversibility-driven tier floor; STRIDE-HC threat-modelling templates for the dual network/physical attack surface; Control Justification Record templates aligned to ISO 14971, AAMI TIR57, and FDA 524B; a Dockerised empirical test harness; and a software reference design for the inline service-port multi-factor authentication shim (Pattern C).",
+  "description": "Open-source companion artifact suite for Mohiuddin, Bernia & Gong (2026), 'A Practical Cybersecurity Framework for Legacy Medical Devices', International Journal of Science and Research Archive, 19(2):1178-1195, doi:10.30574/ijsra.2026.19.2.1164. Five integrated practitioner-oriented frameworks comprising: the Medical Device Risk Score (MDRS) reference calculator with irreversibility-driven tier floor; STRIDE-HC threat-modelling templates for the dual network/physical attack surface; Control Justification Record templates aligned to HIPAA Security Rule, ISO 14971, AAMI TIR57/97, and FDA 524B; a Dockerised empirical test harness; and a software reference design for the inline service-port multi-factor authentication shim (Pattern C).",
   "creators": [
     {
       "name": "Mohiuddin, Khaja T.",
@@ -39,8 +39,14 @@
   ],
   "related_identifiers": [
     {
-      "identifier": "https://github.com/analyst133/legacy-medical-device-security-frameworks",
+      "identifier": "10.30574/ijsra.2026.19.2.1164",
       "relation": "isSupplementTo",
+      "scheme": "doi",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "https://github.com/analyst133/legacy-medical-device-security-frameworks",
+      "relation": "isAlternateIdentifier",
       "scheme": "url"
     }
   ]
