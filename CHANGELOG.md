@@ -25,12 +25,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Top-level [`requirements.txt`](./requirements.txt) — aggregator that pulls in `mfa-shim/prototype/requirements.txt`.
 - "Where the output goes" section in `stride-hc-templates/README.md` covering FDA, ISO 14971, AAMI TIR57, CJR, and MDRS handoffs.
 - Live-page links from every artifact README; Quick Start table in the top-level README.
+- [`CONTRIBUTORS.md`](./CONTRIBUTORS.md) listing the three paper authors with affiliations.
+- [`FAQ.md`](./FAQ.md) covering common reader questions: archetype meaning, how STRIDE-HC and CJR fit together, MDRS vs CVSS, citation, licensing, contributing.
+- [`MAINTENANCE-QUEUE.md`](./MAINTENANCE-QUEUE.md) — a 30-day list of small, genuine improvements for ongoing maintenance cadence.
+- [`Makefile`](./Makefile) at repo root with `test` / `test-mdrs` / `test-mfa-shim` / `serve` / `venv` / `harness` / `harness-down` / `clean` / `help` targets.
+- [`.editorconfig`](./.editorconfig) and [`.gitattributes`](./.gitattributes) for cross-platform editor + line-ending consistency (LF for source, CRLF for `.bat`/`.cmd`/`.ps1`).
+- [`robots.txt`](./robots.txt) for GitHub Pages crawlability — explicitly welcomes Google Scholar and other well-behaved crawlers to index the live tools alongside the published paper.
+- Brand-mark favicon ([`favicon.svg`](./favicon.svg) — Michigan-Blue square with Maize diamond) wired into all five live pages.
+- Open Graph and Twitter-card meta tags on all five live pages so that links shared on LinkedIn / Slack / X / Mastodon render proper preview cards instead of bare URLs.
+- **Wenbo Gong** (University of Michigan) added as third co-author across `.zenodo.json`, `CITATION.cff`, `LICENSE`, `README.md`, and `FAQ.md`.
 
 ### Changed
 
 - **Visual design** of all five live pages refreshed to a publication-grade aesthetic: Michigan Blue (`#00274C`) + Maize (`#FFCB05`) palette on white, Fraunces serif headings + Geist sans body + JetBrains Mono numerics (loaded from Google Fonts), brand-mark logo (Michigan-Blue square with Maize diamond) on each page.
-- Citing section in `README.md` updated to include the Zenodo concept DOI and v1.0.0 versioned DOI bibtex.
+- Citing section in `README.md` updated to include the Zenodo concept DOI and v1.0.0 versioned DOI bibtex, plus the published paper bibtex with full journal, volume, issue, page range, and DOI.
 - Long live-page URLs converted to descriptive hyperlinks (`[Open the live X →](...)`) across all READMEs.
+- Bernia given-name updated to the formal **"Bradley"** (was "Brad") across all author-listing files, matching the published Zenodo deposit and IJSRA paper byline.
+- Affiliations for Bernia and Gong consolidated to **"University of Michigan"** (no campus suffix) for consistency with the published deposit.
+- `.zenodo.json` `related_identifiers` restructured per DataCite semantics: software is now declared **`isSupplementTo`** the paper DOI ([`10.30574/ijsra.2026.19.2.1164`](https://doi.org/10.30574/ijsra.2026.19.2.1164)); GitHub URL moved to `isAlternateIdentifier`. Future Zenodo releases will surface this relationship in OpenAIRE and DataCite citation graphs.
+- `.zenodo.json` `description` opens with the full published citation so anyone landing on a future deposit page sees the paper attribution immediately.
 
 ### Fixed
 
