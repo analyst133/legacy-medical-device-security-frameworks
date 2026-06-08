@@ -23,9 +23,9 @@ When the queue runs out (or you've fallen behind), add new items at the bottom �
 - **Commit:** `Add robots.txt for GitHub Pages crawlability`
 
 ### Day 2 — Add Dependabot config
-- [ ] **File:** `.github/dependabot.yml`
+- [x] **File:** `.github/dependabot.yml`
 - **Why:** GitHub auto-opens PRs when Python deps in `mfa-shim/prototype/requirements.txt` have updates.
-- **Content:** Standard `version: 2` config watching `pip` ecosystem on weekly schedule.
+- **Done:** Watches `pip` ecosystem weekly + `github-actions` monthly (will auto-activate when first workflow lands).
 - **Commit:** `Add Dependabot config for weekly Python dependency updates`
 
 ### Day 3 — Add bug-report issue template
