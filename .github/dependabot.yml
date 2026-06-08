@@ -1,0 +1,36 @@
+# Dependabot keeps the project's dependencies up to date.
+# Configuration reference:
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Python dependencies for the MFA shim prototype.
+  # Currently: pyotp, PyYAML, pyserial, pytest.
+  - package-ecosystem: "pip"
+    directory: "/mfa-shim/prototype"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "python"
+
+  # GitHub Actions workflows. No workflows in the repo yet — this becomes
+  # active automatically the day any .github/workflows/*.yml is added.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "ci"
