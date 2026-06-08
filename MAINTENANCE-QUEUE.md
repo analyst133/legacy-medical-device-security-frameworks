@@ -29,8 +29,9 @@ When the queue runs out (or you've fallen behind), add new items at the bottom �
 - **Commit:** `Add Dependabot config for weekly Python dependency updates`
 
 ### Day 3 — Add bug-report issue template
-- [ ] **File:** `.github/ISSUE_TEMPLATE/bug_report.md`
+- [x] **File:** `.github/ISSUE_TEMPLATE/bug_report.md`
 - **Why:** Structured bug reports — which artifact, expected vs actual, OS, browser/Python version.
+- **Done:** Template asks reporter to tick which of the five artifacts is affected, capture environment versions, and pre-flags the security-private-reporting path for security-relevant bugs.
 - **Commit:** `Add bug report issue template`
 
 ### Day 4 — Add feature-request issue template
