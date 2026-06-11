@@ -35,8 +35,9 @@ When the queue runs out (or you've fallen behind), add new items at the bottom �
 - **Commit:** `Add bug report issue template`
 
 ### Day 4 — Add feature-request issue template
-- [ ] **File:** `.github/ISSUE_TEMPLATE/feature_request.md`
+- [x] **File:** `.github/ISSUE_TEMPLATE/feature_request.md`
 - **Why:** Pair with bug template.
+- **Done:** Asks which of the five artifacts the request affects, problem statement, proposed solution, standards alignment, contribution willingness.
 - **Commit:** `Add feature request issue template`
 
 ### Day 5 — Add pull request template
