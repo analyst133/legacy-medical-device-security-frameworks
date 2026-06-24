@@ -41,8 +41,9 @@ When the queue runs out (or you've fallen behind), add new items at the bottom �
 - **Commit:** `Add feature request issue template`
 
 ### Day 5 — Add pull request template
-- [ ] **File:** `.github/PULL_REQUEST_TEMPLATE.md`
+- [x] **File:** `.github/PULL_REQUEST_TEMPLATE.md`
 - **Why:** Checklist (tests, walkthroughs updated, CHANGELOG entry, etc.).
+- **Done:** Covers artifact-affected checkboxes, type-of-change, testing checklist tied to the actual repo (52 tests, paper Table 7 presets, Windows tempdir teardown), CHANGELOG section routing, standards-alignment prompt, reviewer checklist.
 - **Commit:** `Add pull request template`
 
 ### Day 6 — Add `.python-version` file
