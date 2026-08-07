@@ -35,6 +35,8 @@
   --warning-bg: var(--warn-soft);
 }
 html, body { margin: 0; background: var(--bg); color: var(--ink); }
+.skip-link { position: absolute; top: -100px; left: 8px; background: var(--blue); color: #ffffff; padding: 10px 14px; border-radius: 4px; text-decoration: none; font-weight: 600; z-index: 1000; transition: top 0.15s; }
+.skip-link:focus { top: 8px; outline: 3px solid var(--maize); outline-offset: 2px; }
 body { font-family: 'Geist', system-ui, -apple-system, sans-serif; font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 .container { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
 header { background: var(--bg); border-bottom: 1px solid var(--line); color: var(--ink); padding: 28px 0 22px; margin-bottom: 32px; }
@@ -107,6 +109,7 @@ p { margin: 0 0 12px; }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 <header>
   <div class="container">
     <div class="brand-mark">
@@ -127,7 +130,7 @@ p { margin: 0 0 12px; }
   </div>
 </header>
 
-<main class="container">
+<main id="main" class="container">
 
 <div class="notice">
   <strong>This is a reference design</strong>, not a regulated product. Read <a href="./FDA-CONSIDERATIONS.md">FDA-CONSIDERATIONS.md</a> before any clinical deployment — inline insertion into a medical device's service port may, depending on jurisdiction, constitute a modification requiring regulatory engagement.
