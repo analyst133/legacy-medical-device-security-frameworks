@@ -60,6 +60,22 @@ html, body { margin: 0; background: var(--bg); color: var(--ink); }
   outline: 3px solid var(--maize);
   outline-offset: 2px;
 }
+
+/* Global keyboard-focus indicator (WCAG 2.4.7 Focus Visible).
+   Uses :focus-visible so the outline only appears for keyboard / assistive
+   navigation — mouse clicks don't trigger it, avoiding visual noise for
+   sighted-mouse users while remaining clearly discoverable for keyboard
+   users. Maize matches the brand accent. */
+:focus-visible {
+  outline: 3px solid var(--maize);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+/* Suppress the default browser outline on plain :focus so we don't stack
+   with the :focus-visible outline on browsers that support both. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
 body {
   font-family: 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 15px;
