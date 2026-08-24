@@ -90,7 +90,7 @@ In addition to Pattern C, this CJR documents the supporting policy controls:
 
 ### 4.2 Reference to Compensating Controls Playbook
 
-Paper §3.3 Table 3, "Service-mode password disclosed" constraint. Pattern C described in §3.4.
+Paper Section 3.3 Table 3, "Service-mode password disclosed" constraint. Pattern C described in Section 3.4.
 
 ### 4.3 How the control addresses the threat
 
@@ -149,12 +149,12 @@ A re-rating to High is contingent on (a) production hardware procurement and (b)
 
 - ISO 14971:2019, cl.7.4 (Risk control measures)
 - ISO 14971:2019, cl.8 (Residual risk evaluation)
-- AAMI TIR57:2016, §6.3
-- AAMI TIR97, §6.2 and §7 (Postmarket residual risk)
-- HIPAA Security Rule, 45 CFR §164.310(b) (Workstation use — physical safeguards)
-- HIPAA Security Rule, 45 CFR §164.312(d) (Person/entity authentication)
-- HIPAA Security Rule, 45 CFR §164.312(b) (Audit controls)
-- FDA (2026) *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* — authentication and postmarket vulnerability-management provisions (implementing FD&C Act §524B)
+- AAMI TIR57:2016, Section 6.3
+- AAMI TIR97, Section 6.2 and Section 7 (Postmarket residual risk)
+- HIPAA Security Rule, 45 CFR Section 164.310(b) (Workstation use — physical safeguards)
+- HIPAA Security Rule, 45 CFR Section 164.312(d) (Person/entity authentication)
+- HIPAA Security Rule, 45 CFR Section 164.312(b) (Audit controls)
+- FDA (2026) *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* — authentication and postmarket vulnerability-management provisions (implementing FD&C Act Section 524B)
 - NIST SP 800-82r3, IA-2, PE-3 (Physical access control)
 - NIST SP 800-153 (Wireless local area network security)
 - HSCC HIC-MaLTS (2023), Practice 5.4 (Physical security)

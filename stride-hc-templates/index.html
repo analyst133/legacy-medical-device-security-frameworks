@@ -431,7 +431,7 @@ function buildMarkdown() {
     md += `**CCD coverage assessment:** ${c.coverage || '_(not assessed)_'}\n\n---\n\n`;
   }
   md += `## 3. Clinical Availability Weights (CAW)\n\n`;
-  md += `Defaults applied per paper §4.3:\n\n`;
+  md += `Defaults applied per paper Section 4.3:\n\n`;
   md += `| Category | CAW |\n|---|---|\n`;
   for (const cat of ['S','T','R','I','D','E']) md += `| ${cat} — ${CAT_NAMES[cat]} | ${CAW[cat]} |\n`;
   md += `\n## 4. Linked records\n\n_(reference your MDRS score, related CJRs, test-harness outputs, etc.)_\n`;

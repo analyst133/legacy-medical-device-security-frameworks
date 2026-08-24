@@ -1,15 +1,15 @@
 # Control Justification Record (CJR) Templates
 
-Templates for documenting compensating-control selections per [Mohiuddin, Bernia & Gong (2026), §3.5](https://doi.org/10.30574/ijsra.2026.19.2.1164).
+Templates for documenting compensating-control selections per [Mohiuddin, Bernia & Gong (2026), Section 3.5](https://doi.org/10.30574/ijsra.2026.19.2.1164).
 
 **[Open the interactive CJR builder →](https://analyst133.github.io/legacy-medical-device-security-frameworks/cjr-templates/)** — no install required.
  CJRs serve as **shared evidence artifacts** across multiple regulatory and standards regimes:
 
-- **HIPAA Security Rule** (45 CFR §164.308): risk analysis and risk management documentation
+- **HIPAA Security Rule** (45 CFR Section 164.308): risk analysis and risk management documentation
 - **ISO 14971:2019** clause 7 (risk control) and clause 8 (residual risk evaluation)
 - **AAMI TIR57:2016**: security risk control activities
 - **AAMI TIR97**: postmarket cybersecurity for legacy devices
-- **FDA 2026 premarket cybersecurity guidance** and **FD&C Act §524B**: premarket cybersecurity content and postmarket vulnerability-management evidence
+- **FDA 2026 premarket cybersecurity guidance** and **FD&C Act Section 524B**: premarket cybersecurity content and postmarket vulnerability-management evidence
 
 A single, well-authored CJR can satisfy documentation requirements across all of these without requiring separate, redundant authoring exercises in each domain.
 
@@ -61,7 +61,7 @@ CJRs can serve manufacturers in two distinct contexts:
 1. **As guidance to customers.** Where a manufacturer cannot resolve a constraint in the device itself but can describe operationally validated compensating controls, publishing CJR-format guidance assists customer compliance with HIPAA, ISO 14971, and AAMI TIR57 obligations.
 2. **As internal documentation.** When the manufacturer is itself the operator of legacy devices in production environments (manufacturing, R&D, field-service simulation), CJRs document control selection in the same way HDOs use them.
 
-For FD&C Act §524B postmarket vulnerability-management evidence, manufacturers may publish a CJR-aligned response to security advisories — describing the compensating controls customers can apply pending vendor patch availability.
+For FD&C Act Section 524B postmarket vulnerability-management evidence, manufacturers may publish a CJR-aligned response to security advisories — describing the compensating controls customers can apply pending vendor patch availability.
 
 ### For tooling integration
 
@@ -77,14 +77,14 @@ Each CJR field is mapped to one or more standards regimes. The full mapping is d
 
 Column heads: **FDA 2026** refers to *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* (FDA, Feb 2026). Subsection identifiers should be verified against the current version of the guidance document at issuance time; the topical mapping below is stable across the 2023 and 2026 guidance revisions.
 
-| CJR field | HIPAA | ISO 14971 | AAMI TIR57/97 | FDA 2026 / FD&C Act §524B |
+| CJR field | HIPAA | ISO 14971 | AAMI TIR57/97 | FDA 2026 / FD&C Act Section 524B |
 |---|---|---|---|---|
-| Constraint and standard control | §164.308(a)(1)(ii)(A) | cl.5 (hazard ID) | TIR57 §4 | Threat / asset identification |
-| Compensating control | §164.308(a)(1)(ii)(B) | cl.7 (risk control) | TIR57 §6 | Authentication and access controls |
-| Threat addressed | §164.308(a)(1)(ii)(A) | cl.5–6 | TIR57 §4–5 | Threat modelling |
-| Residual risk | §164.308(a)(1)(ii)(C) | cl.8 (residual eval) | TIR57 §7; TIR97 §6 | Residual risk evaluation |
-| Approval | §164.308(a)(2) (assigned security responsibility) | cl.4.2 (mgmt responsibilities) | TIR57 §3 | Secure product development framework / QMS ownership |
-| Review cadence | §164.308(a)(8) (evaluation) | cl.10 (postmarket info) | TIR97 §8 | Postmarket vulnerability monitoring |
+| Constraint and standard control | Section 164.308(a)(1)(ii)(A) | cl.5 (hazard ID) | TIR57 Section 4 | Threat / asset identification |
+| Compensating control | Section 164.308(a)(1)(ii)(B) | cl.7 (risk control) | TIR57 Section 6 | Authentication and access controls |
+| Threat addressed | Section 164.308(a)(1)(ii)(A) | cl.5–6 | TIR57 Section 4–5 | Threat modelling |
+| Residual risk | Section 164.308(a)(1)(ii)(C) | cl.8 (residual eval) | TIR57 Section 7; TIR97 Section 6 | Residual risk evaluation |
+| Approval | Section 164.308(a)(2) (assigned security responsibility) | cl.4.2 (mgmt responsibilities) | TIR57 Section 3 | Secure product development framework / QMS ownership |
+| Review cadence | Section 164.308(a)(8) (evaluation) | cl.10 (postmarket info) | TIR97 Section 8 | Postmarket vulnerability monitoring |
 
 ## Licence
 

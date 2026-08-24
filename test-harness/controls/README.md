@@ -1,6 +1,6 @@
 # Compensating Controls — Profiles
 
-This directory contains the compensating-control implementations toggled via Docker Compose profiles. Each control corresponds to a category of compensating control documented in the Compensating Controls Playbook (paper §3 Tables 2 and 3).
+This directory contains the compensating-control implementations toggled via Docker Compose profiles. Each control corresponds to a category of compensating control documented in the Compensating Controls Playbook (paper Section 3 Tables 2 and 3).
 
 ## Available controls
 

@@ -868,7 +868,7 @@ footer .disclaimer {
    Print stylesheet
    -------------------------------------------------------------------------
    Clinical engineers and risk managers periodically print MDRS results to
-   attach to paper risk files (ISO 14971 documentation, HIPAA §164.316(b)(2)
+   attach to paper risk files (ISO 14971 documentation, HIPAA Section 164.316(b)(2)
    time-limited records, vendor advisories filed with the device history
    record). The screen aesthetic — dark navy header, Maize accents, chip UI —
    wastes ink and adds visual noise. This block strips the page back to a

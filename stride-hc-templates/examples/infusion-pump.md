@@ -1,6 +1,6 @@
 # STRIDE-HC Threat Model: ExampleMed Volumetric Infusion Pump v3.2
 
-> Worked example for paper §4.5 — large-volume infusion pump representative of **Archetype 2 (embedded RTOS legacy)**.
+> Worked example for paper Section 4.5 — large-volume infusion pump representative of **Archetype 2 (embedded RTOS legacy)**.
 
 ## 1. Device profile
 

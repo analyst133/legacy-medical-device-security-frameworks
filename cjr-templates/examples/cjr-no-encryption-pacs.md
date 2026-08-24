@@ -73,7 +73,7 @@ A combination of network-layer and protocol-layer controls:
 
 ### 4.2 Reference to Compensating Controls Playbook
 
-Paper §3.2 Table 2, "No encryption (data in transit)" constraint.
+Paper Section 3.2 Table 2, "No encryption (data in transit)" constraint.
 
 ### 4.3 How the control addresses the threat
 
@@ -125,10 +125,10 @@ CISO (K. Williams) with Radiology Director (Dr R. Suzuki) concurrence, dated 202
 ## 7. Normative references
 
 - ISO 14971:2019, cl.7.4
-- AAMI TIR57:2016, §6.3
-- HIPAA Security Rule, 45 CFR §164.312(a)(2)(iv) (Encryption and decryption — addressable)
-- HIPAA Security Rule, 45 CFR §164.312(e)(1) (Transmission security)
-- FDA (2026) *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* — authenticity, integrity, and confidentiality provisions (implementing FD&C Act §524B)
+- AAMI TIR57:2016, Section 6.3
+- HIPAA Security Rule, 45 CFR Section 164.312(a)(2)(iv) (Encryption and decryption — addressable)
+- HIPAA Security Rule, 45 CFR Section 164.312(e)(1) (Transmission security)
+- FDA (2026) *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* — authenticity, integrity, and confidentiality provisions (implementing FD&C Act Section 524B)
 - NIST SP 800-111 (Storage encryption)
 - DICOM Security Profiles (PS3.15 – Security and System Management Profiles)
 - HSCC HIC-MaLTS (2023), Practice 6.4 (Imaging-specific controls)

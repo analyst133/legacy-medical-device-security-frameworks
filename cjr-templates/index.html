@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <title>CJR Builder — Control Justification Record</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Author a Control Justification Record — defensible across HIPAA, ISO 14971, AAMI TIR57/97, and FDA §524B. Guided 10-section form.">
+<meta name="description" content="Author a Control Justification Record — defensible across HIPAA, ISO 14971, AAMI TIR57/97, and FDA Section 524B. Guided 10-section form.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="CJR Builder — Control Justification Record">
-<meta property="og:description" content="Defensible across HIPAA, ISO 14971, AAMI TIR57/97, FDA §524B. Guided 10-section form with worked-example button.">
+<meta property="og:description" content="Defensible across HIPAA, ISO 14971, AAMI TIR57/97, FDA Section 524B. Guided 10-section form with worked-example button.">
 <meta property="og:url" content="https://analyst133.github.io/legacy-medical-device-security-frameworks/cjr-templates/">
 <meta property="og:image" content="https://analyst133.github.io/legacy-medical-device-security-frameworks/favicon.svg">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CJR Builder">
-<meta name="twitter:description" content="Author a Control Justification Record. HIPAA + ISO 14971 + AAMI + FDA §524B aligned. No install.">
+<meta name="twitter:description" content="Author a Control Justification Record. HIPAA + ISO 14971 + AAMI + FDA Section 524B aligned. No install.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,7 +112,7 @@ textarea.tall { min-height: 100px; }
       <span class="logo" role="img" aria-label="Legacy Medical Device Security Frameworks logo"></span>
       <div class="meta">
         <h1>CJR Builder</h1>
-        <p class="subtitle">Control Justification Record · HIPAA · ISO 14971 · AAMI · FDA §524B</p>
+        <p class="subtitle">Control Justification Record · HIPAA · ISO 14971 · AAMI · FDA Section 524B</p>
       </div>
     </div>
     <nav>
@@ -226,7 +226,7 @@ textarea.tall { min-height: 100px; }
     <label class="full-width">4.1 Control description</label>
     <textarea id="control-desc" class="full-width tall" placeholder="e.g., Pattern A — Upstream PAM gateway using CyberArk PSM v12.x, brokering all network connections to the pump management interface."></textarea>
     <label class="full-width">4.2 Playbook reference</label>
-    <textarea id="playbook-ref" class="full-width" placeholder="e.g., Paper §3.2 Table 2, 'MFA not supported'. Pattern A described in §3.4."></textarea>
+    <textarea id="playbook-ref" class="full-width" placeholder="e.g., Paper Section 3.2 Table 2, 'MFA not supported'. Pattern A described in Section 3.4."></textarea>
     <label class="full-width">4.3 How the control addresses the threat</label>
     <textarea id="control-mechanism" class="full-width tall" placeholder="Walk through each scenario from 3.2 individually. Say *how* the control affects each one."></textarea>
     <label class="full-width">4.4 Design principles (Equivalence, Independence, Proportionality, Auditability)</label>
@@ -341,12 +341,12 @@ textarea.tall { min-height: 100px; }
 const COMMON_REFS = [
   'ISO 14971:2019, cl.7 (Risk control measures)',
   'ISO 14971:2019, cl.8 (Evaluation of overall residual risk)',
-  'AAMI TIR57:2016, §6 (Security risk control)',
-  'AAMI TIR97, §6 (Postmarket security risk control)',
-  'HIPAA Security Rule, 45 CFR §164.308(a)(1)(ii)(B) (Risk management)',
-  'HIPAA Security Rule, 45 CFR §164.312(d) (Person or entity authentication)',
-  'HIPAA Security Rule, 45 CFR §164.312(b) (Audit controls)',
-  'FDA (2026) Cybersecurity in Medical Devices Guidance — authentication (implementing FD&C Act §524B)',
+  'AAMI TIR57:2016, Section 6 (Security risk control)',
+  'AAMI TIR97, Section 6 (Postmarket security risk control)',
+  'HIPAA Security Rule, 45 CFR Section 164.308(a)(1)(ii)(B) (Risk management)',
+  'HIPAA Security Rule, 45 CFR Section 164.312(d) (Person or entity authentication)',
+  'HIPAA Security Rule, 45 CFR Section 164.312(b) (Audit controls)',
+  'FDA (2026) Cybersecurity in Medical Devices Guidance — authentication (implementing FD&C Act Section 524B)',
   'FDA (2026) Cybersecurity in Medical Devices Guidance — residual risk evaluation',
   'NIST SP 800-82r3, IA-2 (Identification and Authentication)',
   'IEC 62443-3-3, SR 1.7 (Strength of authenticators)',
@@ -534,9 +534,9 @@ function loadExample() {
   document.getElementById('initial-detect').value = 'Difficult';
   document.getElementById('initial-detect-r').value = 'Device generates no authentication audit log; detection depends entirely on upstream observation.';
   document.getElementById('control-desc').value = 'Pattern A — Upstream PAM (CyberArk PSM v12.x) brokers all network connections to the pump management interface. Users authenticate to the PAM with individual MFA. PAM retrieves the hardcoded credential from a vault and connects on the user\'s behalf.';
-  document.getElementById('playbook-ref').value = 'Paper §3.2 Table 2, "MFA not supported" constraint. Pattern A described in §3.4.';
+  document.getElementById('playbook-ref').value = 'Paper Section 3.2 Table 2, "MFA not supported" constraint. Pattern A described in Section 3.4.';
   document.getElementById('control-mechanism').value = 'Hardcoded credential never leaves the vault, eliminating network discovery. Pump management interface reachable only from PAM gateway IP via VLAN ACL. PAM enforces individual MFA. Session recording provides per-user attribution.';
-  document.getElementById('design-principles').value = 'Equivalence: MFA enforced at PAM provides equivalent protection. Independence: control does not depend on any pump capability. Proportionality: CRITICAL tier; PAM with MFA is strongest network control. Auditability: HIPAA §164.312(b), ISO 14971 cl.7.4, AAMI TIR57 §6.3.';
+  document.getElementById('design-principles').value = 'Equivalence: MFA enforced at PAM provides equivalent protection. Independence: control does not depend on any pump capability. Proportionality: CRITICAL tier; PAM with MFA is strongest network control. Auditability: HIPAA Section 164.312(b), ISO 14971 cl.7.4, AAMI TIR57 Section 6.3.';
   document.getElementById('implementation').value = 'CyberArk PSM v12.x; pump VLAN ACL inbound permit only from PAM gateway IP/32 to TCP/8080; session retention 90 days online, 7 years archived; MFA factor Duo Push or hardware token; emergency break-glass available with elevated audit and 4-hour CISO review.';
   document.getElementById('residual-likelihood').value = 'Low';
   document.getElementById('residual-likelihood-r').value = 'Credential no longer network-discoverable.';

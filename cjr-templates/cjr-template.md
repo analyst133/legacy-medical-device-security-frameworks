@@ -4,7 +4,7 @@
 **Status:** [Draft / Approved / Under Review / Retired]
 **Version:** 1.0
 
-> **Template**: replace bracketed text with device- and control-specific content. This template is suitable for direct use in HIPAA Security Rule risk analysis, ISO 14971 risk management files, AAMI TIR57 security risk records, and FD&C Act §524B evidence packs (both premarket content per FDA's Feb 2026 cybersecurity guidance and ongoing postmarket vulnerability-management records).
+> **Template**: replace bracketed text with device- and control-specific content. This template is suitable for direct use in HIPAA Security Rule risk analysis, ISO 14971 risk management files, AAMI TIR57 security risk records, and FD&C Act Section 524B evidence packs (both premarket content per FDA's Feb 2026 cybersecurity guidance and ongoing postmarket vulnerability-management records).
 
 ## 1. Device identification
 
@@ -87,7 +87,7 @@
 
 ### 4.3 How the control addresses the threat
 
-[Explain the mechanism by which the compensating control mitigates the identified threat scenarios. Address each scenario from §3.2 explicitly.]
+[Explain the mechanism by which the compensating control mitigates the identified threat scenarios. Address each scenario from Section 3.2 explicitly.]
 
 ### 4.4 Why this control is appropriate
 
@@ -122,7 +122,7 @@
 
 ## 6. Effectiveness rating
 
-[Per paper §3.5, assign a Control Effectiveness Rating:]
+[Per paper Section 3.5, assign a Control Effectiveness Rating:]
 
 - [ ] **High** — Equivalent protection to the standard control; validated through penetration testing or empirical harness evaluation.
 - [ ] **Medium** — Partially addresses the threat; residual risk elevated but manageable.
@@ -138,9 +138,9 @@
 - ISO 14971:2019, clause 8 (Evaluation of overall residual risk)
 - AAMI TIR57:2016, section 6 (Security risk control)
 - AAMI TIR97, section 6 (Postmarket security risk control)
-- HIPAA Security Rule, 45 CFR §164.308(a)(1)(ii)(B) (Risk management)
-- HIPAA Security Rule, 45 CFR §164.310(b) (Workstation use)
-- FDA (2026), *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* (implementing FD&C Act §524B)
+- HIPAA Security Rule, 45 CFR Section 164.308(a)(1)(ii)(B) (Risk management)
+- HIPAA Security Rule, 45 CFR Section 164.310(b) (Workstation use)
+- FDA (2026), *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* (implementing FD&C Act Section 524B)
 - NIST SP 800-82r3, [specific control identifier]
 - IEC 62443-3-3, [specific security level requirement]
 - HSCC HIC-MaLTS (2023), [specific section]

@@ -68,7 +68,7 @@ The constraint is technical (the device cannot be modified to support MFA) and r
 
 ### 4.2 Reference to Compensating Controls Playbook
 
-Paper §3.2 Table 2, "MFA not supported" constraint. Pattern A described in §3.4.
+Paper Section 3.2 Table 2, "MFA not supported" constraint. Pattern A described in Section 3.4.
 
 ### 4.3 How the control addresses the threat
 
@@ -82,7 +82,7 @@ Paper §3.2 Table 2, "MFA not supported" constraint. Pattern A described in §3.
 - **Equivalent or superior protection.** MFA is enforced at the PAM gateway. From the user perspective the authentication experience is equivalent to native MFA on the pump. Network-attacker exploitation of the hardcoded credential is no longer possible without first compromising PAM and a user's MFA factor.
 - **Independence.** The control does not depend on any pump capability; it is implemented entirely upstream in network architecture.
 - **Proportionality.** The pump's MDRS tier is CRITICAL; PAM with MFA is the strongest network-layer compensating control available for this constraint, appropriate to the tier.
-- **Auditability.** All sessions logged at the PAM with full keystroke or screen capture. Logs retained 90 days online, 7 years archived. Compliant with HIPAA §164.312(b) (audit controls), ISO 14971 cl.7.4, AAMI TIR57 §6.3.
+- **Auditability.** All sessions logged at the PAM with full keystroke or screen capture. Logs retained 90 days online, 7 years archived. Compliant with HIPAA Section 164.312(b) (audit controls), ISO 14971 cl.7.4, AAMI TIR57 Section 6.3.
 
 ### 4.5 Implementation references
 
@@ -122,12 +122,12 @@ CISO (K. Williams), with CMO concurrence under standing approval for the legacy 
 
 - ISO 14971:2019, cl.7.4 (Implementation of risk control measures)
 - ISO 14971:2019, cl.8 (Evaluation of overall residual risk acceptability)
-- AAMI TIR57:2016, §6.3 (Security risk control measures)
-- AAMI TIR97, §6.2 (Postmarket security risk control)
-- HIPAA Security Rule, 45 CFR §164.308(a)(1)(ii)(B) (Risk management)
-- HIPAA Security Rule, 45 CFR §164.312(d) (Person or entity authentication)
-- HIPAA Security Rule, 45 CFR §164.312(b) (Audit controls)
-- FDA (2026) *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* — authentication provisions (implementing FD&C Act §524B)
+- AAMI TIR57:2016, Section 6.3 (Security risk control measures)
+- AAMI TIR97, Section 6.2 (Postmarket security risk control)
+- HIPAA Security Rule, 45 CFR Section 164.308(a)(1)(ii)(B) (Risk management)
+- HIPAA Security Rule, 45 CFR Section 164.312(d) (Person or entity authentication)
+- HIPAA Security Rule, 45 CFR Section 164.312(b) (Audit controls)
+- FDA (2026) *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* — authentication provisions (implementing FD&C Act Section 524B)
 - NIST SP 800-82r3, IA-2 (Identification and Authentication)
 - PCI-DSS v4.0, Req 8.4 (Multi-factor authentication)
 - HSCC HIC-MaLTS (2023), Practice 5.2 (Privileged access management)

@@ -123,7 +123,7 @@ The harness has known limitations that must be considered when interpreting resu
 
 Results from harness runs can be reported in:
 
-- **CJR effectiveness validation** (paper §3.5) — link harness output to the CJR record
+- **CJR effectiveness validation** (paper Section 3.5) — link harness output to the CJR record
 - **STRIDE-HC threat models** as evidence of control coverage
 - **MDRS CCD scoring** as evidence supporting reduced CCD values for devices with validated controls
 - **Manufacturer security advisories** providing customers with evidence that recommended compensating controls are effective

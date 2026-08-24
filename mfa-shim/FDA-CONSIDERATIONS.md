@@ -12,8 +12,8 @@ The answer is jurisdiction- and case-specific. This document outlines the framew
 
 ### Relevant regulations and guidance
 
-- **21 CFR §820.30** — Design controls (for manufacturer modifications)
-- **21 CFR §807** — Premarket notification (510(k))
+- **21 CFR Section 820.30** — Design controls (for manufacturer modifications)
+- **21 CFR Section 807** — Premarket notification (510(k))
 - **FDA Guidance: Deciding When to Submit a 510(k) for a Change to an Existing Device** (October 2017)
 - **FDA Guidance: Cybersecurity in Medical Devices: Quality System Considerations and Content of Premarket Submissions** (September 2023)
 - **Section 524B FD&C Act** — Cybersecurity expectations for cyber devices
@@ -35,7 +35,7 @@ The deployment most closely resembles the addition of a network compensating con
 ### Caveats and risk areas
 
 - **Servicing failure during use**: if shim failure can prevent legitimate service activity that is itself safety-critical, the deployment plan must include break-glass and physical-removal procedures. The shim's documentation includes such procedures, but they must be operationally validated.
-- **Classification edge case**: if the shim itself is alleged to be a medical device accessory under 21 CFR §890.1 or similar, classification could be required. The argument that it is a security accessory rather than a medical accessory is plausible but not precedential. Regulatory affairs review is recommended before scaled deployment.
+- **Classification edge case**: if the shim itself is alleged to be a medical device accessory under 21 CFR Section 890.1 or similar, classification could be required. The argument that it is a security accessory rather than a medical accessory is plausible but not precedential. Regulatory affairs review is recommended before scaled deployment.
 - **Manufacturer service warranties**: many manufacturer service contracts contain language voiding warranty if third-party hardware is connected to service ports. This is a contractual rather than regulatory consideration but practically significant.
 - **Manufacturer cybersecurity advisories**: if a manufacturer publishes a security advisory recommending specific compensating controls and the shim is among them, the deployment is on stronger ground than a self-initiated deployment.
 
@@ -66,7 +66,7 @@ Pilot deployments should:
 
 - **EU MDR 2017/745** — particularly Articles 14 (distributor obligations), 16 (modifications), 23 (manufacturer of in-vitro diagnostic devices)
 - **MDCG 2019-11** — Guidance on qualification and classification of software in MDR
-- **Annex I** — General safety and performance requirements, particularly §17.2 (IT environment requirements)
+- **Annex I** — General safety and performance requirements, particularly Section 17.2 (IT environment requirements)
 
 ### Analysis
 

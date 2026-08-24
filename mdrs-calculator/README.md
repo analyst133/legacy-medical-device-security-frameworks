@@ -91,7 +91,7 @@ The calculator can be:
 - **Forked** to add organisation-specific scoring guidance, presets, or weight defaults.
 - **Used in batch** by importing `calculator.js` as a Node module — see `tests/run-tests.js` for an example of headless usage.
 
-Per the paper's §9.2 limitations: weights are based on expert judgement rather than empirical elicitation. Organisations conducting sensitivity analysis or empirical re-calibration should adjust the weights and the boundary thresholds accordingly, and document the choices in their MDRS configuration record.
+Per the paper's Section 9.2 limitations: weights are based on expert judgement rather than empirical elicitation. Organisations conducting sensitivity analysis or empirical re-calibration should adjust the weights and the boundary thresholds accordingly, and document the choices in their MDRS configuration record.
 
 ## Citing
 

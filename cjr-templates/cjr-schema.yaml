@@ -56,7 +56,7 @@ compensating_control:
     to the PAM with individual MFA. PAM retrieves the hardcoded service
     credential from a vault and connects to the pump on the user's behalf.
     All sessions are recorded.
-  playbook_reference: "Paper §3.2 Table 2 — 'MFA not supported' constraint"
+  playbook_reference: "Paper Section 3.2 Table 2 — 'MFA not supported' constraint"
   how_addresses_threat: |
     The hardcoded credential never leaves the vault. Network discovery of
     the credential becomes operationally useless because the management
@@ -76,8 +76,8 @@ compensating_control:
       the tier.
     auditability: |
       All sessions logged at the PAM with full keystroke or screen capture.
-      Compliant with HIPAA §164.312(b) (audit controls), ISO 14971 cl.7.4,
-      AAMI TIR57 §6.3.
+      Compliant with HIPAA Section 164.312(b) (audit controls), ISO 14971 cl.7.4,
+      AAMI TIR57 Section 6.3.
   implementation_references:
     - "PAM platform: CyberArk PSM v12.x"
     - "Network ACL: pump-vlan inbound permit only from pam-gateway-ip"
@@ -107,12 +107,12 @@ effectiveness:
 
 normative_references:
   - "ISO 14971:2019, cl.7.4"
-  - "AAMI TIR57:2016, §6.3"
-  - "AAMI TIR97, §6.2"
-  - "HIPAA Security Rule, 45 CFR §164.308(a)(1)(ii)(B)"
-  - "HIPAA Security Rule, 45 CFR §164.312(d) (person/entity authentication)"
-  - "HIPAA Security Rule, 45 CFR §164.312(b) (audit controls)"
-  - "FDA (2026) Cybersecurity in Medical Devices Guidance — authentication (implementing FD&C Act §524B)"
+  - "AAMI TIR57:2016, Section 6.3"
+  - "AAMI TIR97, Section 6.2"
+  - "HIPAA Security Rule, 45 CFR Section 164.308(a)(1)(ii)(B)"
+  - "HIPAA Security Rule, 45 CFR Section 164.312(d) (person/entity authentication)"
+  - "HIPAA Security Rule, 45 CFR Section 164.312(b) (audit controls)"
+  - "FDA (2026) Cybersecurity in Medical Devices Guidance — authentication (implementing FD&C Act Section 524B)"
   - "NIST SP 800-82r3, IA-2"
   - "PCI-DSS v4.0, Req 8.4"
   - "HSCC HIC-MaLTS (2023), Practice 5.2"

@@ -16,7 +16,7 @@ Fact about device → Risk tier      →  Threat list      → Justified     →
                                                                                               │
                                                           Pattern C is ONE specific control ──┘
                                                           (the other controls come from
-                                                           paper §3 Compensating Controls
+                                                           paper Section 3 Compensating Controls
                                                            Playbook)
 ```
 
@@ -112,7 +112,7 @@ A CJR is a regulator-readable, audit-readable document that captures:
 3. **The constraint** preventing the standard control — vendor will not re-cert firmware with MFA; FDA 510(k) burden too high
 4. **The threat being addressed** — mapped to specific STRIDE-HC scenarios by ID (Step 2's output is referenced, not duplicated)
 5. **The compensating control deployed** — MFA shim Pattern C
-6. **Standards mapping** — HIPAA §164.308, ISO 14971 cl.7, AAMI TIR57, FDA §524B
+6. **Standards mapping** — HIPAA Section 164.308, ISO 14971 cl.7, AAMI TIR57, FDA Section 524B
 7. **Sign-offs** — CISO, clinical engineering, regulatory affairs, CMO
 8. **Review cadence** — matches the tier from MDRS (quarterly for CRITICAL)
 

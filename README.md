@@ -21,7 +21,7 @@ A substantial fraction of clinical medical devices run end-of-life operating sys
 |---|----------|--------|-------------|
 | 1 | [**MDRS Calculator**](./mdrs-calculator/) | Production | Reference implementation of the Medical Device Risk Score with irreversibility-driven tier floor and CCD promoter. Web-based; no build tooling. |
 | 2 | [**STRIDE-HC Templates**](./stride-hc-templates/) | Production | Threat-modelling templates for clinical legacy environments. Markdown for humans; YAML/JSON for tooling. Two worked examples covering both device archetypes. |
-| 3 | [**CJR Templates**](./cjr-templates/) | Production | Control Justification Record templates aligned to HIPAA Security Rule, ISO 14971 cl.7–8, AAMI TIR57, and FD&C Act §524B cybersecurity obligations. |
+| 3 | [**CJR Templates**](./cjr-templates/) | Production | Control Justification Record templates aligned to HIPAA Security Rule, ISO 14971 cl.7–8, AAMI TIR57, and FD&C Act Section 524B cybersecurity obligations. |
 | 4 | [**Test Harness**](./test-harness/) | Functional prototype | Dockerised multi-container test environment for empirical evaluation of compensating-control effectiveness. Includes infusion pump emulator and STRIDE-mapped attack scenarios. |
 | 5 | [**MFA Shim (Pattern C)**](./mfa-shim/) | Functional prototype | Software reference design for the inline service-port multi-factor authentication shim addressing the physical-attacker threat surface. Linux daemon with TOTP gating, session recording, and tamper detection. |
 
@@ -105,7 +105,7 @@ The frameworks are explicitly aligned to:
 - **NIST CSF 2.0** (2024) and **NIST SP 800-82r3** (2023)
 - **IEC 62443-3-3 / 62443-4-2**
 - **HIPAA Security Rule** (45 CFR Part 164)
-- **FDA 2026 premarket cybersecurity guidance** (*Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions*, Feb 2026) and **FD&C Act §524B** (added by FDORA, 2022)
+- **FDA 2026 premarket cybersecurity guidance** (*Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions*, Feb 2026) and **FD&C Act Section 524B** (added by FDORA, 2022)
 - **HSCC HIC-MaLTS** (2023) — complementary
 - **MITRE Rubric for Applying CVSS to Medical Devices** (2020)
 - **MITRE ATT&CK for ICS** (TA0104, TA0105)
@@ -115,9 +115,9 @@ The frameworks are explicitly aligned to:
 The frameworks are designed for both audiences:
 
 - **HDOs** use the playbook to structure compensating controls, MDRS to prioritise remediation, the segmentation model to design clinical networks, and the behavioural monitoring framework to operationalise detection.
-- **Medical device manufacturers** use STRIDE-HC for FDA premarket threat-model deliverables (per FDA's Feb 2026 premarket cybersecurity guidance), MDRS to complement ISO 14971 risk management files, the constraint categories to inform MDS² disclosures, and the compensating-controls catalogue to structure customer security advisories under FD&C Act §524B postmarket vulnerability-management obligations.
+- **Medical device manufacturers** use STRIDE-HC for FDA premarket threat-model deliverables (per FDA's Feb 2026 premarket cybersecurity guidance), MDRS to complement ISO 14971 risk management files, the constraint categories to inform MDS² disclosures, and the compensating-controls catalogue to structure customer security advisories under FD&C Act Section 524B postmarket vulnerability-management obligations.
 
-The Manufacturer–HDO interface (paper §8) treats the artifacts as shared instruments enabling structured dialogue about residual risk and required compensating controls.
+The Manufacturer–HDO interface (paper Section 8) treats the artifacts as shared instruments enabling structured dialogue about residual risk and required compensating controls.
 
 ## Contributing
 

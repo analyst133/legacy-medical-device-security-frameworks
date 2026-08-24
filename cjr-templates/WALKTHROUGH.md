@@ -15,7 +15,7 @@ You need one whenever you choose a **compensating control** in place of a standa
 - Device has hardcoded service-port credentials → compensate with inline MFA shim
 - Device cannot run endpoint detection → compensate with network-side IDS
 
-A CJR is what makes that choice **defensible**: regulator-readable, audit-readable, and traceable. Without one, the compensating-control decision is invisible to ISO 14971 cl.7 (risk control), HIPAA §164.308(a)(1)(ii)(B) (risk management), and FDA §524B postmarket evidence reviews.
+A CJR is what makes that choice **defensible**: regulator-readable, audit-readable, and traceable. Without one, the compensating-control decision is invisible to ISO 14971 cl.7 (risk control), HIPAA Section 164.308(a)(1)(ii)(B) (risk management), and FDA Section 524B postmarket evidence reviews.
 
 ## What you need before starting
 
@@ -145,7 +145,7 @@ The level of detail should be enough for a reviewer to understand what was actua
 
 ### Section 4.2 — Reference the Playbook
 
-Cite the entry from paper Tables 2 or 3. For our pump: "Paper §3.2 Table 2, 'MFA not supported' constraint. Pattern A described in §3.4." This makes the CJR's compensating-control choice traceable to the paper's published taxonomy.
+Cite the entry from paper Tables 2 or 3. For our pump: "Paper Section 3.2 Table 2, 'MFA not supported' constraint. Pattern A described in Section 3.4." This makes the CJR's compensating-control choice traceable to the paper's published taxonomy.
 
 ### Section 4.3 — How the control addresses each scenario
 
@@ -155,7 +155,7 @@ For our pump, four scenarios → four mitigation claims:
 
 1. *Default credential exploit via mgmt interface* → "The hardcoded credential never leaves the vault; network discovery yields nothing useful."
 2. *Lateral movement to peer pumps* → "Network ACL on pump VLAN allows TCP/8080 only from PAM gateway IP; lateral movement at this layer becomes impossible."
-3. *Service-port credential abuse* → "PAM addresses network side only — physical service-port abuse requires a separate CJR (CJR-EMPump-003-ServicePort), referenced under §9 Linked records."
+3. *Service-port credential abuse* → "PAM addresses network side only — physical service-port abuse requires a separate CJR (CJR-EMPump-003-ServicePort), referenced under Section 9 Linked records."
 4. *Vendor-impersonation social engineering* → "PAM requires individual MFA; impersonation now requires compromising both an MFA factor and the user's credentials."
 
 Notice scenario 3's response: *honesty matters*. If your compensating control doesn't fully cover the threat surface, say so and reference the complementary CJR that does. Pretending one CJR covers everything is the most common mistake in this artifact.
@@ -169,7 +169,7 @@ For every compensating control choice, the paper requires four justifications:
 | **Equivalent or superior protection** | Does the compensating control meet or exceed what the standard control would have provided? | Yes — MFA enforced at PAM gateway provides the same protection as native MFA from the user's perspective |
 | **Independence** | Does the control depend on the same missing capability that caused the original constraint? | No — implemented entirely upstream in network architecture; does not depend on any pump capability |
 | **Proportionality** | Is the control intensity appropriate to the device's MDRS tier? | Yes — pump is CRITICAL; PAM with MFA is the strongest network-layer control available for this constraint |
-| **Auditability** | Are there normative references supporting this selection, and is the control's effect auditable? | Yes — HIPAA §164.312(b), ISO 14971 cl.7.4, AAMI TIR57 §6.3; all sessions logged with full keystroke capture |
+| **Auditability** | Are there normative references supporting this selection, and is the control's effect auditable? | Yes — HIPAA Section 164.312(b), ISO 14971 cl.7.4, AAMI TIR57 Section 6.3; all sessions logged with full keystroke capture |
 
 A CJR that fails any of these four is a CJR that won't survive audit. If you can't tick all four convincingly, reconsider the control or accept the residual risk explicitly in Section 5.
 
@@ -241,9 +241,9 @@ For our pump, the rating is High because:
 
 ## Step 7 — Normative references (Section 7, ~3 minutes)
 
-List the standards, guidance, and regulatory provisions that justify the selection. For a CJR addressing missing MFA on a Class II device, the typical reference list is 8–12 entries spanning HIPAA, ISO 14971, AAMI TIR57, AAMI TIR97, FDA §524B, NIST SP 800-82r3, and HSCC HIC-MaLTS. See [`examples/cjr-no-mfa-infusion-pump.md`](./examples/cjr-no-mfa-infusion-pump.md) Section 7 for the full reference list to copy-and-adapt.
+List the standards, guidance, and regulatory provisions that justify the selection. For a CJR addressing missing MFA on a Class II device, the typical reference list is 8–12 entries spanning HIPAA, ISO 14971, AAMI TIR57, AAMI TIR97, FDA Section 524B, NIST SP 800-82r3, and HSCC HIC-MaLTS. See [`examples/cjr-no-mfa-infusion-pump.md`](./examples/cjr-no-mfa-infusion-pump.md) Section 7 for the full reference list to copy-and-adapt.
 
-**Pattern: reference the *specific clause*, not the whole standard.** "HIPAA Security Rule §164.312(d)" is useful; "HIPAA" is not.
+**Pattern: reference the *specific clause*, not the whole standard.** "HIPAA Security Rule Section 164.312(d)" is useful; "HIPAA" is not.
 
 ---
 
@@ -314,13 +314,13 @@ If your CJR is much shorter than these (~150 lines), you've probably under-speci
 | Pitfall | Why it happens | Fix |
 |---|---|---|
 | **Constraint paragraph is hand-waving** | Author isn't sure why the device can't do X | Cite the source of truth (vendor doc, MDS², advisory). If you don't know, the answer is "TBD — pending vendor consultation". |
-| **Scenarios in §3.2 don't appear in the STRIDE-HC model** | Author skipped the threat model step | Stop. Do [`../stride-hc-templates/WALKTHROUGH.md`](../stride-hc-templates/WALKTHROUGH.md) first. The CJR is the *response* to a threat model, not a substitute for one. |
-| **§4.3 says "this control mitigates the threat" generically** | Lack of mechanism-specificity | Walk through each scenario individually. Say *how* the control affects each one. |
-| **§4.4 ticks all four principles without explanation** | Pro forma compliance | If you can't write a one-sentence explanation per principle, the control may not actually be appropriate. |
-| **§5 marks residual "Low" everywhere** | Optimism | Severity rarely drops post-control. Be honest about what doesn't change. |
-| **§6 rates "High" without validation** | Empirical evidence is hard | Run the test harness. Cite the run ID. If you can't validate empirically, the rating should be Medium. |
-| **§7 references whole standards** | Author copies a generic list | Reference specific clauses. Auditors check this. |
-| **One CJR covers multiple constraints** | Author tries to bundle | One constraint per CJR. Cross-reference related CJRs in §9. |
+| **Scenarios in Section 3.2 don't appear in the STRIDE-HC model** | Author skipped the threat model step | Stop. Do [`../stride-hc-templates/WALKTHROUGH.md`](../stride-hc-templates/WALKTHROUGH.md) first. The CJR is the *response* to a threat model, not a substitute for one. |
+| **Section 4.3 says "this control mitigates the threat" generically** | Lack of mechanism-specificity | Walk through each scenario individually. Say *how* the control affects each one. |
+| **Section 4.4 ticks all four principles without explanation** | Pro forma compliance | If you can't write a one-sentence explanation per principle, the control may not actually be appropriate. |
+| **Section 5 marks residual "Low" everywhere** | Optimism | Severity rarely drops post-control. Be honest about what doesn't change. |
+| **Section 6 rates "High" without validation** | Empirical evidence is hard | Run the test harness. Cite the run ID. If you can't validate empirically, the rating should be Medium. |
+| **Section 7 references whole standards** | Author copies a generic list | Reference specific clauses. Auditors check this. |
+| **One CJR covers multiple constraints** | Author tries to bundle | One constraint per CJR. Cross-reference related CJRs in Section 9. |
 
 ---
 
@@ -330,10 +330,10 @@ A signed CJR is **input to four downstream consumers**:
 
 | Consumer | What it does with the CJR |
 |---|---|
-| **HIPAA Security Rule risk analysis** (HDOs) | The CJR is the §164.308(a)(1)(ii)(B) risk-management record for this device-constraint pair |
+| **HIPAA Security Rule risk analysis** (HDOs) | The CJR is the Section 164.308(a)(1)(ii)(B) risk-management record for this device-constraint pair |
 | **ISO 14971 risk management file** (vendors + HDOs) | The CJR is the cl.7 risk-control measure and cl.8 residual-risk evaluation, in one record |
-| **AAMI TIR57 / TIR97** | The CJR populates §6 (security risk control) and TIR97 §6.2 (postmarket security risk control) |
-| **FD&C Act §524B evidence packs** (vendors) | The CJR provides authentication-control evidence and residual-risk evaluation per FDA's Feb 2026 premarket cybersecurity guidance, and supports ongoing postmarket vulnerability management |
+| **AAMI TIR57 / TIR97** | The CJR populates Section 6 (security risk control) and TIR97 Section 6.2 (postmarket security risk control) |
+| **FD&C Act Section 524B evidence packs** (vendors) | The CJR provides authentication-control evidence and residual-risk evaluation per FDA's Feb 2026 premarket cybersecurity guidance, and supports ongoing postmarket vulnerability management |
 | **MDRS calculator** ([`../mdrs-calculator/`](../mdrs-calculator/)) | The CJR corpus for a device determines its **CCD** (Compensating-Control Deficit) score; more CJRs covering more constraints lower CCD, which improves the device's tier |
 
 **Storage:** import the markdown into your existing GRC system (Archer, ServiceNow GRC, RiskWatch, internal SharePoint). The markdown form is intentionally simple to support automated import.
@@ -342,6 +342,6 @@ A signed CJR is **input to four downstream consumers**:
 
 ## Going further
 
-- For the **paper-cited methodology** behind CJRs and the Compensating Controls Playbook, see paper §3.
+- For the **paper-cited methodology** behind CJRs and the Compensating Controls Playbook, see paper Section 3.
 - For the **integrated workflow** showing how CJRs connect to MDRS, STRIDE-HC, the test harness, and the MFA shim, see the top-level [`../WALKTHROUGH.md`](../WALKTHROUGH.md).
 - For **tooling integration** — querying your CJR corpus programmatically, generating coverage reports, building audit-specific evidence packs — see the schemas at [`cjr-schema.yaml`](./cjr-schema.yaml) / [`cjr-schema.json`](./cjr-schema.json) and the "For tooling integration" section of [`README.md`](./README.md).

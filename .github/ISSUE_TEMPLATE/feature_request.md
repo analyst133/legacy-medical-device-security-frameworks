@@ -34,7 +34,7 @@ assignees: ''
 ## Standards / regulatory alignment
 
 <!-- For templates and frameworks: which standards or regulatory provisions does this support?
-     For example: ISO 14971 cl.X, AAMI TIR57 §Y, FDA §524B section Z, NIST CSF 2.0 function W. -->
+     For example: ISO 14971 cl.X, AAMI TIR57 Section Y, FDA Section 524B section Z, NIST CSF 2.0 function W. -->
 
 ## Scope and impact
 

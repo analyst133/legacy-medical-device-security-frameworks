@@ -74,7 +74,7 @@ Open the new file. Section 1 is the device profile table. Every field has italic
 
 This becomes the **shared context** that every later section refers to. Get it right; everything else flows from it.
 
-**Tip:** the MDS² disclosure form (if the vendor provides one) answers most of these fields directly. If the device pre-dates MDS² or the vendor didn't issue one, contact vendor support for the equivalent answers — vendors are increasingly under FDA §524B pressure to provide them retroactively.
+**Tip:** the MDS² disclosure form (if the vendor provides one) answers most of these fields directly. If the device pre-dates MDS² or the vendor didn't issue one, contact vendor support for the equivalent answers — vendors are increasingly under FDA Section 524B pressure to provide them retroactively.
 
 ---
 
@@ -328,7 +328,7 @@ A completed STRIDE-HC threat model is not the deliverable — it's an **input to
 
 | Downstream artifact | What the STRIDE-HC model provides | Where to send it |
 |---|---|---|
-| **FDA §524B premarket submission** (vendors) | The threat-model deliverable required by FDA's Feb 2026 premarket cybersecurity guidance | Attach as Appendix to your premarket submission |
+| **FDA Section 524B premarket submission** (vendors) | The threat-model deliverable required by FDA's Feb 2026 premarket cybersecurity guidance | Attach as Appendix to your premarket submission |
 | **ISO 14971 risk management file** (vendors + HDOs) | Hazard identification (cl.5) and risk estimation (cl.6) records | Attach as the security-hazard section of your risk management file |
 | **AAMI TIR57 security risk records** | The security risk identification activities required by TIR57 | Reference by ID in your TIR57 records |
 | **CJR documents** ([`../cjr-templates/`](../cjr-templates/)) | The threat each compensating control is justified against | Each STRIDE-HC scenario you cannot fully mitigate produces a CJR; cross-reference the STRIDE-HC scenario ID inside the CJR |
@@ -362,6 +362,6 @@ A completed STRIDE-HC threat model is not the deliverable — it's an **input to
 
 ## Going further
 
-- For the **paper-cited methodology** behind STRIDE-HC and the CAW values, see paper §4.
+- For the **paper-cited methodology** behind STRIDE-HC and the CAW values, see paper Section 4.
 - For the **integrated workflow** showing how STRIDE-HC connects to MDRS, CJR, the test harness, and the MFA shim, see the top-level [`../WALKTHROUGH.md`](../WALKTHROUGH.md).
 - For **tooling integration** — querying your threat models programmatically — see the schemas at [`stride-hc-schema.yaml`](./stride-hc-schema.yaml) / [`stride-hc-schema.json`](./stride-hc-schema.json) and the "For tooling integration" section of [`README.md`](./README.md).

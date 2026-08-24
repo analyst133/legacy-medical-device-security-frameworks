@@ -6,7 +6,7 @@ Common questions about the framework suite, the artifacts, and how to use them. 
 
 ### What does "Archetype" mean? Is it a typo?
 
-It's a deliberate term from paper §4. An archetype groups legacy medical devices into two fundamental classes that share **security-relevant characteristics** — so the same compensating-control logic applies to every device in that class:
+It's a deliberate term from paper Section 4. An archetype groups legacy medical devices into two fundamental classes that share **security-relevant characteristics** — so the same compensating-control logic applies to every device in that class:
 
 | | **Archetype 1** | **Archetype 2** |
 |---|---|---|
@@ -18,7 +18,7 @@ The split determines which scenario library applies (`stride-hc-templates/scenar
 
 ### How do STRIDE-HC and CJR fit together?
 
-**STRIDE-HC** is the threat modeller: for one device, it produces a list of specific threat scenarios (network attacker + physical/insider attacker, across six categories) and candidate compensating controls. **CJR** is the justification document: for each compensating control you choose, it explains *what control you used instead of the standard one, why the standard one can't be applied, and how the substitution remains defensible* under HIPAA, ISO 14971, AAMI TIR57, and FDA §524B.
+**STRIDE-HC** is the threat modeller: for one device, it produces a list of specific threat scenarios (network attacker + physical/insider attacker, across six categories) and candidate compensating controls. **CJR** is the justification document: for each compensating control you choose, it explains *what control you used instead of the standard one, why the standard one can't be applied, and how the substitution remains defensible* under HIPAA, ISO 14971, AAMI TIR57, and FDA Section 524B.
 
 One STRIDE-HC threat model → typically 2–5 CJRs (one per constraint/control pair).
 
@@ -26,7 +26,7 @@ See [`WALKTHROUGH.md`](./WALKTHROUGH.md) for the end-to-end chain MDRS → STRID
 
 ### What does MDRS stand for, and how is it different from CVSS?
 
-**Medical Device Risk Score.** Five dimensions (CIS, ES, DCI, NEF, CCD) → composite → tier (CRITICAL / HIGH / MEDIUM / LOW) per paper §5.
+**Medical Device Risk Score.** Five dimensions (CIS, ES, DCI, NEF, CCD) → composite → tier (CRITICAL / HIGH / MEDIUM / LOW) per paper Section 5.
 
 Unlike CVSS:
 
@@ -57,7 +57,7 @@ Three reasons:
 
 1. **No data leaves your browser.** Hospital security architects can score devices without trusting a remote service with sensitive inventory facts.
 2. **No build, no install.** Open `index.html` and it works in any modern browser. Survives the next 10 years of JavaScript framework churn.
-3. **Reviewable.** A reviewer reading `calculator.js` (332 lines) can audit the math against paper §5 in 20 minutes. A 50-MB SPA bundle is opaque.
+3. **Reviewable.** A reviewer reading `calculator.js` (332 lines) can audit the math against paper Section 5 in 20 minutes. A 50-MB SPA bundle is opaque.
 
 ### Why is the MFA shim a software prototype if the deployment target is hardware?
 
@@ -113,7 +113,7 @@ The Apache-2.0 patent grant matters specifically for the Pattern C MFA shim refe
 
 ### Can I include the artifacts in a medical device submission to FDA?
 
-The artifacts can serve as **evidence** in cybersecurity submissions per §524B — specifically as threat-model deliverables (STRIDE-HC), compensating-control documentation (CJR), and empirical effectiveness evidence (test harness output). The artifacts themselves are **research output, not regulated medical devices**.
+The artifacts can serve as **evidence** in cybersecurity submissions per Section 524B — specifically as threat-model deliverables (STRIDE-HC), compensating-control documentation (CJR), and empirical effectiveness evidence (test harness output). The artifacts themselves are **research output, not regulated medical devices**.
 
 Inline insertion of the MFA shim into a cleared device's service port may, under jurisdiction-specific rules, constitute modification requiring regulatory engagement — see [`mfa-shim/FDA-CONSIDERATIONS.md`](./mfa-shim/FDA-CONSIDERATIONS.md) before any clinical deployment.
 
