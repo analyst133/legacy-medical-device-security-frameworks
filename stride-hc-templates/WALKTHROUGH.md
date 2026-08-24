@@ -328,7 +328,7 @@ A completed STRIDE-HC threat model is not the deliverable — it's an **input to
 
 | Downstream artifact | What the STRIDE-HC model provides | Where to send it |
 |---|---|---|
-| **FDA §524B premarket submission** (vendors) | The threat-model deliverable required by 2023 cybersecurity guidance | Attach as Appendix to your premarket submission |
+| **FDA §524B premarket submission** (vendors) | The threat-model deliverable required by FDA's Feb 2026 premarket cybersecurity guidance | Attach as Appendix to your premarket submission |
 | **ISO 14971 risk management file** (vendors + HDOs) | Hazard identification (cl.5) and risk estimation (cl.6) records | Attach as the security-hazard section of your risk management file |
 | **AAMI TIR57 security risk records** | The security risk identification activities required by TIR57 | Reference by ID in your TIR57 records |
 | **CJR documents** ([`../cjr-templates/`](../cjr-templates/)) | The threat each compensating control is justified against | Each STRIDE-HC scenario you cannot fully mitigate produces a CJR; cross-reference the STRIDE-HC scenario ID inside the CJR |

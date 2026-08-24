@@ -4,7 +4,7 @@
 **Status:** [Draft / Approved / Under Review / Retired]
 **Version:** 1.0
 
-> **Template**: replace bracketed text with device- and control-specific content. This template is suitable for direct use in HIPAA Security Rule risk analysis, ISO 14971 risk management files, AAMI TIR57 security risk records, and FDA 524B postmarket evidence packs.
+> **Template**: replace bracketed text with device- and control-specific content. This template is suitable for direct use in HIPAA Security Rule risk analysis, ISO 14971 risk management files, AAMI TIR57 security risk records, and FD&C Act §524B evidence packs (both premarket content per FDA's Feb 2026 cybersecurity guidance and ongoing postmarket vulnerability-management records).
 
 ## 1. Device identification
 
@@ -140,7 +140,7 @@
 - AAMI TIR97, section 6 (Postmarket security risk control)
 - HIPAA Security Rule, 45 CFR §164.308(a)(1)(ii)(B) (Risk management)
 - HIPAA Security Rule, 45 CFR §164.310(b) (Workstation use)
-- FDA 2023 Cybersecurity Guidance, §VII (Postmarket cybersecurity)
+- FDA (2026), *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* (implementing FD&C Act §524B)
 - NIST SP 800-82r3, [specific control identifier]
 - IEC 62443-3-3, [specific security level requirement]
 - HSCC HIC-MaLTS (2023), [specific section]

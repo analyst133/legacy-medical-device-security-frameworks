@@ -46,6 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **FDA guidance citations refreshed to the current (Feb 2026) premarket cybersecurity guidance.** Previously the repo referenced *FDA 2023 Cybersecurity Guidance* with specific `§VII.A.X` subsection numbers. The 2023 guidance has been superseded by *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* (FDA, Feb 3, 2026); the subsection numbering shifted with the new document, so specific §VII.A references have been replaced with topical descriptions (Authentication, Residual risk evaluation, etc.) that remain stable across guidance revisions. Also disambiguated: §524B is a **statute** (FD&C Act, added by FDORA 2022) — not a guidance document. Affects README, CHANGELOG, CITATION.cff (unchanged), all CJR templates and worked examples, STRIDE-HC README and walkthrough, and the CJR-builder live page reference list.
+
 - **MFA shim test fixture leak on Windows**: `test_session_recorder.py` left a session file open after `test_cannot_open_two_sessions`, causing pytest tempdir cleanup to fail with `WinError 32`. The fixture now force-closes any open session in `finally`.
 - **Stale "(forthcoming)" reference** to `SECURITY.md` in `CONTRIBUTING.md` removed — the file has shipped since v1.0.0.
 - **XSS surface in test-harness results explorer**: CSV-sourced strings (`control_profile`, `stride_hc`, `scenario`, `outcome`, `timestamp`) are now routed through `escapeHtml()` before `innerHTML` interpolation in the matrix header, scenario rows, and detail panel. Verified against malicious payloads.
@@ -58,7 +60,7 @@ Five companion artifacts for the paper *"A Practical Cybersecurity Framework for
 
 - **MDRS Calculator** — reference implementation of the Medical Device Risk Score (paper §5) with irreversibility-driven tier floor and CCD promoter. Pure HTML/JS, zero build dependencies. 15/15 unit tests passing; paper Table 7 presets reproduce to the third decimal place.
 - **STRIDE-HC Templates** — threat-modelling templates for legacy medical devices (paper §4), with Archetype 1 and Archetype 2 scenario libraries and two worked examples (infusion pump, PACS workstation).
-- **CJR Templates** — Control Justification Record templates aligned to HIPAA Security Rule, ISO 14971 cl.7–8, AAMI TIR57, AAMI TIR97, and FDA 2023 §524B postmarket cybersecurity guidance. Three worked examples.
+- **CJR Templates** — Control Justification Record templates aligned to HIPAA Security Rule, ISO 14971 cl.7–8, AAMI TIR57, AAMI TIR97, and FD&C Act §524B (as implemented by FDA's Feb 2026 premarket cybersecurity guidance). Three worked examples.
 - **Test Harness** — Dockerised multi-container test environment for empirical evaluation of compensating-control effectiveness. Five STRIDE-mapped attack scenarios (ARP poisoning, firmware injection, cleartext HL7 sniff, protocol-flood DoS, default-credential EoP) against three control profiles (IPS, PAM upstream, network segmentation).
 - **MFA Shim (Pattern C) Reference Design** — software reference implementation of the inline service-port multi-factor authentication shim (paper §3.4). Python prototype with TOTP gate, session recorder, and tamper detector. 37/37 unit tests passing.
 

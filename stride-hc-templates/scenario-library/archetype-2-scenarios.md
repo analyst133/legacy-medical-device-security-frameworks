@@ -139,4 +139,4 @@ Archetype 2 has structural limitations that compensating controls cannot fully o
 - **Limited cryptographic key handling** — many devices have no facility for organisation-issued certificates, restricting authenticated communication options
 - **Vendor-controlled security floor** — meaningful protocol or authentication improvements require vendor firmware update, often subject to FDA clearance dependencies
 
-These structural limitations argue for **defence-in-depth at the network and physical layers**, **behavioural monitoring as a first-class control rather than a backstop**, and **manufacturer engagement under FDA 524B postmarket cybersecurity obligations** to drive longer-term improvements.
+These structural limitations argue for **defence-in-depth at the network and physical layers**, **behavioural monitoring as a first-class control rather than a backstop**, and **manufacturer engagement under FD&C Act §524B postmarket vulnerability-management obligations** to drive longer-term improvements.

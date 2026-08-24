@@ -57,7 +57,7 @@ A completed STRIDE-HC threat model is an **input to four downstream artifacts**,
 
 | Downstream | What STRIDE-HC provides | Handoff |
 |---|---|---|
-| **FDA §524B premarket submission** (vendors) | The threat-model deliverable required by 2023 cybersecurity guidance | Attach as Appendix to your premarket submission |
+| **FDA §524B premarket submission** (vendors) | The threat-model deliverable required by FDA's Feb 2026 premarket cybersecurity guidance | Attach as Appendix to your premarket submission |
 | **ISO 14971 risk management file** (vendors + HDOs) | Hazard identification (cl.5) and risk estimation (cl.6) records | Attach as the security-hazard section of your risk management file |
 | **AAMI TIR57 security risk records** | The security risk identification activities TIR57 requires | Reference by ID in your TIR57 records |
 | **CJR documents** ([`../cjr-templates/`](../cjr-templates/)) | The threat each compensating control is justified against | Each STRIDE-HC scenario you cannot fully mitigate produces a CJR; cross-reference the STRIDE-HC scenario ID inside the CJR |
@@ -97,7 +97,7 @@ STRIDE-HC threat models align directly with:
 
 - **ISO 14971:2019 cl.5–6** — hazard identification, risk estimation
 - **AAMI TIR57:2016** — security risk identification activities
-- **FDA 2023 cybersecurity guidance §524B** — threat-model deliverable expectation in premarket submissions
+- **FDA 2026 premarket cybersecurity guidance** (*Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions*, Feb 2026) — threat-model deliverable expectation in premarket submissions, implementing **FD&C Act §524B**
 - **MITRE ATT&CK for ICS** — particularly TA0104 (Inhibit Response Function) and TA0105 (Impair Process Control)
 - **OWASP IoT Attack Surface Areas** — for the attack-surface decomposition
 

@@ -333,7 +333,7 @@ A signed CJR is **input to four downstream consumers**:
 | **HIPAA Security Rule risk analysis** (HDOs) | The CJR is the §164.308(a)(1)(ii)(B) risk-management record for this device-constraint pair |
 | **ISO 14971 risk management file** (vendors + HDOs) | The CJR is the cl.7 risk-control measure and cl.8 residual-risk evaluation, in one record |
 | **AAMI TIR57 / TIR97** | The CJR populates §6 (security risk control) and TIR97 §6.2 (postmarket security risk control) |
-| **FDA §524B premarket / postmarket evidence packs** (vendors) | The CJR is the §VII.A.4 authentication-control evidence and §VII.A.6 residual-risk evaluation |
+| **FD&C Act §524B evidence packs** (vendors) | The CJR provides authentication-control evidence and residual-risk evaluation per FDA's Feb 2026 premarket cybersecurity guidance, and supports ongoing postmarket vulnerability management |
 | **MDRS calculator** ([`../mdrs-calculator/`](../mdrs-calculator/)) | The CJR corpus for a device determines its **CCD** (Compensating-Control Deficit) score; more CJRs covering more constraints lower CCD, which improves the device's tier |
 
 **Storage:** import the markdown into your existing GRC system (Archer, ServiceNow GRC, RiskWatch, internal SharePoint). The markdown form is intentionally simple to support automated import.

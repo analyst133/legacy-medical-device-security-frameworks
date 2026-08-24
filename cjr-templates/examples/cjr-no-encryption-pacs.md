@@ -128,7 +128,7 @@ CISO (K. Williams) with Radiology Director (Dr R. Suzuki) concurrence, dated 202
 - AAMI TIR57:2016, §6.3
 - HIPAA Security Rule, 45 CFR §164.312(a)(2)(iv) (Encryption and decryption — addressable)
 - HIPAA Security Rule, 45 CFR §164.312(e)(1) (Transmission security)
-- FDA 2023 Cybersecurity Guidance, §VII.A.3 (Authenticity, integrity, confidentiality)
+- FDA (2026) *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* — authenticity, integrity, and confidentiality provisions (implementing FD&C Act §524B)
 - NIST SP 800-111 (Storage encryption)
 - DICOM Security Profiles (PS3.15 – Security and System Management Profiles)
 - HSCC HIC-MaLTS (2023), Practice 6.4 (Imaging-specific controls)

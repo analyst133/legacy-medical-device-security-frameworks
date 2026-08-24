@@ -127,7 +127,7 @@ CISO (K. Williams), with CMO concurrence under standing approval for the legacy 
 - HIPAA Security Rule, 45 CFR §164.308(a)(1)(ii)(B) (Risk management)
 - HIPAA Security Rule, 45 CFR §164.312(d) (Person or entity authentication)
 - HIPAA Security Rule, 45 CFR §164.312(b) (Audit controls)
-- FDA 2023 Cybersecurity Guidance, §VII.A.4 (Authentication)
+- FDA (2026) *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* — authentication provisions (implementing FD&C Act §524B)
 - NIST SP 800-82r3, IA-2 (Identification and Authentication)
 - PCI-DSS v4.0, Req 8.4 (Multi-factor authentication)
 - HSCC HIC-MaLTS (2023), Practice 5.2 (Privileged access management)

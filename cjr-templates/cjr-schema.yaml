@@ -112,7 +112,7 @@ normative_references:
   - "HIPAA Security Rule, 45 CFR §164.308(a)(1)(ii)(B)"
   - "HIPAA Security Rule, 45 CFR §164.312(d) (person/entity authentication)"
   - "HIPAA Security Rule, 45 CFR §164.312(b) (audit controls)"
-  - "FDA 2023 Cybersecurity Guidance, §VII.A.4"
+  - "FDA (2026) Cybersecurity in Medical Devices Guidance — authentication (implementing FD&C Act §524B)"
   - "NIST SP 800-82r3, IA-2"
   - "PCI-DSS v4.0, Req 8.4"
   - "HSCC HIC-MaLTS (2023), Practice 5.2"
