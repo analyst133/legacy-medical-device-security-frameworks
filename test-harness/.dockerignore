@@ -1,0 +1,59 @@
+# .dockerignore for the test harness build context.
+#
+# Docker sends the entire build context to the daemon before it starts
+# building. Anything not needed inside the container should be excluded
+# here — it makes `docker compose build` significantly faster (especially
+# after several `make matrix` runs when the results/ directory fills up).
+
+# Version control / editor cruft
+.git/
+.gitignore
+.gitattributes
+.editorconfig
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Python caches (present because attacker/, target-device/, clinical-workstation/,
+# and controls/*/ are all Python containers)
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Virtual environments — the container brings its own Python
+.venv/
+venv/
+env/
+ENV/
+
+# Harness runtime output — the container should never contain past run data
+results/run-*/
+results/matrix.csv
+.harness-state/
+
+# Docs and process files — not needed inside containers
+README.md
+METHODOLOGY.md
+ROADMAP.md
+compose-profiles.md
+*.md
+
+# Log files
+*.log
+logs/
+
+# Compose overrides that shouldn't be baked into images
+docker-compose.override.yml
+docker-compose.override.yaml
+
+# Environment-specific secrets (should never be in a container image)
+.env
+.env.local
+.env.*.local
