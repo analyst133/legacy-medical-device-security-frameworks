@@ -41,6 +41,19 @@
       }
     },
     {
+      "name": "Preset 4: well-controlled mechanical ventilator (floor demo)",
+      "category": "preset",
+      "inputs": { "cis": 10.0, "es": 3.0, "dci": 5.0, "nef": 3.0, "ccd": 3.0 },
+      "expected": {
+        "composite": 5.85,
+        "baseTier": "MEDIUM",
+        "floorActive": true,
+        "afterFloor": "HIGH",
+        "promoterActive": false,
+        "finalTier": "HIGH"
+      }
+    },
+    {
       "name": "Floor activation: low exploitability life-sustaining device",
       "category": "floor",
       "inputs": { "cis": 9.0, "es": 1.0, "dci": 1.0, "nef": 1.0, "ccd": 1.0 },

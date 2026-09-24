@@ -374,8 +374,8 @@
   </section>
 
   <section id="presets">
-    <h2>2. Worked example presets (paper Table 7)</h2>
-    <p>Three reference profiles from the paper. Click any preset to load its values into the calculator above.</p>
+    <h2>2. Worked example presets</h2>
+    <p>The first three profiles are the paper's Table 7 reference cases. The fourth is a well-controlled mechanical ventilator that specifically illustrates the irreversibility floor — a numerically MEDIUM device that the framework promotes to HIGH because a compromised ventilator is patient-safety-critical regardless of exploitability. Click any preset to load its values into the calculator above.</p>
 
     <div class="preset-grid">
       <button class="preset" data-cis="9.0" data-es="7.5" data-dci="8.0" data-nef="8.0" data-ccd="7.0">
@@ -394,6 +394,12 @@
         <h3>Bedside ECG monitor</h3>
         <p>Proprietary OS · Segmented VLAN · Partial controls · Exposed BLE</p>
         <p class="expected">Expected: <strong>HIGH</strong> · composite 6.325</p>
+      </button>
+
+      <button class="preset" data-cis="10.0" data-es="3.0" data-dci="5.0" data-nef="3.0" data-ccd="3.0">
+        <h3>Mechanical ventilator (well-controlled)</h3>
+        <p>Life-sustaining · Dedicated VLAN · PAM-gated management · Physical port protections · Full playbook deployed</p>
+        <p class="expected">Expected: <strong>HIGH</strong> · composite 5.850 · irreversibility floor promotes MEDIUM → HIGH (CIS = 10)</p>
       </button>
     </div>
   </section>
