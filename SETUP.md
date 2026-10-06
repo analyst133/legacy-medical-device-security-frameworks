@@ -76,7 +76,7 @@ node tests/run-tests.js
 cd ..
 ```
 
-Expected output: `15 test(s); 15 passed; 0 failed.`
+Expected output: `16 test(s); 16 passed; 0 failed.`
 
 The first three tests reproduce the paper's worked presets (infusion pump, PACS server, ECG monitor) to the third decimal place.
 
@@ -273,7 +273,7 @@ You've now installed (or verified) every artifact you wanted. The substantive le
 | Artifact | Install time | What you get |
 |---|---|---|
 | MDRS calculator (live) | 0 minutes | Working calculator in your browser |
-| MDRS calculator (local + tests) | ~2 minutes | Local copy + 15/15 unit tests passing |
+| MDRS calculator (local + tests) | ~2 minutes | Local copy + 16/16 unit tests passing |
 | STRIDE-HC templates | 0 minutes | Markdown files; just read them |
 | CJR templates | 0 minutes | Markdown files; just read them |
 | MFA shim prototype | ~2 minutes | 37/37 unit tests passing |

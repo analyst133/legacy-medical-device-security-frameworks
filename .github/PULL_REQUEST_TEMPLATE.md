@@ -28,7 +28,7 @@ your PR quickly. Delete sections that don't apply.
 
 ## Testing
 
-- [ ] All 52 unit tests pass (`make test`)
+- [ ] All 53 unit tests pass (`make test`)
 - [ ] If MDRS math changed: paper Table 7 presets still reproduce to 3-decimal precision
 - [ ] If MFA shim code changed: pytest passes including the Windows tempdir teardown case
 - [ ] If live pages changed: opened the affected page in a browser at least once

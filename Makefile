@@ -5,7 +5,7 @@
 
 help:
 	@echo "Targets:"
-	@echo "  make test          Run all 52 unit tests (MDRS + MFA shim)"
+	@echo "  make test          Run all 53 unit tests (MDRS + MFA shim)"
 	@echo "  make test-mdrs     Run MDRS calculator tests only (15)"
 	@echo "  make test-mfa-shim Run MFA shim prototype tests only (37)"
 	@echo "  make serve         Serve the repo at http://localhost:8000 (Python http.server)"
@@ -25,7 +25,7 @@ test-mfa-shim:
 	cd mfa-shim/prototype && python -m pytest tests/ -v
 
 test-all: test
-	@echo "All 52 tests passed."
+	@echo "All 53 tests passed."
 
 venv:
 	python -m venv .venv

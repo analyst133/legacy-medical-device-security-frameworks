@@ -57,10 +57,10 @@ Run the test suite:
 node tests/run-tests.js
 ```
 
-The current suite includes 15 test cases covering: all three paper presets, irreversibility-floor activation conditions, CCD-promoter activation conditions, floor + promoter combined, ceiling behaviour, and tier boundaries (8.0, 6.0, 3.5).
+The current suite includes 16 test cases covering: all three paper presets plus a ventilator preset that demonstrates the irreversibility floor explicitly, irreversibility-floor activation conditions, CCD-promoter activation conditions, floor + promoter combined, ceiling behaviour, and tier boundaries (8.0, 6.0, 3.5).
 
 ```
-15 test(s); 15 passed; 0 failed.
+16 test(s); 16 passed; 0 failed.
 ```
 
 ## File layout
