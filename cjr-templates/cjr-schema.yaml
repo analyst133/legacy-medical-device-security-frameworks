@@ -114,6 +114,7 @@ normative_references:
   - "HIPAA Security Rule, 45 CFR Section 164.312(b) (audit controls)"
   - "FDA (2026) Cybersecurity in Medical Devices Guidance — authentication (implementing FD&C Act Section 524B)"
   - "NIST SP 800-82r3, IA-2"
+  - "NIST Cybersecurity Framework (CSF) 2.0 (Feb 2024), GV.RM-04 (strategic direction for cybersecurity risk management)"
   - "PCI-DSS v4.0, Req 8.4"
   - "HSCC HIC-MaLTS (2023), Practice 5.2"
 

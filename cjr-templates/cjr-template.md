@@ -142,6 +142,7 @@
 - HIPAA Security Rule, 45 CFR Section 164.310(b) (Workstation use)
 - FDA (2026), *Cybersecurity in Medical Devices: Quality Management System Considerations and Content of Premarket Submissions* (implementing FD&C Act Section 524B)
 - NIST SP 800-82r3, [specific control identifier]
+- NIST Cybersecurity Framework (CSF) 2.0 (February 2024), [specific category — e.g., GV.RM (Govern: Risk Management Strategy), ID.RA (Identify: Risk Assessment), PR.AA (Protect: Identity Management, Authentication, Access Control), DE.CM (Detect: Continuous Monitoring)]
 - IEC 62443-3-3, [specific security level requirement]
 - HSCC HIC-MaLTS (2023), [specific section]
 
