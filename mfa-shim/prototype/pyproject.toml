@@ -1,0 +1,89 @@
+# pyproject.toml for the Pattern C MFA shim prototype.
+#
+# Enables `pip install -e .` for development installs, and provides
+# PEP 621-compliant project metadata that packaging tools, IDEs, and
+# dependency scanners (Dependabot, pip-audit, Snyk, etc.) can consume
+# without having to infer it from requirements.txt.
+#
+# This file does not replace requirements.txt — requirements.txt remains
+# the authoritative pinned list for reproducing the exact dev environment
+# the test suite is run against. pyproject.toml declares the loose bounds
+# that are actually compatible.
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mfa-shim-prototype"
+version = "1.0.0"
+description = "Pattern C MFA shim — software reference design for inline service-port multi-factor authentication on legacy medical devices."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Khaja T. Mohiuddin" },
+    { name = "Bradley Bernia" },
+    { name = "Wenbo Gong" },
+]
+keywords = [
+    "medical-devices",
+    "cybersecurity",
+    "legacy",
+    "mfa",
+    "totp",
+    "rfc-6238",
+    "healthcare",
+    "hipaa",
+    "iso-14971",
+    "aami-tir57",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: Security :: Cryptography",
+]
+dependencies = [
+    "pyotp>=2.9.0,<3.0",
+    "PyYAML>=6.0,<7.0",
+    "pyserial>=3.5,<4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4,<9.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/analyst133/legacy-medical-device-security-frameworks"
+Repository = "https://github.com/analyst133/legacy-medical-device-security-frameworks"
+Issues = "https://github.com/analyst133/legacy-medical-device-security-frameworks/issues"
+Paper = "https://doi.org/10.30574/ijsra.2026.19.2.1164"
+"Software DOI" = "https://doi.org/10.5281/zenodo.20113684"
+Documentation = "https://github.com/analyst133/legacy-medical-device-security-frameworks/tree/main/mfa-shim"
+
+[tool.setuptools]
+# The prototype is a set of flat top-level modules, not a packaged library.
+# Enumerate them explicitly so setuptools doesn't try to auto-discover and
+# accidentally bundle tests/ or config.example.yaml.
+py-modules = ["shim", "totp_gate", "session_recorder", "tamper_detector"]
+
+[tool.pytest.ini_options]
+minversion = "7.4"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = [
+    "-v",
+    "--tb=short",
+]
